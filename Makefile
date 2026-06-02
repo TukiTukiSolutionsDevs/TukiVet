@@ -44,7 +44,14 @@ makemigration:
 	docker compose -f infra/docker-compose.yml exec api alembic revision --autogenerate -m "$(name)"
 
 test:
-	docker compose -f infra/docker-compose.yml exec api pytest -q
+	docker compose -f infra/docker-compose.yml exec \
+		-e TEST_DATABASE_URL=postgresql+asyncpg://tukivet:tukivet_dev@postgres:5432/tukivet_test \
+		api pytest -q
+
+test-cov:
+	docker compose -f infra/docker-compose.yml exec \
+		-e TEST_DATABASE_URL=postgresql+asyncpg://tukivet:tukivet_dev@postgres:5432/tukivet_test \
+		api pytest --cov=app --cov-report=term-missing
 
 lint:
 	docker compose -f infra/docker-compose.yml exec api ruff check .

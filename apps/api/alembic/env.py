@@ -13,9 +13,8 @@ from alembic import context
 from app.config import settings
 from app.db.base import Base
 
-# Importa modelos para que Base.metadata los reconozca en autogenerate.
-# Conforme se agreguen modelos, agregar los imports aquí.
-# from app.models import organization  # noqa: F401
+# Importa todos los modelos para que Base.metadata los reconozca en autogenerate.
+from app import models  # noqa: F401  pylint: disable=unused-import
 
 config = context.config
 
