@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
+from app.api.v1.appointments import router as appointments_router
 from app.api.v1.auth import router as auth_router
 from app.api.v1.customers import router as customers_router
 from app.api.v1.encounters import router as encounters_router
@@ -23,3 +24,4 @@ api_router.include_router(encounters_router, prefix="/encounters", tags=["encoun
 api_router.include_router(problems_router, tags=["problems"])
 api_router.include_router(vaccines_router, prefix="/vaccines", tags=["vaccines"])
 api_router.include_router(inventory_router, prefix="/inventory", tags=["inventory"])
+api_router.include_router(appointments_router, prefix="/appointments", tags=["appointments"])
