@@ -10,6 +10,7 @@ from app.models.pet import Pet, PetOwner, PetWeightHistory
 from app.models.problem import Problem
 from app.models.refresh_token import RefreshToken
 from app.models.user import User, UserRole, UserStatus
+from app.models.vaccine import VaccineAdministration, VaccineCatalog
 
 __all__ = [
     "AuditLog",
@@ -31,5 +32,7 @@ __all__ = [
     "User",
     "UserRole",
     "UserStatus",
+    "VaccineAdministration",
+    "VaccineCatalog",
     "VitalSign",
 ]
