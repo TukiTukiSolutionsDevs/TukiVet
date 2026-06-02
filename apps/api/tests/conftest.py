@@ -82,6 +82,48 @@ async def client(db: AsyncSession) -> AsyncIterator[AsyncClient]:
     app.dependency_overrides.clear()
 
 
+@pytest_asyncio.fixture
+async def auth_client(
+    client: AsyncClient, sample_org_payload: dict
+) -> AsyncIterator[AsyncClient]:
+    """Cliente HTTP ya autenticado como owner (auto-registra la org)."""
+    r = await client.post("/api/v1/auth/register-org", json=sample_org_payload)
+    if r.status_code != 201:
+        raise AssertionError(f"register-org falló en fixture: {r.status_code} {r.text}")
+    token = r.json()["tokens"]["access_token"]
+    client.headers["Authorization"] = f"Bearer {token}"
+    yield client
+
+
+@pytest.fixture
+def sample_customer_payload() -> dict[str, object]:
+    """Payload válido para POST /api/v1/customers."""
+    return {
+        "document_type": "DNI",
+        "document_number": "12345678",
+        "first_name": "María",
+        "last_name": "García",
+        "phone_primary": "+51999111222",
+        "email": "maria@example.pe",
+        "address": "Calle Las Flores 100",
+        "district": "Miraflores",
+        "city": "Lima",
+    }
+
+
+@pytest.fixture
+def sample_pet_payload() -> dict[str, object]:
+    """Payload válido para POST /api/v1/pets (sin customer_id; lo agrega el test)."""
+    return {
+        "name": "Toby",
+        "species": "dog",
+        "breed_name": "Labrador Retriever",
+        "sex": "male",
+        "color": "amarillo",
+        "sterilized": False,
+    }
+
+
 @pytest.fixture
 def sample_org_payload() -> dict[str, object]:
     """Payload válido para POST /api/v1/auth/register-org."""
