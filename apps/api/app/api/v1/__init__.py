@@ -10,6 +10,7 @@ from app.api.v1.customers import router as customers_router
 from app.api.v1.encounters import router as encounters_router
 from app.api.v1.inventory import router as inventory_router
 from app.api.v1.pets import router as pets_router
+from app.api.v1.prescriptions import router as prescriptions_router
 from app.api.v1.problems import router as problems_router
 from app.api.v1.users import router as users_router
 from app.api.v1.vaccines import router as vaccines_router
@@ -25,3 +26,4 @@ api_router.include_router(problems_router, tags=["problems"])
 api_router.include_router(vaccines_router, prefix="/vaccines", tags=["vaccines"])
 api_router.include_router(inventory_router, prefix="/inventory", tags=["inventory"])
 api_router.include_router(appointments_router, prefix="/appointments", tags=["appointments"])
+api_router.include_router(prescriptions_router, prefix="/prescriptions", tags=["prescriptions"])

@@ -9,6 +9,7 @@ from app.models.inventory import InventoryLot, InventoryMovement, Product, Suppl
 from app.models.organization import Branch, Organization
 from app.models.permission import Permission, Role, RolePermission
 from app.models.pet import Pet, PetOwner, PetWeightHistory
+from app.models.prescription import Prescription, PrescriptionItem
 from app.models.problem import Problem
 from app.models.refresh_token import RefreshToken
 from app.models.user import User, UserRole, UserStatus
@@ -29,6 +30,8 @@ __all__ = [
     "Pet",
     "PetOwner",
     "PetWeightHistory",
+    "Prescription",
+    "PrescriptionItem",
     "Problem",
     "Product",
     "RefreshToken",
