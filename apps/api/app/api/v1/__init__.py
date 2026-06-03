@@ -15,6 +15,7 @@ from app.api.v1.notifications import router as notifications_router
 from app.api.v1.orders import router as orders_router
 from app.api.v1.pets import router as pets_router
 from app.api.v1.portal import router as portal_router
+from app.api.v1.reports import router as reports_router
 from app.api.v1.prescriptions import router as prescriptions_router
 from app.api.v1.problems import router as problems_router
 from app.api.v1.users import router as users_router
@@ -39,3 +40,4 @@ api_router.include_router(invoices_router, prefix="/invoices", tags=["invoices"]
 api_router.include_router(notifications_router, prefix="/notifications", tags=["notifications"])
 api_router.include_router(webhooks_router, prefix="/webhooks", tags=["webhooks"])
 api_router.include_router(portal_router, prefix="/portal", tags=["portal"])
+api_router.include_router(reports_router, prefix="/reports", tags=["reports"])
