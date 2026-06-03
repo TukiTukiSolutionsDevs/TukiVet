@@ -4,6 +4,13 @@ from app.models.appointment import Appointment, Room, TimeOff
 from app.models.audit_log import AuditLog
 from app.models.breed import Breed
 from app.models.customer import Customer
+from app.models.customer_portal import (
+    Consent,
+    CustomerCredential,
+    CustomerMagicLink,
+    CustomerSession,
+    DataSubjectRequest,
+)
 from app.models.electronic_document import (
     DocumentSeriesCounter,
     ElectronicDocument,
@@ -28,7 +35,12 @@ __all__ = [
     "Branch",
     "Breed",
     "CashSession",
+    "Consent",
     "Customer",
+    "CustomerCredential",
+    "CustomerMagicLink",
+    "CustomerSession",
+    "DataSubjectRequest",
     "DocumentSeriesCounter",
     "ElectronicDocument",
     "ElectronicDocumentEvent",
