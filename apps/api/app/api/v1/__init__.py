@@ -11,6 +11,7 @@ from app.api.v1.customers import router as customers_router
 from app.api.v1.encounters import router as encounters_router
 from app.api.v1.inventory import router as inventory_router
 from app.api.v1.invoices import router as invoices_router
+from app.api.v1.notifications import router as notifications_router
 from app.api.v1.orders import router as orders_router
 from app.api.v1.pets import router as pets_router
 from app.api.v1.prescriptions import router as prescriptions_router
@@ -34,4 +35,5 @@ api_router.include_router(prescriptions_router, prefix="/prescriptions", tags=["
 api_router.include_router(orders_router, prefix="/orders", tags=["orders"])
 api_router.include_router(cash_router, prefix="/cash-sessions", tags=["cash"])
 api_router.include_router(invoices_router, prefix="/invoices", tags=["invoices"])
+api_router.include_router(notifications_router, prefix="/notifications", tags=["notifications"])
 api_router.include_router(webhooks_router, prefix="/webhooks", tags=["webhooks"])

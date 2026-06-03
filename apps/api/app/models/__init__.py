@@ -11,6 +11,7 @@ from app.models.electronic_document import (
 )
 from app.models.encounter import Encounter, EncounterAmendment, SoapNote, VitalSign
 from app.models.inventory import InventoryLot, InventoryMovement, Product, Supplier
+from app.models.notification import MessageTemplate, Notification
 from app.models.order import CashSession, Order, OrderItem, Payment, ServiceCatalog
 from app.models.organization import Branch, Organization
 from app.models.permission import Permission, Role, RolePermission
@@ -35,6 +36,8 @@ __all__ = [
     "EncounterAmendment",
     "InventoryLot",
     "InventoryMovement",
+    "MessageTemplate",
+    "Notification",
     "Order",
     "OrderItem",
     "Organization",
