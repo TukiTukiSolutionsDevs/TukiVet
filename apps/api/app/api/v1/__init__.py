@@ -10,12 +10,14 @@ from app.api.v1.cash import router as cash_router
 from app.api.v1.customers import router as customers_router
 from app.api.v1.encounters import router as encounters_router
 from app.api.v1.inventory import router as inventory_router
+from app.api.v1.invoices import router as invoices_router
 from app.api.v1.orders import router as orders_router
 from app.api.v1.pets import router as pets_router
 from app.api.v1.prescriptions import router as prescriptions_router
 from app.api.v1.problems import router as problems_router
 from app.api.v1.users import router as users_router
 from app.api.v1.vaccines import router as vaccines_router
+from app.api.v1.webhooks import router as webhooks_router
 
 api_router = APIRouter()
 api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
@@ -31,3 +33,5 @@ api_router.include_router(appointments_router, prefix="/appointments", tags=["ap
 api_router.include_router(prescriptions_router, prefix="/prescriptions", tags=["prescriptions"])
 api_router.include_router(orders_router, prefix="/orders", tags=["orders"])
 api_router.include_router(cash_router, prefix="/cash-sessions", tags=["cash"])
+api_router.include_router(invoices_router, prefix="/invoices", tags=["invoices"])
+api_router.include_router(webhooks_router, prefix="/webhooks", tags=["webhooks"])

@@ -4,6 +4,11 @@ from app.models.appointment import Appointment, Room, TimeOff
 from app.models.audit_log import AuditLog
 from app.models.breed import Breed
 from app.models.customer import Customer
+from app.models.electronic_document import (
+    DocumentSeriesCounter,
+    ElectronicDocument,
+    ElectronicDocumentEvent,
+)
 from app.models.encounter import Encounter, EncounterAmendment, SoapNote, VitalSign
 from app.models.inventory import InventoryLot, InventoryMovement, Product, Supplier
 from app.models.order import CashSession, Order, OrderItem, Payment, ServiceCatalog
@@ -23,6 +28,9 @@ __all__ = [
     "Breed",
     "CashSession",
     "Customer",
+    "DocumentSeriesCounter",
+    "ElectronicDocument",
+    "ElectronicDocumentEvent",
     "Encounter",
     "EncounterAmendment",
     "InventoryLot",
