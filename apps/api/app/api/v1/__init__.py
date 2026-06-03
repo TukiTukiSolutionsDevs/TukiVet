@@ -6,9 +6,11 @@ from fastapi import APIRouter
 
 from app.api.v1.appointments import router as appointments_router
 from app.api.v1.auth import router as auth_router
+from app.api.v1.cash import router as cash_router
 from app.api.v1.customers import router as customers_router
 from app.api.v1.encounters import router as encounters_router
 from app.api.v1.inventory import router as inventory_router
+from app.api.v1.orders import router as orders_router
 from app.api.v1.pets import router as pets_router
 from app.api.v1.prescriptions import router as prescriptions_router
 from app.api.v1.problems import router as problems_router
@@ -27,3 +29,5 @@ api_router.include_router(vaccines_router, prefix="/vaccines", tags=["vaccines"]
 api_router.include_router(inventory_router, prefix="/inventory", tags=["inventory"])
 api_router.include_router(appointments_router, prefix="/appointments", tags=["appointments"])
 api_router.include_router(prescriptions_router, prefix="/prescriptions", tags=["prescriptions"])
+api_router.include_router(orders_router, prefix="/orders", tags=["orders"])
+api_router.include_router(cash_router, prefix="/cash-sessions", tags=["cash"])

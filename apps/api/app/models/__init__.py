@@ -6,6 +6,7 @@ from app.models.breed import Breed
 from app.models.customer import Customer
 from app.models.encounter import Encounter, EncounterAmendment, SoapNote, VitalSign
 from app.models.inventory import InventoryLot, InventoryMovement, Product, Supplier
+from app.models.order import CashSession, Order, OrderItem, Payment, ServiceCatalog
 from app.models.organization import Branch, Organization
 from app.models.permission import Permission, Role, RolePermission
 from app.models.pet import Pet, PetOwner, PetWeightHistory
@@ -20,12 +21,16 @@ __all__ = [
     "AuditLog",
     "Branch",
     "Breed",
+    "CashSession",
     "Customer",
     "Encounter",
     "EncounterAmendment",
     "InventoryLot",
     "InventoryMovement",
+    "Order",
+    "OrderItem",
     "Organization",
+    "Payment",
     "Permission",
     "Pet",
     "PetOwner",
@@ -38,6 +43,7 @@ __all__ = [
     "Role",
     "RolePermission",
     "Room",
+    "ServiceCatalog",
     "SoapNote",
     "Supplier",
     "TimeOff",
