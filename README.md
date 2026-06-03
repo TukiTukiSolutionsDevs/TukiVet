@@ -73,14 +73,22 @@ Si te incorporás al proyecto, leé en este orden:
 3. [`docs/MODELO_DATOS.md`](docs/MODELO_DATOS.md) — esquema de BD.
 4. [`docs/ROADMAP.md`](docs/ROADMAP.md) — qué sigue.
 
-## Próximos sprints
+## Estado actual
 
-- **Sprint 1** — Identity & Auth (organización, sedes, usuarios, roles, JWT)
-- **Sprint 2** — Clientes y mascotas (con validación DNI/RUC + búsqueda full-text)
-- **Sprint 3** — Historia clínica + SOAP estructurado
-- ...
+**Backend MVP completo** — 13 sprints en `main`. ~90 endpoints, ~70 tests E2E, 12 migraciones.
 
-Detalle completo en [`docs/ROADMAP.md`](docs/ROADMAP.md).
+Próximas fases (ver [`docs/ROADMAP.md`](docs/ROADMAP.md)):
+
+- **Fase 2** — Validación + hardening (2 sprints)
+- **Fase 3** — Frontend MVP con Cloud Design (~8 sprints) basado en [`docs/DESIGN.md`](docs/DESIGN.md)
+- **Fase 4** — Deploy al VPS (~3 sprints)
+- **Fase 5** — V2 features (hospitalización, cirugía, lab, AI SOAP, multi-sede, mobile app)
+- **Fase 6** — V3 features (DICOM, IDEXX, API pública)
+
+## Continuar el trabajo en sesión nueva
+
+Ver [`docs/CONTINUAR.md`](docs/CONTINUAR.md) — contiene el prompt template
+listo para copy-paste en cualquier agente o sesión nueva.
 
 ## Licencia
 

@@ -1,309 +1,204 @@
-# Roadmap — Backend Veterinaria SaaS
+# Roadmap — TukiVet
 
-Última actualización: 2026-06-01
-Estado: **borrador para aprobación**
+Última actualización: **2026-06-02**
 
-Plan por sprints quincenales. Cada sprint termina con: código en `main`, tests pasando, PR documentado, demo funcional (cuando aplica).
-
----
-
-## Sprint 0 — Bootstrap (1 semana)
-
-**Objetivo**: repo funcional, esqueleto, CI, contenedores corriendo localmente.
-
-- [ ] Inicializar repo git, estructura `apps/api`, `docs/`, `infra/`
-- [ ] `docker-compose.yml` con Postgres 16, Redis 7, MinIO
-- [ ] FastAPI hello world + healthcheck
-- [ ] Alembic configurado + primera migración (tabla `health`)
-- [ ] `pyproject.toml` con deps base (fastapi, sqlalchemy, alembic, pydantic, httpx, pytest)
-- [ ] GitHub Actions: lint (ruff), type-check (mypy), tests (pytest)
-- [ ] `.env.example` + carga de config con pydantic-settings
-- [ ] README con quickstart
-- [ ] Logging estructurado JSON (uvicorn + loguru o structlog)
-
-**Entrega**: `docker compose up` levanta todo, `curl /health` responde, `pytest` corre.
+Plan global del producto. Estado por sprint con commit hash. Sprints futuros sin fecha — orden sugerido.
 
 ---
 
-## Sprint 1 — Identity & Multi-tenant (2 semanas)
+## Fase 1 — Backend MVP ✅ COMPLETADA (13 sprints)
 
-**Objetivo**: usuarios, organizaciones, autenticación, RBAC, RLS Postgres.
+| # | Sprint | Estado | Commit |
+|---|---|---|---|
+| 0 | Bootstrap (FastAPI + Postgres + Docker + CI) | ✅ | `844f2f1` |
+| 1 | Identity + RBAC (41 permisos, 5 roles, JWT, audit_log) | ✅ | `1d648e9` |
+| 2 | Customers + Pets + DNI/RUC + búsqueda | ✅ | `9a84d2e` |
+| 3 | Historia clínica + SOAP + signos vitales + POMR | ✅ | `194cf47` |
+| 4 | Vacunas + administraciones + due-list | ✅ | `70ee302` |
+| 5 | Inventario + lotes + FIFO + alertas | ✅ | `2193c12` |
+| 6 | Citas + calendario por recurso | ✅ | `4e5fe32` |
+| 7 | Recetas + dosis mg/kg + dispensación | ✅ | `e18377e` |
+| 8 | POS + caja + pagos manuales + IGV SUNAT | ✅ | `7deeefe` |
+| 9 | TukiFact integration (adapter + webhooks) | ✅ | `c82ae8d` |
+| 10 | WhatsApp Twilio + plantillas + safe-mode | ✅ | `0c36909` |
+| 11 | Portal cliente + ARCO Ley 29733 | ✅ | `17bc9f3` |
+| 12 | Reports/KPIs + DESIGN.md + LEY_29733.md | ✅ | `9253a8c` |
 
-- [ ] Modelo: `organization`, `branch`, `user`, `role`, `user_role`, `permission`
-- [ ] Migración con seed: roles default (owner, vet, tech, reception, accountant, customer)
-- [ ] Auth endpoints: `/auth/register-org`, `/auth/login`, `/auth/refresh`, `/auth/me`, `/auth/logout`
-- [ ] JWT con refresh tokens (access 15m, refresh 7d)
-- [ ] Argon2id hashing
-- [ ] Middleware: extrae `tenant_id` del JWT, inyecta en request context
-- [ ] Decorator `@require_role("vet", "owner")` + `@require_permission("encounters:write")`
-- [ ] **Row Level Security** en Postgres: política `current_setting('app.tenant_id')`
-- [ ] Tabla `audit_log` + helper para auditar acciones
-- [ ] Tests: 80% cobertura en servicio de auth + tests E2E del flujo
-
-**Entrega**: puedo registrar una clínica, crear usuarios con roles, login, los tokens funcionan, RLS bloquea cross-tenant.
-
----
-
-## Sprint 2 — Clientes y Pacientes (2 semanas)
-
-**Objetivo**: gestión completa de tutores y mascotas con búsqueda rápida.
-
-- [ ] Modelos: `customer`, `pet`, `pet_owner` (M:N)
-- [ ] CRUD clientes con validación de DNI/RUC (formato + dígito verificador)
-- [ ] Endpoint `/customers/validate-doc` consulta API gratuita gov.pe
-- [ ] CRUD mascotas + peso histórico (JSONB serie temporal)
-- [ ] Búsqueda full-text con Postgres `tsvector`: nombre cliente, mascota, teléfono, microchip
-- [ ] Endpoint `/search?q=...` ultra-rápido (<50ms)
-- [ ] Soft-delete con `deleted_at`
-- [ ] Auditoría de cambios sensibles
-- [ ] Tests E2E
-
-**Entrega**: registro un cliente con su mascota, los busco por chip, valido un RUC contra SUNAT.
+**Métrica**: 129 archivos Python, 12 migraciones, ~90 endpoints, ~70 tests E2E.
 
 ---
 
-## Sprint 3 — Historia Clínica + SOAP (2 semanas)
+## Fase 2 — Validación + Hardening (2 sprints) ⏳ SIGUIENTE
 
-**Objetivo**: el módulo más crítico. SOAP, signos vitales, lista de problemas.
+### Sprint V0 — Smoke test real
+**Objetivo**: levantar todo, correr los 70 tests, arreglar lo que rompa.
 
-- [ ] Modelos: `encounter`, `soap_note`, `vital_sign`, `problem`, `attachment`
-- [ ] CRUD encuentro con estados: `open → in_progress → closed → amended`
-- [ ] Endpoint para signos vitales con timestamp
-- [ ] SOAP estructurado (JSONB) + plantillas por tipo de consulta
-- [ ] Adjuntos: upload a MinIO/S3, scan con ClamAV opcional, tipos permitidos
-- [ ] Generación PDF del encuentro (WeasyPrint o ReportLab)
-- [ ] Inmutabilidad: SOAP cerrado no se modifica, sólo se "enmienda" con razón firmada
-- [ ] Auditoría completa
-- [ ] Tests
+- [ ] `make up` exitoso, todos los contenedores healthy
+- [ ] `make migrate` aplica las 12 migraciones sin errores
+- [ ] `make test` con tukivet_test DB — debugger de fixtures si falla
+- [ ] Smoke E2E manual del flujo completo:
+  - register-org → login → crear cliente → crear mascota → encounter → SOAP → cerrar → POS → cobrar → emitir comprobante (mock) → WhatsApp notif
+- [ ] Documentar todos los issues encontrados como tareas
 
-**Entrega**: vet abre encuentro, llena SOAP, lo cierra, descarga PDF.
+### Sprint V1 — Production hardening
+- [ ] Sentry SDK integrado en `app/main.py`
+- [ ] Rate limiting Redis-backed real (estructura en `app/core/ratelimit.py`)
+- [ ] Performance review con `EXPLAIN ANALYZE` sobre queries críticas (búsqueda, due-list, KPIs)
+- [ ] Índices adicionales según resultados
+- [ ] Health check con verificación de Redis + S3
+- [ ] Backup script (pg_dump cifrado a B2/S3-compatible)
+- [ ] Smoke test post-restore documentado
+- [ ] Documentar SLA, RTO, RPO en `docs/OPERACIONES.md`
 
----
-
-## Sprint 4 — Vacunas + Catálogos (1 semana)
-
-**Objetivo**: protocolos de vacunación y certificados.
-
-- [ ] Modelos: `vaccine_catalog`, `vaccine_administration`, `species`, `breed`
-- [ ] Seed: catálogo SENASA-compatible (rabia, parvo, triple felina, etc.)
-- [ ] Protocolo por especie/edad (puppy schedule, adult schedule)
-- [ ] Endpoint para registrar vacuna aplicada (con lote + sitio + próxima dosis calculada)
-- [ ] Generación de certificado de vacunación PDF
-- [ ] Listar vacunas vencidas / próximas a vencer (KPI)
-- [ ] Tests
-
-**Entrega**: registro una vacuna, descargo certificado PDF, listo vacunas vencidas.
+**Entrega**: backend listo para conectar con TukiFact y Twilio reales.
 
 ---
 
-## Sprint 5 — Inventario (2 semanas)
+## Fase 3 — Frontend MVP con Cloud Design (~8 sprints)
 
-**Objetivo**: control de stock con lotes y vencimientos.
+Insumo: `docs/DESIGN.md`.
 
-- [ ] Modelos: `product`, `lot`, `inventory_movement`, `supplier`
-- [ ] CRUD productos con categorías (medicamento, vacuna, alimento, accesorio, insumo)
-- [ ] Movimientos: compra (con factura del proveedor), venta (auto desde ticket), ajuste, merma, transferencia
-- [ ] Costo promedio ponderado
-- [ ] FIFO para dispensación
-- [ ] Alertas: stock bajo, vencimiento ≤60d/30d/7d, vencidos
-- [ ] Reorder point sugerido
-- [ ] Tests
+### Sprint F0 — Design system + Next.js bootstrap
+- [ ] `apps/web/` Next.js 15 + TypeScript + Tailwind + shadcn/ui
+- [ ] Cloud Design genera átomos + moléculas (~25 componentes)
+- [ ] Cliente HTTP con interceptor JWT + refresh rotation
+- [ ] Provider de auth + storage de tokens
 
-**Entrega**: registro compras, vendo productos, el stock baja, recibo alerta de vencimiento.
+### Sprint F1 — Landing + Auth + Dashboard
+- [ ] Landing pública (8 secciones de DESIGN.md §3)
+- [ ] `/login` intranet + flow refresh
+- [ ] `/app` dashboard con KPI cards
 
----
+### Sprint F2 — Pacientes (tutores + mascotas)
+- [ ] Lista de pacientes con filtros + búsqueda global del topbar
+- [ ] Detalle de mascota con 6 tabs (Resumen, Encuentros, Vacunas, Recetas, Peso con gráfico, Documentos)
+- [ ] Wizard "Nuevo tutor + mascota"
 
-## Sprint 6 — Citas + Calendario (1 semana)
+### Sprint F3 — Encuentros + SOAP editor (pantalla crítica)
+- [ ] Lista de encuentros con filtros
+- [ ] Editor SOAP bipartito (info contextual izq + S/O/A/P der)
+- [ ] Auto-save cada 30s
+- [ ] Signos vitales inline
+- [ ] Cerrar + amend (con razón obligatoria)
+- [ ] Atajos de teclado
 
-**Objetivo**: agendamiento por recurso.
+### Sprint F4 — Vacunas + Recetas
+- [ ] Catálogo de vacunas
+- [ ] Registrar aplicación
+- [ ] Due-list con "Enviar WhatsApp" inline
+- [ ] Editor de recetas con calculadora de dosis embebida
+- [ ] Dispense con testigo si controlado
 
-- [ ] Modelos: `appointment`, `appointment_type`, `resource` (vet/sala/equipo)
-- [ ] Calendar API: disponibilidad por recurso/día/hora
-- [ ] Bloqueos (cierre, almuerzo, vacaciones)
-- [ ] Endpoint para crear cita (con validación de disponibilidad)
-- [ ] No-show tracking
-- [ ] Tests
+### Sprint F5 — Inventario + POS + Caja
+- [ ] Productos + Lotes + Movimientos
+- [ ] Alertas low-stock + expiring
+- [ ] POS bipartito (composer + cobro)
+- [ ] Apertura/cierre de caja con conciliación visible
 
-**Entrega**: pido disponibilidad de un vet, agendo una cita, no permite doble booking.
+### Sprint F6 — Comprobantes + Agenda
+- [ ] Lista de comprobantes con timeline de webhooks
+- [ ] Anular comprobante
+- [ ] Calendario semanal/día con drag-to-reschedule
+- [ ] Modal de nueva cita con auto-complete
 
----
+### Sprint F7 — Reportes + Comunicaciones + Config
+- [ ] Dashboard de KPIs con gráficos (Recharts)
+- [ ] Reporte financiero con export CSV/Excel
+- [ ] Editor de plantillas WhatsApp con preview
+- [ ] Configuración (org, usuarios, roles, integraciones)
 
-## Sprint 7 — Recetas + Dispensación (1 semana)
+### Sprint F8 — Portal cliente
+- [ ] Login con magic link
+- [ ] Dashboard de mascotas
+- [ ] Historial + descarga de certificados
+- [ ] Sección "Mi cuenta" con ARCO endpoints
 
-**Objetivo**: prescripciones con cálculo automático y descuento de stock.
-
-- [ ] Modelo: `prescription`, `prescription_item`
-- [ ] Cálculo de dosis por peso (mg/kg → ml o tabletas)
-- [ ] Dispensación: descuenta stock del lote (FIFO), marca como entregado
-- [ ] Registro especial para sustancias controladas (bitácora con testigo)
-- [ ] PDF de la receta
-- [ ] Tests
-
-**Entrega**: prescribo un antibiótico, calculo dosis para 25kg, dispenso desde el lote.
-
----
-
-## Sprint 8 — POS + Órdenes (2 semanas)
-
-**Objetivo**: ticket de venta con servicios y productos.
-
-- [ ] Modelos: `service_catalog`, `order`, `order_item`, `payment`, `cash_session`
-- [ ] CRUD servicios con precio + IGV
-- [ ] Crear orden con líneas mixtas (servicio + producto)
-- [ ] Descuentos por línea y por total
-- [ ] Métodos de pago: efectivo, tarjeta presencial, transferencia, crédito
-- [ ] Apertura/cierre de caja por usuario y turno
-- [ ] Reporte cuadre de caja
-- [ ] Auto-cargo: cuando un encuentro se cierra, propone líneas (consulta + vacuna + receta)
-- [ ] Tests
-
-**Entrega**: armo un ticket con 1 consulta + 1 vacuna aplicada + 1 receta dispensada, cobro en efectivo, cierro caja.
-
----
-
-## Sprint 9 — Facturación Electrónica SUNAT (2 semanas) ⚠️ CRÍTICO
-
-**Objetivo**: integración Nubefact y emisión de comprobantes UBL 2.1.
-
-- [ ] Modelo: `electronic_document`, `customer_fiscal`
-- [ ] Cliente HTTP a Nubefact (sandbox + producción)
-- [ ] Servicio `EmitirBoleta`, `EmitirFactura`, `EmitirNotaCredito`, `EmitirNotaDebito`
-- [ ] Persistir XML firmado + CDR + hash SHA-256 en S3
-- [ ] Manejo de estados: pendiente, aceptado, rechazado, anulado
-- [ ] Reintentos asíncronos en cola para envíos fallidos
-- [ ] Webhook desde Nubefact para confirmaciones tardías
-- [ ] Generación de PDF del comprobante
-- [ ] Endpoint público de consulta de comprobante por QR
-- [ ] Tests de contrato contra sandbox
-
-**Entrega**: pago una orden, se emite boleta SUNAT, recibo CDR, descargo PDF.
+### Sprint F9 — QA + a11y + responsive
+- [ ] Lighthouse audit (objetivo: 90+ en accessibility)
+- [ ] Responsive: desktop + tablet horizontal (iPad)
+- [ ] Tests E2E con Playwright (al menos el flujo crítico)
 
 ---
 
-## Sprint 10 — Pagos Online (Culqi) (1 semana)
+## Fase 4 — Deploy a producción (~3 sprints)
 
-**Objetivo**: cobros online con tarjeta y Yape/Plin.
+### Sprint D0 — Infra del VPS
+- [ ] Provisión del VPS (Docker, firewall, ufw, fail2ban)
+- [ ] Caddy o Traefik con TLS automático
+- [ ] DNS apuntando a `tukivet.com.pe` (o el dominio elegido)
+- [ ] Secrets management (env vars, no en repo)
 
-- [ ] Integración Culqi: SDK Python + checkout
-- [ ] Crear cargo (PaymentIntent) desde orden pendiente
-- [ ] Webhook de confirmación de Culqi
-- [ ] Vincular pago confirmado a la orden, auto-emisión de comprobante
-- [ ] Reembolsos
-- [ ] Idempotencia
-- [ ] Tests
+### Sprint D1 — CI/CD deploy
+- [ ] GitHub Actions: build + push imágenes a GHCR
+- [ ] SSH deploy con `docker compose pull && up -d`
+- [ ] Smoke health-check post-deploy
+- [ ] Rollback documentado
 
-**Entrega**: genero link de pago, el cliente paga con Yape, la orden se cierra, se emite boleta.
+### Sprint D2 — Observabilidad + Backups
+- [ ] Sentry, Loki o equivalente para logs
+- [ ] Métricas Prometheus opcionales
+- [ ] Backup diario probado (restauración exitosa)
+- [ ] Runbook de incidentes en `docs/OPERACIONES.md`
 
----
-
-## Sprint 11 — WhatsApp Recordatorios (1 semana)
-
-**Objetivo**: comunicación automatizada vía Twilio WhatsApp.
-
-- [ ] Integración Twilio WhatsApp Business API
-- [ ] Modelos: `notification`, `template`
-- [ ] Cola async para envíos (ARQ/Celery)
-- [ ] Plantillas: confirmación cita, recordatorio 24h, recordatorio vacuna vencida, NPS, recibo
-- [ ] Worker periódico: cada noche revisa vacunas vencidas → encola WhatsApp
-- [ ] Opt-out por cliente
-- [ ] Tests
-
-**Entrega**: cita programada → 24h antes el cliente recibe WhatsApp con confirmación.
+### Sprint D3 — Onboarding cliente piloto
+- [ ] Migrar datos del sistema actual (si tienen)
+- [ ] Capacitar al equipo de la veterinaria (2-3 sesiones)
+- [ ] Soporte cercano primeras 4 semanas
+- [ ] Recolección de feedback con NPS interno
 
 ---
 
-## Sprint 12 — Portal del Cliente (1 semana)
+## Fase 5 — V2: Features avanzados (~10 sprints, opt-in según demanda del cliente)
 
-**Objetivo**: API del portal cliente (web frontend va después).
-
-- [ ] Auth cliente: magic link al WhatsApp + clave opcional
-- [ ] Endpoints: `/portal/me`, `/portal/pets`, `/portal/pets/{id}/history`, `/portal/appointments`, `/portal/payments-pending`
-- [ ] Self-service: actualizar datos, descargar certificados, pagar saldos
-- [ ] Derechos ARCO: descargar mis datos, solicitar eliminación
-- [ ] Tests
-
-**Entrega**: el cliente entra al portal, ve sus mascotas y su historial.
-
----
-
-## Sprint 13 — Reportes y KPIs (1 semana)
-
-**Objetivo**: dashboards y exports.
-
-- [ ] Endpoint `/reports/kpis` con los 10 KPIs definidos
-- [ ] Cache con Redis (refresh cada 1h)
-- [ ] Reporte financiero por rango de fechas (ingresos, egresos, margen)
-- [ ] Export Excel + formato PLE SUNAT
-- [ ] Tests
-
-**Entrega**: dashboard responde en <500ms, contador exporta Excel listo para SUNAT.
+| # | Feature | Valor | Esfuerzo |
+|---|---|---|---|
+| V2.1 | Hospitalización + flowboard digital en vivo (WebSocket) | Alto si la clínica hospitaliza | Alto |
+| V2.2 | Cirugía: planificación + consentimiento informado firmado + hoja anestésica + hoja quirúrgica | Alto | Alto |
+| V2.3 | Laboratorio: pedidos + captura de resultados + tendencias longitudinales | Alto | Medio |
+| V2.4 | Imágenes: upload de Rx/eco a S3, viewer básico, anotaciones | Medio | Medio |
+| V2.5 | Wellness plans (suscripciones mensuales con paquetes prepagados) | Alto (recurring revenue) | Alto |
+| V2.6 | AI SOAP dictation: audio → transcript → SOAP estructurado con LLM | Muy diferencial | Medio |
+| V2.7 | Multi-sede + RLS Postgres + consolidación | Alto si crece a 2+ sedes | Alto |
+| V2.8 | Mobile app del cliente (React Native) | Medio (web responsive cubre) | Alto |
+| V2.9 | Telemedicina: video + documentación VCPR | Medio post-COVID | Medio |
+| V2.10 | Boarding / pensión + grooming | Si la veterinaria los ofrece | Medio |
+| V2.11 | Culqi online (pagos por link) | Si quieren cobrar online | Bajo |
 
 ---
 
-## Sprint 14 — Cumplimiento Ley 29733 + Hardening (1 semana)
+## Fase 6 — V3: Diferenciadores premium
 
-**Objetivo**: cierre legal y security review.
-
-- [ ] Endpoints ARCO (acceso, rectificación, cancelación, oposición)
-- [ ] Consentimientos firmados con hash + timestamp en BD
-- [ ] Documento generador del Registro de Banco de Datos para ANPD
-- [ ] Penetration test interno (OWASP top 10)
-- [ ] Backups cifrados automáticos a S3
-- [ ] Plan de continuidad documentado
-- [ ] Cifrado de columnas sensibles con pgcrypto
-
-**Entrega**: cumplimiento Ley 29733 cerrado, backup probado, registro ANPD generado.
-
----
-
-## Sprint 15 — Pulido + DESIGN.md (1 semana)
-
-**Objetivo**: cierre del backend MVP y handoff al frontend.
-
-- [ ] Doc OpenAPI revisada y limpia
-- [ ] README final del backend
-- [ ] **`DESIGN.md`** generado: descripción de pantallas, flujos, componentes que el frontend debe tener (insumo para Cloud Design / Stitch)
-- [ ] Postman / Insomnia collection exportada
-- [ ] Smoke tests E2E del flujo completo end-to-end (registro → consulta → boleta → WhatsApp)
-- [ ] Métricas de performance documentadas
-
-**Entrega**: backend MVP listo para producción, DESIGN.md listo para que generes el frontend.
-
----
-
-## Resumen de fechas (estimado, ritmo solo)
-
-| Sprint | Semanas | Acumulado |
+| # | Feature | Comentario |
 |---|---|---|
-| 0 — Bootstrap | 1 | 1 |
-| 1 — Identity + Multi-tenant | 2 | 3 |
-| 2 — Clientes y pacientes | 2 | 5 |
-| 3 — Historia clínica + SOAP | 2 | 7 |
-| 4 — Vacunas | 1 | 8 |
-| 5 — Inventario | 2 | 10 |
-| 6 — Citas | 1 | 11 |
-| 7 — Recetas | 1 | 12 |
-| 8 — POS / Órdenes | 2 | 14 |
-| 9 — SUNAT (crítico) | 2 | 16 |
-| 10 — Culqi pagos | 1 | 17 |
-| 11 — WhatsApp | 1 | 18 |
-| 12 — Portal cliente | 1 | 19 |
-| 13 — Reportes / KPIs | 1 | 20 |
-| 14 — Ley 29733 + Hardening | 1 | 21 |
-| 15 — Pulido + DESIGN.md | 1 | 22 |
-
-**Total MVP backend**: ~22 semanas calendar (~5 meses) con dedicación full-time individual. Con AI assistance puede reducirse 30–40%.
+| V3.1 | DICOM viewer integrado | Para hospitales medianos |
+| V3.2 | Integración IDEXX VetConnect / Antech labs | Caro pero diferencial |
+| V3.3 | API pública + marketplace de integraciones | Habilita ecosistema |
+| V3.4 | Pharmacy delivery integrado | Genera ARPU extra |
+| V3.5 | App móvil del vet en campo (offline-first) | Casos especiales |
+| V3.6 | Marketplace de productos para mascotas | E-commerce dentro del portal |
+| V3.7 | Convertir a SaaS multi-tenant comercial | Si Jaime decide venderlo |
 
 ---
 
-## Criterios de salida de MVP
+## Criterios de salida por fase
 
-Backend MVP se considera **completo** cuando:
+**Backend MVP** ✅ Cumplido.
 
-1. Una clínica real puede operar end-to-end: cliente nuevo → consulta → SOAP cerrado → factura emitida a SUNAT con CDR → pago Culqi → recordatorio WhatsApp.
-2. ≥80% cobertura en `services/`, ≥70% en `api/`.
-3. OpenAPI documentado.
-4. Hardening security review pasado.
-5. Backups probados (restauración exitosa).
-6. Cumplimiento Ley 29733 cerrado (consentimientos, ARCO, registro ANPD).
-7. `DESIGN.md` listo para Cloud Design.
+**Frontend MVP** (Fase 3):
+- [ ] Los 14 screens de DESIGN.md generados y funcionales.
+- [ ] Lighthouse ≥90 accessibility.
+- [ ] Flujo E2E completo manual: registro → consulta → SOAP → POS → comprobante → WhatsApp.
+
+**Producción** (Fase 4):
+- [ ] Sistema corriendo en VPS con TLS.
+- [ ] Backups probados.
+- [ ] 1 cliente piloto operando con datos reales.
+- [ ] Ley 29733 cumplida (`docs/LEY_29733.md` checklist).
+
+**V2**: opt-in por feature según demanda real del cliente piloto y prospects siguientes.
+
+---
+
+## Cómo retomar el trabajo en una sesión nueva
+
+Ver `docs/CONTINUAR.md` — contiene el prompt template a usar.
