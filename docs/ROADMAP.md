@@ -144,11 +144,13 @@ Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 - [ ] Export CSV/Excel del reporte financiero (postergado a F9)
 - [ ] Edición inline de datos org desde UI (postergado a F9)
 
-### Sprint F8 — Portal cliente
-- [ ] Login con magic link
-- [ ] Dashboard de mascotas
-- [ ] Historial + descarga de certificados
-- [ ] Sección "Mi cuenta" con ARCO endpoints
+### Sprint F8 — Portal cliente ✅
+- [x] Login con magic link (2-step: documento → código WhatsApp con dev_token en sandbox)
+- [x] Dashboard de mascotas con saludo + saldos pendientes
+- [x] Detalle de mascota: historial encuentros + vacunas con próxima dosis
+- [x] Mi cuenta: datos personales + export JSON (derecho de acceso) + ARCO request
+- [x] Token store + refresh rotation independiente del backoffice (clave `tukivet.portal.*`)
+- [ ] Descarga de certificados PDF (postergado a F9 — depende de endpoint backend)
 
 ### Sprint F9 — QA + a11y + responsive
 - [ ] Lighthouse audit (objetivo: 90+ en accessibility)
