@@ -4,7 +4,7 @@ Este documento te da el **prompt template** para arrancar cualquier sesión
 nueva y retomar el trabajo sin perder contexto, más el estado actualizado del
 roadmap.
 
-Última actualización: **2026-06-04** — Sprint F5 (Inventario + POS + Caja) cerrado.
+Última actualización: **2026-06-04** — Sprint F6 (Comprobantes + Agenda) cerrado.
 
 ---
 
@@ -19,8 +19,9 @@ roadmap.
 | F2 — Pacientes (lista + detalle con tabs) | ✅ COMPLETA | `f238a91` |
 | F3 — Encuentros + SOAP editor (crítica) | ✅ COMPLETA | `4ac50e9` |
 | F4 — Vacunas + Recetas | ✅ COMPLETA | `0abe8cb` |
-| **F5 — Inventario + POS + Caja** | ✅ COMPLETA | _este sprint_ |
-| F6 — Comprobantes + Agenda | ⏳ siguiente | — |
+| F5 — Inventario + POS + Caja | ✅ COMPLETA | _commit previo_ |
+| **F6 — Comprobantes + Agenda** | ✅ COMPLETA | _este sprint_ |
+| F7 — Reportes + Comunicaciones + Config | ⏳ siguiente | — |
 | F7 — Reportes + Comunicaciones + Config | ⏳ | — |
 | F8 — Portal cliente | ⏳ | — |
 | F9 — QA + a11y + responsive | ⏳ | — |
@@ -28,8 +29,9 @@ roadmap.
 | D0-D3 — Deploy VPS | ⏳ | — |
 
 Backend: 141/141 tests, ~90 endpoints. Frontend: landing + auth + dashboard +
-Pacientes + Encuentros + Vacunas + Recetas + **Inventario (productos / alertas
-/ proveedores) + POS y caja (composer + cobro + apertura/cierre)** + 7 placeholders.
+Pacientes + Encuentros + Vacunas + Recetas + Inventario + POS y caja +
+**Comprobantes (lista + drawer con timeline + void) + Agenda (calendario semanal
++ nueva cita + estados)** + 5 placeholders.
 
 ---
 
@@ -76,10 +78,14 @@ Soy Jaime Andrés (TukiTuki Solutions SAC, RUC 20613614509).
   - `src/app/(app)/inventario/_components/{products-tab,alerts-tab,suppliers-tab,new-product-dialog,receive-lot-dialog,adjustment-dialog}.tsx`
   - `src/app/(app)/pos/page.tsx` — composer + totales + caja
   - `src/app/(app)/pos/_components/{cash-session-bar,customer-picker,item-picker,payment-dialog}.tsx`
+  - `src/app/(app)/comprobantes/page.tsx` — tabla con filtro + paginación
+  - `src/app/(app)/comprobantes/_components/invoice-detail-dialog.tsx` — timeline + void
+  - `src/app/(app)/agenda/page.tsx` — week navigator + vet chips
+  - `src/app/(app)/agenda/_components/{week-view,new-appointment-dialog,appointment-detail-dialog}.tsx`
   - `src/components/shell/{sidebar,topbar,nav,placeholder-screen}.tsx`
   - `src/components/ui/tabs.tsx` — Base UI tabs wrapper
   - `src/components/marketing/public-header.tsx`
-  - `src/lib/{api,auth-api,customers-api,pets-api,encounters-api,inventory-api,orders-api,vaccines-api,prescriptions-api,reports-api,notifications-api,pagination,storage,format,env,utils}.ts`
+  - `src/lib/{api,auth-api,customers-api,pets-api,encounters-api,inventory-api,orders-api,invoices-api,appointments-api,users-api,vaccines-api,prescriptions-api,reports-api,notifications-api,pagination,storage,format,env,utils}.ts`
   - `src/contexts/auth-context.tsx`
 
 ## Documentación canónica — LEE EN ESTE ORDEN antes de codear

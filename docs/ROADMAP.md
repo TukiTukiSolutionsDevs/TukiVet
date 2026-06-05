@@ -123,11 +123,15 @@ Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 - [x] Pago con 7 métodos (efectivo/yape/plin/transferencia/tarjeta/crédito/otro)
 - [x] Apertura/cierre de caja con conciliación auto vs declarado
 
-### Sprint F6 — Comprobantes + Agenda
-- [ ] Lista de comprobantes con timeline de webhooks
-- [ ] Anular comprobante
-- [ ] Calendario semanal/día con drag-to-reschedule
-- [ ] Modal de nueva cita con auto-complete
+### Sprint F6 — Comprobantes + Agenda ✅
+- [x] Lista de comprobantes con filtro por estado + paginación
+- [x] Detalle modal con timeline TukiFact/SUNAT + links PDF/XML
+- [x] Anular comprobante (motivo mínimo 10 chars, audit trail)
+- [x] Calendario semanal (08:00-20:00) con navegación prev/today/next
+- [x] Filtro por veterinario (chips) + click-to-create en slots vacíos
+- [x] Modal de nueva cita con autocomplete de cliente + selector de mascota
+- [x] Detalle de cita con acciones: confirmar / iniciar / completar / cancelar / no-show / reagendar
+- [ ] Drag-to-reschedule (postergado a F9, hoy se reagenda via modal)
 
 ### Sprint F7 — Reportes + Comunicaciones + Config
 - [ ] Dashboard de KPIs con gráficos (Recharts)
