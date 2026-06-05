@@ -133,11 +133,16 @@ Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 - [x] Detalle de cita con acciones: confirmar / iniciar / completar / cancelar / no-show / reagendar
 - [ ] Drag-to-reschedule (postergado a F9, hoy se reagenda via modal)
 
-### Sprint F7 — Reportes + Comunicaciones + Config
-- [ ] Dashboard de KPIs con gráficos (Recharts)
-- [ ] Reporte financiero con export CSV/Excel
-- [ ] Editor de plantillas WhatsApp con preview
-- [ ] Configuración (org, usuarios, roles, integraciones)
+### Sprint F7 — Reportes + Comunicaciones + Config ✅
+- [x] Dashboard de KPIs (11 métricas) + reporte financiero por rango
+- [x] Breakdown: ingresos por categoría (tabla), pagos por método (bars CSS)
+- [x] Plantillas WhatsApp/SMS/email con preview + "Cargar defaults"
+- [x] Log de envíos con filtro por estado (incl. blocked_safe_mode)
+- [x] Composer manual: elegir plantilla + recipient + variables dinámicas
+- [x] Configuración: datos de org + tu cuenta + estado de integraciones
+- [x] Equipo: lista de usuarios + alta con selección múltiple de roles
+- [ ] Export CSV/Excel del reporte financiero (postergado a F9)
+- [ ] Edición inline de datos org desde UI (postergado a F9)
 
 ### Sprint F8 — Portal cliente
 - [ ] Login con magic link

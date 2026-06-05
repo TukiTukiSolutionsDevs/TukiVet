@@ -151,7 +151,7 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["reports", "kpis"],
-    queryFn: reportsApi.kpis,
+    queryFn: () => reportsApi.kpis(),
   });
 
   const firstName = user?.full_name.split(" ")[0] ?? "";
