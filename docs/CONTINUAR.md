@@ -1,12 +1,40 @@
 # Cómo continuar TukiVet en una sesión nueva
 
-Este documento te da el **prompt template** para arrancar cualquier sesión nueva (Claude Code, otro agente, otro dev humano) y retomar el trabajo sin perder contexto.
+Este documento te da el **prompt template** para arrancar cualquier sesión
+nueva y retomar el trabajo sin perder contexto, más el estado actualizado del
+roadmap.
+
+Última actualización: **2026-06-04** — Sprint F1 (Landing + Register) cerrado.
+
+---
+
+## Estado actual (de un vistazo)
+
+| Fase | Estado | Commit clave |
+|---|---|---|
+| Backend MVP (Sprint 0-12) | ✅ COMPLETA | `9253a8c` |
+| V0 — Smoke + framework hardening | ✅ COMPLETA | `022e735` |
+| F0 — Bootstrap Next.js + auth + Dashboard | ✅ COMPLETA | `5eb418d` |
+| **F1 — Landing pública + Register wizard** | ✅ COMPLETA | _este sprint_ |
+| F2 — Pacientes (lista + detalle con tabs) | ⏳ siguiente | — |
+| F3 — Encuentros + SOAP editor (crítica) | ⏳ | — |
+| F4 — Vacunas + Recetas | ⏳ | — |
+| F5 — Inventario + POS + Caja | ⏳ | — |
+| F6 — Comprobantes + Agenda | ⏳ | — |
+| F7 — Reportes + Comunicaciones + Config | ⏳ | — |
+| F8 — Portal cliente | ⏳ | — |
+| F9 — QA + a11y + responsive | ⏳ | — |
+| V1 — Production hardening backend | ⏳ paralelo | — |
+| D0-D3 — Deploy VPS | ⏳ | — |
+
+Backend: 141/141 tests, ~90 endpoints. Frontend: 5 pantallas públicas + auth +
+dashboard funcional + 12 placeholders.
 
 ---
 
 ## Prompt template — copiar y pegar
 
-Reemplaza la línea `[MI OBJETIVO HOY ES: ...]` con lo que querés hacer en esta sesión.
+Reemplaza `[MI OBJETIVO HOY ES: ...]` con lo que querés hacer.
 
 ```markdown
 Estoy trabajando en TukiVet, un SaaS de gestión veterinaria para Perú.
@@ -15,88 +43,165 @@ Soy Jaime Andrés (TukiTuki Solutions SAC, RUC 20613614509).
 ## Contexto del proyecto
 
 - **Repo**: `/Users/soulkin/Documents/Veterinaria`
-- **Estado**: Backend MVP completo (Sprint 0-12, 13 commits en `main`)
-- **Producto**: gestión integral para una veterinaria en Perú (mi amigo).
-- **Modelo**: single-tenant promovible (existe `organization` y `branch`
-  como entidades; no hay RLS ni middleware tenant_id por ahora).
+- **Estado**: Backend MVP + V0 + Sprint F0 + Sprint F1 frontend cerrados
+  (~19 commits en `main`, 141/141 tests pasando, login + register + dashboard
+  conectados al backend real).
+- **Modelo**: single-tenant promovible (org + branch como entidades; sin RLS).
 
-## Stack confirmado
+## Stack
 
-- Python 3.12, FastAPI 0.115, SQLAlchemy 2.0 async, Alembic
-- Postgres 16, Redis 7, MinIO (S3-compatible)
-- pydantic 2.9, structlog, argon2-cffi, pyjwt, python-ulid, ARQ
-- pytest + ruff + mypy + GitHub Actions
-- Frontend pendiente: Next.js 15 + TS + Tailwind + shadcn/ui
+**Backend** (puerto 8000):
+- Python 3.12 · FastAPI 0.115 · SQLAlchemy 2.0 async · Alembic
+- Postgres 16 · Redis 7 · MinIO · ARQ
+- pydantic v2 · argon2-cffi · pyjwt · python-ulid · structlog
+
+**Frontend** (`apps/web`, puerto 3000):
+- Next.js 16.2 (App Router + Turbopack) · React 19 · TypeScript
+- Tailwind v4 · shadcn/ui (Base UI flavor, slate base)
+- @tanstack/react-query · next-themes · lucide-react · sonner
+- Auth: tokenStore localStorage + AuthProvider + refresh rotation
+- Estructura:
+  - `src/app/page.tsx` — landing pública 8 secciones
+  - `src/app/login/page.tsx` — login
+  - `src/app/register/page.tsx` — wizard 3 pasos (org → sede → owner)
+  - `src/app/(app)/<screen>/page.tsx` — pantallas autenticadas con shell
+  - `src/components/shell/{sidebar,topbar,nav,placeholder-screen}.tsx`
+  - `src/components/marketing/public-header.tsx`
+  - `src/lib/{api,auth-api,reports-api,storage,format,env,utils}.ts`
+  - `src/contexts/auth-context.tsx`
 
 ## Documentación canónica — LEE EN ESTE ORDEN antes de codear
 
-1. `docs/DECISIONES.md` ← **fuente única de verdad**. Si algo contradice
-   a este archivo, este gana.
-2. `docs/ROADMAP.md` — qué está hecho, qué sigue, fases V2/V3.
-3. `docs/ARQUITECTURA.md` — 12 ADRs, capas, patrones.
-4. `docs/MODELO_DATOS.md` — esquema de BD detallado.
-5. `docs/DESIGN.md` — handoff para Cloud Design / frontend.
-6. `docs/LEY_29733.md` — cumplimiento ANPD.
+1. `docs/DECISIONES.md` ← fuente única de verdad
+2. `docs/ROADMAP.md` — qué está hecho, qué sigue
+3. `docs/ARQUITECTURA.md` — 12 ADRs y patrones backend
+4. `docs/MODELO_DATOS.md` — esquema BD
+5. `docs/DESIGN.md` — handoff para frontend (14 screens + tokens)
+6. `docs/LEY_29733.md` — cumplimiento ANPD
 
-## Patrones establecidos — RESPETAR
+## Patrones a respetar
 
-- **Modelos** en `app/models/*.py`: ULID PK string(26), TimestampMixin,
-  soft-delete con `deleted_at`. Importar todo en `models/__init__.py`.
-- **Schemas** Pydantic v2 en `app/schemas/*.py` con `ORMModel`
-  (from_attributes=True).
-- **Services** en `app/services/*.py` con lógica de negocio. NO commitean —
-  lo hace el endpoint con `await db.commit()`.
-- **Routers** en `app/api/v1/*.py` usando `Annotated` + `Depends`.
-  Permisos vía `dependencies=[Depends(require_permission("dominio:accion"))]`.
-- **Migraciones** escritas manualmente en `alembic/versions/2026...py`
-  (NO autogenerate, queremos control de índices y seeds).
-- **Tests** integration en `tests/integration/` con fixtures de `conftest.py`:
-  `auth_client`, `client`, `sample_customer_payload`, `sample_pet_payload`.
-- **Adapter pattern** para integraciones externas (TukiFact, Twilio):
-  ABC port en `provider.py` + real + mock. Selección por config.
-- **Audit log** en cada acción mutante via `app.core.audit.audit(...)`.
-- **Dinero**: siempre `Decimal`, nunca `float`. Postgres `NUMERIC(12,2)`.
-- **Idempotency**: endpoints `POST` que generan recursos cobrables
-  aceptan header `Idempotency-Key`.
+**Backend:**
+- Modelos: ULID PK str(26), `TimestampMixin`, soft-delete `deleted_at`
+- Schemas: Pydantic v2 `ORMModel` (from_attributes=True)
+- Services: lógica async **sin commit** (el endpoint commitea)
+- Routers: `Annotated + Depends + require_permission("dom:acción")`
+- Migraciones: manuales (no autogenerate)
+- Tests integration con fixture `auth_client`
+- Adapter pattern para integraciones (port + real + mock)
+- Audit log en cada acción mutante
+- Dinero: `Decimal` siempre, nunca `float`
 
-## Decisiones críticas (resumen rápido)
-
-- **TukiFact** (servicio del propio Jaime, tukifact.com.pe) es el OSE
-  de facturación electrónica. Adapter listo en
-  `app/services/invoicing/`. Conectar real con `TUKIFACT_API_KEY` y
-  `TUKIFACT_ENVIRONMENT` en `.env`.
-- **Pagos manuales** primero (efectivo, Yape, Plin, transfer, POS).
-  Culqi diferido a post-MVP (feature flag `ENABLE_ONLINE_PAYMENTS`).
-- **WhatsApp** vía **Twilio**. En dev: `SAFE_RECIPIENTS_ONLY=true` con
-  whitelist en `SAFE_RECIPIENTS`. Plantillas seed en
-  `app.services.notification_service.DEFAULT_TEMPLATES`.
-- **Deploy** en VPS propio del usuario con Docker + Caddy/Traefik.
-
-## Lo que falta (orden sugerido — ver ROADMAP.md para detalle)
-
-1. **Fase 2 — Validación + Hardening** (2 sprints): `make up`/`test`
-   reales, Sentry, rate-limit, backups.
-2. **Fase 3 — Frontend MVP** (~8 sprints) con Cloud Design / Stitch.
-   Insumo: `docs/DESIGN.md` con las 14 pantallas, design system, mapa
-   endpoints.
-3. **Fase 4 — Deploy** (~3 sprints): VPS + CI/CD + observabilidad +
-   onboarding cliente piloto.
-4. **Fase 5 — V2** (~10 sprints opt-in): hospitalización, cirugía, lab,
-   wellness plans, AI SOAP, multi-sede, mobile app, telemedicina,
-   boarding/grooming, Culqi online.
-5. **Fase 6 — V3** (diferenciadores premium): DICOM, IDEXX/Antech,
-   API pública, marketplace, app móvil del vet.
+**Frontend:**
+- Tokens del bundle Claude Design en `src/app/globals.css` (paleta teal
+  `#2DB39A` primario, naranja `#F4A261` acento, Geist Sans, warm canvas)
+- Cliente HTTP único: `src/lib/api.ts` con `apiFetch<T>(...)` + ApiError
+- Tipos por dominio en `src/lib/<dominio>-api.ts` (auth, reports, …)
+- Auth: `useAuth()` desde `@/contexts/auth-context`
+- Botón shadcn de Base UI **no soporta `asChild`** — para enlaces usar
+  `<Link className={buttonVariants({...})}>`
+- Toasts con `import { toast } from "sonner"`
+- React Query keys: `["dominio", "subresource", ...args]`
+- Formularios: state local + zod inline o `validateStep()` puro
+- Idiomas: UI en español Perú; código y comentarios en inglés
+- Mobile-first; placeholders con `<PlaceholderScreen />`
 
 ## Setup local
 
 ```bash
+# Backend
 cd /Users/soulkin/Documents/Veterinaria
-cp .env.example .env   # ajustar TUKIFACT_API_KEY y TWILIO_* si vas a integrar real
-make up                 # postgres + redis + minio + api
-make migrate            # aplica las 12 migraciones
-make test               # ~70 tests deberían pasar
+make up                 # postgres + redis + minio + api (8000)
+make migrate            # 12 migraciones
+make test               # 141/141 should pass
 open http://localhost:8000/docs
+
+# Frontend (terminal aparte)
+cd apps/web
+npm install             # si es la primera vez
+npm run dev             # http://localhost:3000
 ```
+
+## Credenciales demo
+
+Backend single-tenant: solo acepta UNA organización. Si ya existe la demo,
+NO podrás crear otra hasta limpiar la BD:
+
+- Org: TukiVet Demo SAC · RUC `20612345678`
+- Owner: `demo@tukivet.pe` · `DemoSecret-2026`
+- Rol: `owner` (41 permisos)
+
+Para resetear demo: `make down && docker volume rm tukivet_pgdata && make up && make migrate`.
+
+## Documentos vivos en el repo
+
+- `docs/ROADMAP.md` — fases y sprints con commit hashes
+- `docs/CONTINUAR.md` — este archivo (prompt + estado)
+
+## MI OBJETIVO HOY ES
+
+[MI OBJETIVO HOY ES: <describe acá lo que querés hacer en esta sesión.
+Sé específico: "Sprint F2 — pantalla de Pacientes con lista filtrable + búsqueda
+global + detalle con tabs", "V1 hardening: integrar Sentry + rate-limit Redis",
+etc.>]
+
+## Reglas para ti, agente
+
+- NO empezar a codear sin leer al menos `DECISIONES.md` y `ROADMAP.md`.
+- Si vas a tocar BD: lee `MODELO_DATOS.md`, escribe migración manual,
+  agrega tests integration.
+- Si vas a integrar servicio externo: adapter pattern (port + real + mock).
+- Si vas a sumar pantalla frontend: reusa shell `(app)/layout.tsx`,
+  consume backend real (NO mocks), usa react-query, sigue tokens
+  existentes de `globals.css`.
+- Commitea por sprint con mensaje descriptivo. Una línea por feature/cambio.
+- No hagas `git push` salvo que te lo pida explícitamente.
+- Tests E2E backend en `tests/integration/test_*.py` con `auth_client`.
+- Si encontrás un patrón que no calza con lo establecido, preguntame
+  antes de cambiarlo globalmente.
+- Si hay decisiones nuevas que tomar (producto, arquitectura),
+  documentalas en `docs/DECISIONES.md` antes de codear.
+- Trabajá en español Perú para mensajes de usuario; código y comentarios
+  en inglés.
+- Si los puertos chocan con TukiJuris (5432, 6379, 8000, 3000): detené
+  TukiJuris primero con `docker compose down` en su repo.
+```
+
+---
+
+## Tips para usar el prompt
+
+- **Sé específico en "MI OBJETIVO HOY ES"**.
+  - ❌ "Sigue con el proyecto"
+  - ✅ "Sprint F2: Pantalla de Pacientes. Lista filtrable contra `GET /api/v1/pets` + búsqueda con `?q=` + paginación. Detalle con 6 tabs (Resumen, Encuentros, Vacunas, Recetas, Peso con gráfico, Documentos). Wizard 'Nuevo tutor + mascota' contra `POST /customers` y `POST /pets`. Smoke E2E manual."
+  - ✅ "V1 backend hardening: Sentry SDK con `app.main:app`, rate-limit Redis real en `app/core/ratelimit.py`, `EXPLAIN ANALYZE` sobre queries críticas (búsqueda, due-list, KPIs), backup script `pg_dump` cifrado, `docs/OPERACIONES.md` con RTO/RPO."
+
+- **Si retomás después de tiempo**, agregá:
+  > Hace [N] semanas que no toco esto. Antes de codear, hacé `git log
+  > --oneline -20`, `make test` y `cd apps/web && npm run build` para
+  > verificar que nada se rompió con deps actualizadas.
+
+- **Si sos un agente con memoria persistente** (Engram, Meridian),
+  hacé `mem_search "tukivet"` para retomar contexto.
+
+---
+
+## Próximos sprints — orden recomendado
+
+| Sprint | Foco | Endpoints clave | Esfuerzo |
+|---|---|---|---|
+| **F2** | Pacientes (lista + detalle con tabs) | `/customers`, `/pets`, `/pets/:id/weights` | medio |
+| **F3** | Encuentros + SOAP editor bipartito (crítica) | `/encounters`, `/encounters/:id/soap`, `/vitals`, `/problems` | grande |
+| **F4** | Vacunas + Recetas | `/vaccines`, `/prescriptions` | medio |
+| **F5** | Inventario + POS + Caja | `/inventory/*`, `/orders`, `/payments`, `/cash-sessions` | grande |
+| **F6** | Comprobantes + Agenda | `/invoices`, `/appointments`, `/rooms` | medio |
+| **F7** | Reportes + Comunicaciones + Config | `/reports/*`, `/notifications/*`, `/organizations`, `/users` | medio |
+| **F8** | Portal cliente | `/portal/*` | medio |
+| **F9** | QA + a11y + responsive + Playwright E2E | — | chico |
+| **V1** | Backend hardening (paralelo) | Sentry, rate-limit Redis real, EXPLAIN, backups | medio |
+| **D0-D3** | Deploy a VPS | infra, CI/CD, observabilidad, piloto | grande |
+
+---
 
 ## Pendientes operativos del usuario (Jaime)
 
@@ -106,59 +211,3 @@ open http://localhost:8000/docs
    `docs/DECISIONES.md §D9` para validar workflow.
 4. **Cumplimiento Ley 29733**: ver `docs/LEY_29733.md` checklist.
 5. **Specs del VPS** cuando estés listo para Fase 4.
-
----
-
-## MI OBJETIVO HOY ES
-
-[MI OBJETIVO HOY ES: <describe acá lo que querés hacer en esta sesión.
-Sé específico: "arrancar Sprint V0", "implementar V2.1 Hospitalización",
-"setup frontend con Next.js 15", etc.>]
-
-## Reglas para ti, agente
-
-- NO empezar a codear sin leer al menos `DECISIONES.md` y `ROADMAP.md`.
-- Si vas a tocar BD: lee `MODELO_DATOS.md`, escribe migración manual.
-- Si vas a integrar servicio externo: adapter pattern (port + real + mock).
-- Commitea por sprint con mensaje descriptivo. Una línea por feature/cambio.
-- Si encontrás un patrón que no calza con lo establecido, pregúntame
-  antes de cambiarlo globalmente.
-- Tests E2E en `tests/integration/test_*.py` con `auth_client` fixture.
-- Si hay decisiones nuevas que tomar (producto, arquitectura),
-  documentarlas en `docs/DECISIONES.md` antes de codear.
-- Trabajá en español Perú para mensajes de usuario, código en inglés.
-```
-
----
-
-## Tips para usar el prompt
-
-- **Sé específico en "MI OBJETIVO HOY ES"**. Cuanto más concreto, mejor.
-  - ❌ "Sigue con el proyecto"
-  - ✅ "Arrancá Sprint V0 — Smoke test real. Probá `make up`, `make migrate` y `make test`. Si algo falla, debugea y arregla. Reportame todo lo que encuentres."
-  - ✅ "Implementá V2.1 Hospitalización. Lee primero ROADMAP.md y DESIGN.md. Diseñá los modelos (HospitalizationStay, KardexEntry, MedicalOrder), define endpoints, escribe migración, tests. Commitea cuando termines."
-
-- **Si retomás después de mucho tiempo**, agregá al prompt:
-  > Hace [N] semanas que no toco esto. Antes de codear, hacé `git log
-  > --oneline -20` y `make test` para verificar que nada se rompió con
-  > deps actualizadas.
-
-- **Si la sesión nueva no es Claude Code, sino otro agente o un dev**,
-  pegale el prompt completo y el agente sabrá leer la documentación.
-
-- **Si necesitás onboarding profundo** y no querés explicar cada cosa,
-  decile al agente:
-  > Antes de hacer nada, leé los 6 documentos en `docs/` en orden y
-  > resumime: (1) qué hace el sistema, (2) cuáles son las decisiones
-  > clave, (3) qué patrones debo respetar, (4) qué falta hacer.
-
----
-
-## Memoria persistente (Engram, Meridian, etc.)
-
-Si tu agente tiene memoria persistente, también está guardado en:
-- `tukivet_progreso` — estado de sprints y commits
-- `proyecto_veterinaria` — contexto inicial del proyecto
-- `productos_tukituki` — portafolio (TukiJuris, TukiFact, TukiVet)
-
-El agente puede llamar a `mem_search "tukivet"` para retomar contexto.

@@ -77,10 +77,11 @@ Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 - [x] 12 placeholders para el resto del NAV
 - [x] Smoke E2E verificado: register-org → login → dashboard con KPIs reales
 
-### Sprint F1 — Landing + Auth + Dashboard
-- [ ] Landing pública (8 secciones de DESIGN.md §3)
-- [ ] `/login` intranet + flow refresh
-- [ ] `/app` dashboard con KPI cards
+### Sprint F1 — Landing + Auth + Dashboard ✅ COMPLETO
+- [x] Landing pública en `/` con 8 secciones (hero, banda, servicios, equipo, sobre, ubicación, testimonios, footer)
+- [x] `PublicHeader` con CTAs dinámicos (Ingresar/Registrar o Ir a la app si auth)
+- [x] `/register` wizard 3 pasos (Veterinaria → Sede → Owner) contra `POST /api/v1/auth/register-org`
+- [x] `/login` y `/dashboard` ya cubiertos en F0
 
 ### Sprint F2 — Pacientes (tutores + mascotas)
 - [ ] Lista de pacientes con filtros + búsqueda global del topbar
