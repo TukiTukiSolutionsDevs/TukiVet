@@ -53,6 +53,7 @@ export const STATUS_LABELS: Record<PetStatus, string> = {
 export type PetRead = {
   id: string;
   organization_id: string;
+  customer_id: string | null;
   name: string;
   species: string;
   breed_id: string | null;

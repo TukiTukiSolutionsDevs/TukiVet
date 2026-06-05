@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Query, Request, status
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import (
     CurrentUser,
@@ -12,11 +14,33 @@ from app.api.deps import (
     require_permission,
 )
 from app.core.audit import audit
+from app.models import Pet, PetOwner
 from app.schemas.common import Page
 from app.schemas.pet import PetCreate, PetRead, PetUpdate, PetWeightCreate, PetWeightRead
 from app.services import pet_service
 
 router = APIRouter()
+
+
+async def _primary_owner_map(
+    db: AsyncSession, pet_ids: list[str]
+) -> dict[str, str]:
+    """Devuelve {pet_id: customer_id} para el tutor primario."""
+    if not pet_ids:
+        return {}
+    rows = await db.execute(
+        select(PetOwner.pet_id, PetOwner.customer_id).where(
+            PetOwner.pet_id.in_(pet_ids),
+            PetOwner.role == "primary",
+        )
+    )
+    return {pet_id: customer_id for pet_id, customer_id in rows.all()}
+
+
+def _pet_to_read(pet: Pet, primary_customer_id: str | None) -> PetRead:
+    return PetRead.model_validate(pet).model_copy(
+        update={"customer_id": primary_customer_id}
+    )
 
 
 @router.post(
@@ -49,7 +73,8 @@ async def create_pet(
         user_agent=get_user_agent(request),
     )
     await db.commit()
-    return PetRead.model_validate(pet)
+    owners = await _primary_owner_map(db, [pet.id])
+    return _pet_to_read(pet, owners.get(pet.id))
 
 
 @router.get(
@@ -78,8 +103,9 @@ async def list_pets(
         page=page,
         page_size=page_size,
     )
+    owners = await _primary_owner_map(db, [p.id for p in rows])
     return Page[PetRead](
-        items=[PetRead.model_validate(p) for p in rows],
+        items=[_pet_to_read(p, owners.get(p.id)) for p in rows],
         total=total,
         page=page,
         page_size=page_size,
@@ -100,7 +126,8 @@ async def get_pet(
     pet = await pet_service.get_pet(
         db, organization_id=current_user.organization_id, pet_id=pet_id
     )
-    return PetRead.model_validate(pet)
+    owners = await _primary_owner_map(db, [pet.id])
+    return _pet_to_read(pet, owners.get(pet.id))
 
 
 @router.put(
@@ -134,7 +161,8 @@ async def update_pet(
         user_agent=get_user_agent(request),
     )
     await db.commit()
-    return PetRead.model_validate(pet)
+    owners = await _primary_owner_map(db, [pet.id])
+    return _pet_to_read(pet, owners.get(pet.id))
 
 
 @router.delete(

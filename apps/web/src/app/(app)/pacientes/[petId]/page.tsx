@@ -235,18 +235,9 @@ function StatusBadge({ status }: { status: string }) {
 /* ------------------------------------------------------------------ Tabs */
 
 function OverviewTab({ pet }: { pet: PetRead }) {
-  // No tenemos endpoint pet→customer directo; obtenemos tutor por la lista de mascotas del cliente.
-  // Lo más confiable es buscar al tutor desde el último encuentro.
-  const encountersQ = useQuery({
-    queryKey: ["encounters", "by-pet", pet.id, 1],
-    queryFn: () => petsApi.listEncounters(pet.id, 1),
-  });
-  const customerId = encountersQ.data?.items[0]?.customer_id;
-
   const customerQ = useQuery({
-    queryKey: ["customers", customerId],
-    queryFn: () => customersApi.get(customerId!),
-    enabled: !!customerId,
+    queryKey: ["customers", pet.customer_id],
+    queryFn: () => customersApi.get(pet.customer_id),
   });
 
   return (
@@ -289,11 +280,7 @@ function OverviewTab({ pet }: { pet: PetRead }) {
         <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <UserIcon className="size-4" /> Tutor
         </div>
-        {!customerId ? (
-          <p className="text-xs text-muted-foreground">
-            No hay encuentros aún. El tutor se mostrará al crear el primer encuentro.
-          </p>
-        ) : customerQ.isLoading ? (
+        {customerQ.isLoading ? (
           <div className="space-y-2">
             <Skeleton className="h-4 w-32" />
             <Skeleton className="h-4 w-24" />

@@ -73,6 +73,7 @@ class PetUpdate(ORMModel):
 class PetRead(ORMModel):
     id: str
     organization_id: str
+    customer_id: str | None = None
     name: str
     species: str
     breed_id: str | None

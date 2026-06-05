@@ -199,4 +199,7 @@ async def list_pets_of_customer(
     pets = await pet_service.list_pets_for_customer(
         db, organization_id=current_user.organization_id, customer_id=customer_id
     )
-    return [PetRead.model_validate(p) for p in pets]
+    return [
+        PetRead.model_validate(p).model_copy(update={"customer_id": customer_id})
+        for p in pets
+    ]
