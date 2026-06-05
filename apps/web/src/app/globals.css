@@ -1,0 +1,210 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-heading: var(--font-sans);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+
+/* =================================================================
+   TukiVet design tokens — from DESIGN.md §1 + bundle theme.css
+   =================================================================*/
+
+:root {
+  --radius: 0.75rem; /* 12px */
+
+  /* Neutrals — warm */
+  --background: #F4F1EC;
+  --foreground: #1F2937;
+  --card: #FFFFFF;
+  --card-foreground: #1F2937;
+  --popover: #FFFFFF;
+  --popover-foreground: #1F2937;
+
+  /* Brand teal */
+  --primary: #2DB39A;
+  --primary-foreground: #FFFFFF;
+
+  /* Surfaces */
+  --secondary: #FBFAF7;
+  --secondary-foreground: #1F2937;
+  --muted: #FBFAF7;
+  --muted-foreground: #6B7280;
+
+  /* Accent orange */
+  --accent: #F4A261;
+  --accent-foreground: #1F2937;
+
+  /* Status */
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --info: #3B82F6;
+
+  --border: #ECE7DF;
+  --input: #ECE7DF;
+  --ring: #2DB39A;
+
+  --chart-1: #2DB39A;
+  --chart-2: #F4A261;
+  --chart-3: #3B82F6;
+  --chart-4: #F59E0B;
+  --chart-5: #7A5AE0;
+
+  /* Sidebar (always darker) */
+  --sidebar: #18211F;
+  --sidebar-foreground: #C9D4D0;
+  --sidebar-primary: #2DB39A;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #25322E;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #2B3936;
+  --sidebar-ring: #2DB39A;
+
+  /* Extended palette (raw access for special cases) */
+  --primary-50: #E9F8F4;
+  --primary-100: #CFF0E8;
+  --primary-300: #6FD2BC;
+  --primary-600: #1F9E87;
+  --primary-700: #167D6B;
+  --error-bg: #FCEBEB;
+  --warning-bg: #FDF3DF;
+  --success-bg: #E4F7EF;
+  --info-bg: #E8F0FE;
+  --text-subtle: #9AA1AB;
+}
+
+.dark {
+  --background: #0E1614;
+  --foreground: #E9EFED;
+  --card: #18211F;
+  --card-foreground: #E9EFED;
+  --popover: #18211F;
+  --popover-foreground: #E9EFED;
+
+  --primary: #34C7AC;
+  --primary-foreground: #0E1614;
+
+  --secondary: #1E2826;
+  --secondary-foreground: #E9EFED;
+  --muted: #1E2826;
+  --muted-foreground: #9DB0AB;
+
+  --accent: #F4A261;
+  --accent-foreground: #0E1614;
+
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --info: #60A5FA;
+
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: #34C7AC;
+
+  --sidebar: #0B1210;
+  --sidebar-foreground: #C2CECA;
+  --sidebar-primary: #34C7AC;
+  --sidebar-primary-foreground: #0E1614;
+  --sidebar-accent: #1A2421;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: #34C7AC;
+
+  --primary-50: #11302A;
+  --primary-100: #163E36;
+  --error-bg: #3A1E1E;
+  --warning-bg: #372B14;
+  --success-bg: #16302A;
+  --info-bg: #1A2740;
+  --text-subtle: #6F827D;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    font-family: var(--font-sans);
+  }
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--border) 80%, transparent);
+  border-radius: 99px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+  background-clip: content-box;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
