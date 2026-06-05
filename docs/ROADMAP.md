@@ -113,11 +113,15 @@ Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 - [x] `/recetas/[id]` vista con dispense (con testigo si controlado) + anular
 - [x] Pet detail: VaccinesTab y PrescriptionsTab con botones de creación y filas clickeables
 
-### Sprint F5 — Inventario + POS + Caja
-- [ ] Productos + Lotes + Movimientos
-- [ ] Alertas low-stock + expiring
-- [ ] POS bipartito (composer + cobro)
-- [ ] Apertura/cierre de caja con conciliación visible
+### Sprint F5 — Inventario + POS + Caja ✅
+- [x] Productos (lista + búsqueda + filtros por categoría + alerta stock bajo)
+- [x] Proveedores CRUD con toggle activo
+- [x] Recibir lote (compra) con costo unitario, vencimiento y proveedor
+- [x] Movimientos manuales (ajuste, merma, transferencia con motivo)
+- [x] Alertas: low-stock + expiring (ventana configurable 7/30/60/90d)
+- [x] POS bipartito: cliente + items (servicios o productos) + totales + IGV
+- [x] Pago con 7 métodos (efectivo/yape/plin/transferencia/tarjeta/crédito/otro)
+- [x] Apertura/cierre de caja con conciliación auto vs declarado
 
 ### Sprint F6 — Comprobantes + Agenda
 - [ ] Lista de comprobantes con timeline de webhooks

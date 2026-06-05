@@ -4,7 +4,7 @@ Este documento te da el **prompt template** para arrancar cualquier sesión
 nueva y retomar el trabajo sin perder contexto, más el estado actualizado del
 roadmap.
 
-Última actualización: **2026-06-04** — Sprint F4 (Vacunas + Recetas) cerrado.
+Última actualización: **2026-06-04** — Sprint F5 (Inventario + POS + Caja) cerrado.
 
 ---
 
@@ -18,10 +18,9 @@ roadmap.
 | F1 — Landing pública + Register wizard | ✅ COMPLETA | `c0cc475` |
 | F2 — Pacientes (lista + detalle con tabs) | ✅ COMPLETA | `f238a91` |
 | F3 — Encuentros + SOAP editor (crítica) | ✅ COMPLETA | `4ac50e9` |
-| **F4 — Vacunas + Recetas** | ✅ COMPLETA | _este sprint_ |
-| F5 — Inventario + POS + Caja | ⏳ siguiente | — |
-| F5 — Inventario + POS + Caja | ⏳ | — |
-| F6 — Comprobantes + Agenda | ⏳ | — |
+| F4 — Vacunas + Recetas | ✅ COMPLETA | `0abe8cb` |
+| **F5 — Inventario + POS + Caja** | ✅ COMPLETA | _este sprint_ |
+| F6 — Comprobantes + Agenda | ⏳ siguiente | — |
 | F7 — Reportes + Comunicaciones + Config | ⏳ | — |
 | F8 — Portal cliente | ⏳ | — |
 | F9 — QA + a11y + responsive | ⏳ | — |
@@ -29,7 +28,8 @@ roadmap.
 | D0-D3 — Deploy VPS | ⏳ | — |
 
 Backend: 141/141 tests, ~90 endpoints. Frontend: landing + auth + dashboard +
-**Pacientes (lista + detalle 6-tabs + wizard tutor/mascota)** + 11 placeholders.
+Pacientes + Encuentros + Vacunas + Recetas + **Inventario (productos / alertas
+/ proveedores) + POS y caja (composer + cobro + apertura/cierre)** + 7 placeholders.
 
 ---
 
@@ -72,10 +72,14 @@ Soy Jaime Andrés (TukiTuki Solutions SAC, RUC 20613614509).
   - `src/app/(app)/encuentros/page.tsx` — lista con chips de filtro
   - `src/app/(app)/encuentros/[encounterId]/page.tsx` — bipartite SOAP
   - `src/app/(app)/encuentros/_components/{new-encounter-dialog,soap-editor,vital-signs-form,problems-list,amend-dialog}.tsx`
+  - `src/app/(app)/inventario/page.tsx` — tabs (Productos / Alertas / Proveedores) + dialogs
+  - `src/app/(app)/inventario/_components/{products-tab,alerts-tab,suppliers-tab,new-product-dialog,receive-lot-dialog,adjustment-dialog}.tsx`
+  - `src/app/(app)/pos/page.tsx` — composer + totales + caja
+  - `src/app/(app)/pos/_components/{cash-session-bar,customer-picker,item-picker,payment-dialog}.tsx`
   - `src/components/shell/{sidebar,topbar,nav,placeholder-screen}.tsx`
   - `src/components/ui/tabs.tsx` — Base UI tabs wrapper
   - `src/components/marketing/public-header.tsx`
-  - `src/lib/{api,auth-api,customers-api,pets-api,encounters-api,reports-api,pagination,storage,format,env,utils}.ts`
+  - `src/lib/{api,auth-api,customers-api,pets-api,encounters-api,inventory-api,orders-api,vaccines-api,prescriptions-api,reports-api,notifications-api,pagination,storage,format,env,utils}.ts`
   - `src/contexts/auth-context.tsx`
 
 ## Documentación canónica — LEE EN ESTE ORDEN antes de codear
