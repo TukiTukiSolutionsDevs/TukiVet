@@ -63,6 +63,7 @@ async def create_template(
 @router.post(
     "/templates/seed-defaults",
     response_model=dict,
+    status_code=status.HTTP_201_CREATED,
     summary="Crea las plantillas por defecto (recordatorios cita/vacuna, etc.)",
     dependencies=[Depends(require_permission("organization:update"))],
 )

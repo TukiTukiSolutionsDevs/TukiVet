@@ -36,10 +36,37 @@ TEST_DATABASE_URL = os.environ.get(
 )
 
 
-@pytest_asyncio.fixture(scope="session")
+def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
+    """Force all async tests to share the session-scoped event loop.
+
+    pytest-asyncio 0.24 lacks `asyncio_default_test_loop_scope`; without this
+    hook each test runs in its own loop while the engine fixture lives in the
+    session loop, producing "Future attached to a different loop" errors.
+    """
+    import inspect
+
+    session_marker = pytest.mark.asyncio(loop_scope="session")
+    for item in items:
+        if not hasattr(item, "own_markers"):
+            continue
+        func = getattr(item, "function", None)
+        if func is None or not inspect.iscoroutinefunction(func):
+            continue
+        item.own_markers = [m for m in item.own_markers if m.name != "asyncio"]
+        item.add_marker(session_marker)
+
+
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def engine() -> AsyncIterator[AsyncEngine]:
     """Engine compartido — crea esquema una vez por suite."""
-    eng = create_async_engine(TEST_DATABASE_URL, echo=False, pool_pre_ping=True)
+    from app.db.session import _json_serializer
+
+    eng = create_async_engine(
+        TEST_DATABASE_URL,
+        echo=False,
+        pool_pre_ping=True,
+        json_serializer=_json_serializer,
+    )
     async with eng.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
@@ -53,7 +80,7 @@ async def engine() -> AsyncIterator[AsyncEngine]:
     await eng.dispose()
 
 
-@pytest_asyncio.fixture
+@pytest_asyncio.fixture(loop_scope="session")
 async def db(engine: AsyncEngine) -> AsyncIterator[AsyncSession]:
     """Sesión transaccional. Todo cambio se revierte al final del test."""
     connection = await engine.connect()
@@ -68,7 +95,7 @@ async def db(engine: AsyncEngine) -> AsyncIterator[AsyncSession]:
         await connection.close()
 
 
-@pytest_asyncio.fixture
+@pytest_asyncio.fixture(loop_scope="session")
 async def client(db: AsyncSession) -> AsyncIterator[AsyncClient]:
     """Cliente HTTP que comparte la sesión transaccional con los endpoints."""
 
@@ -82,7 +109,7 @@ async def client(db: AsyncSession) -> AsyncIterator[AsyncClient]:
     app.dependency_overrides.clear()
 
 
-@pytest_asyncio.fixture
+@pytest_asyncio.fixture(loop_scope="session")
 async def auth_client(
     client: AsyncClient, sample_org_payload: dict
 ) -> AsyncIterator[AsyncClient]:

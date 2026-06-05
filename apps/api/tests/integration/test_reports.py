@@ -86,8 +86,8 @@ class TestFinancial:
             await auth_client.post(
                 "/api/v1/orders/services",
                 json={
-                    "code": "X",
-                    "name": "S",
+                    "code": "FIN",
+                    "name": "Servicio financiero",
                     "category": "consultation",
                     "base_price": "59.00",
                 },

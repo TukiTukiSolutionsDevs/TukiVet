@@ -119,6 +119,7 @@ async def refresh(
 @router.post(
     "/logout",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
     summary="Revocar el refresh token actual",
 )
 async def logout(payload: RefreshRequest, db: DBSession) -> None:

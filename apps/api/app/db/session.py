@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import json
 from collections.abc import AsyncIterator
+from datetime import date, datetime
+from decimal import Decimal
+from typing import Any
 
 import structlog
 from sqlalchemy import text
@@ -18,6 +22,18 @@ from app.config import settings
 log = structlog.get_logger()
 
 
+def _json_default(value: Any) -> Any:
+    if isinstance(value, Decimal):
+        return str(value)
+    if isinstance(value, datetime | date):
+        return value.isoformat()
+    raise TypeError(f"Object of type {type(value).__name__} is not JSON serializable")
+
+
+def _json_serializer(value: Any) -> str:
+    return json.dumps(value, default=_json_default)
+
+
 def _create_engine() -> AsyncEngine:
     return create_async_engine(
         settings.database_url,
@@ -26,6 +42,7 @@ def _create_engine() -> AsyncEngine:
         pool_size=5,
         max_overflow=10,
         future=True,
+        json_serializer=_json_serializer,
     )
 
 

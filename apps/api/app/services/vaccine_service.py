@@ -128,6 +128,7 @@ async def record_administration(
         notes=payload.notes,
         status="administered",
     )
+    admin.vaccine = vaccine
     db.add(admin)
     await db.flush()
     return admin

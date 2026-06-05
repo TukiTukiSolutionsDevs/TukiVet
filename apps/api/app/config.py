@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, SecretStr, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 Environment = Literal["development", "test", "staging", "production"]
 LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
@@ -43,7 +43,9 @@ class Settings(BaseSettings):
     refresh_token_days: int = 7
 
     # ---- CORS ----
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
+    cors_origins: Annotated[list[str], NoDecode] = Field(
+        default_factory=lambda: ["http://localhost:3000"]
+    )
 
     @field_validator("cors_origins", mode="before")
     @classmethod
@@ -71,7 +73,7 @@ class Settings(BaseSettings):
 
     # ---- Modo seguro de comunicaciones ----
     safe_recipients_only: bool = True
-    safe_recipients: list[str] = Field(default_factory=list)
+    safe_recipients: Annotated[list[str], NoDecode] = Field(default_factory=list)
 
     @field_validator("safe_recipients", mode="before")
     @classmethod

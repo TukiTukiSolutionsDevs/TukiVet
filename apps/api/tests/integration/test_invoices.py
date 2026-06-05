@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import uuid
 from decimal import Decimal
 
 import pytest
@@ -28,7 +29,7 @@ async def _setup_paid_order(
         await auth_client.post(
             "/api/v1/orders/services",
             json={
-                "code": "CONS",
+                "code": f"CONS-{uuid.uuid4().hex[:8]}",
                 "name": "Consulta general",
                 "category": "consultation",
                 "base_price": "118.00",

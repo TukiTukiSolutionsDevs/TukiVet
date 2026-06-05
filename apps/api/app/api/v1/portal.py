@@ -103,7 +103,7 @@ async def consume(
     result = await db.execute(select(Organization).limit(1))
     org = result.scalar_one_or_none()
     if org is None:
-        raise NotFoundError("Organización no registrada")
+        raise UnauthorizedError("Token inválido o ya usado")
 
     customer = await portal_service.consume_magic_link(
         db, organization_id=org.id, raw_token=payload.token

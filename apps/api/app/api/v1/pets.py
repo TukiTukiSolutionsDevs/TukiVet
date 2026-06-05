@@ -140,6 +140,7 @@ async def update_pet(
 @router.delete(
     "/{pet_id}",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
     summary="Eliminar (soft) mascota",
     dependencies=[Depends(require_permission("pet:delete"))],
 )

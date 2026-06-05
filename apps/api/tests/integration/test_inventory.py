@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, timedelta
+from decimal import Decimal
 
 import pytest
 from httpx import AsyncClient
@@ -73,12 +74,11 @@ class TestLots:
     async def test_receive_lot_creates_movement(self, auth_client: AsyncClient) -> None:
         product = await _make_product(auth_client)
         lot = await _make_lot(auth_client, product["id"])
-        assert lot["initial_qty"] == "100.00"
-        assert lot["current_qty"] == "100.00"
+        assert Decimal(lot["initial_qty"]) == Decimal("100")
+        assert Decimal(lot["current_qty"]) == Decimal("100")
 
-        # available_qty del product debería ser 100
         r = await auth_client.get(f"/api/v1/inventory/products/{product['id']}")
-        assert r.json()["available_qty"] == "100.00"
+        assert Decimal(r.json()["available_qty"]) == Decimal("100")
 
     async def test_duplicate_lot_number_returns_409(self, auth_client: AsyncClient) -> None:
         product = await _make_product(auth_client)

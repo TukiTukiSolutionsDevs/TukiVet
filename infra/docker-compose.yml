@@ -63,6 +63,7 @@ services:
     volumes:
       - ../apps/api/app:/app/app
       - ../apps/api/alembic:/app/alembic
+      - ../apps/api/alembic.ini:/app/alembic.ini
       - ../apps/api/tests:/app/tests
       - ../apps/api/pyproject.toml:/app/pyproject.toml
     depends_on:

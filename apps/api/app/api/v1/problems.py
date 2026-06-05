@@ -82,6 +82,7 @@ async def update_problem(
 @router.delete(
     "/problems/{problem_id}",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
     summary="Eliminar (soft) problema",
     dependencies=[Depends(require_permission("encounter:write"))],
 )

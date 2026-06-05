@@ -68,7 +68,7 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(
             ["referenced_document_id"],
             ["electronic_document.id"],
-            name="fk_electronic_document_referenced_document_id_electronic_document",
+            name="fk_electronic_document_referenced_id",
         ),
         sa.UniqueConstraint(
             "organization_id", "series", "number", name="uq_electronic_document_series_number"
@@ -110,7 +110,7 @@ def upgrade() -> None:
             ["electronic_document_id"],
             ["electronic_document.id"],
             ondelete="CASCADE",
-            name="fk_electronic_document_event_electronic_document_id_electronic_document",
+            name="fk_electronic_document_event_doc_id",
         ),
     )
     op.create_index(
