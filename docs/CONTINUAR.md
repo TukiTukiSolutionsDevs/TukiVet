@@ -4,7 +4,7 @@ Este documento te da el **prompt template** para arrancar cualquier sesión
 nueva y retomar el trabajo sin perder contexto, más el estado actualizado del
 roadmap.
 
-Última actualización: **2026-06-04** — Sprint F3 (Encuentros + SOAP) cerrado.
+Última actualización: **2026-06-04** — Sprint F4 (Vacunas + Recetas) cerrado.
 
 ---
 
@@ -17,8 +17,9 @@ roadmap.
 | F0 — Bootstrap Next.js + auth + Dashboard | ✅ COMPLETA | `5eb418d` |
 | F1 — Landing pública + Register wizard | ✅ COMPLETA | `c0cc475` |
 | F2 — Pacientes (lista + detalle con tabs) | ✅ COMPLETA | `f238a91` |
-| **F3 — Encuentros + SOAP editor (crítica)** | ✅ COMPLETA | _este sprint_ |
-| F4 — Vacunas + Recetas | ⏳ siguiente | — |
+| F3 — Encuentros + SOAP editor (crítica) | ✅ COMPLETA | `4ac50e9` |
+| **F4 — Vacunas + Recetas** | ✅ COMPLETA | _este sprint_ |
+| F5 — Inventario + POS + Caja | ⏳ siguiente | — |
 | F5 — Inventario + POS + Caja | ⏳ | — |
 | F6 — Comprobantes + Agenda | ⏳ | — |
 | F7 — Reportes + Comunicaciones + Config | ⏳ | — |

@@ -51,6 +51,8 @@ import { ApiError } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { WeightChart } from "../_components/weight-chart";
 import { NewEncounterDialog } from "../../encuentros/_components/new-encounter-dialog";
+import { RecordVaccineDialog } from "../../vacunas/_components/record-vaccine-dialog";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function PetDetailPage({
   params,
@@ -117,10 +119,10 @@ function PetDetail({ pet }: { pet: PetRead }) {
           <EncountersTab pet={pet} />
         </TabsPanel>
         <TabsPanel value="vaccines">
-          <VaccinesTab petId={pet.id} />
+          <VaccinesTab pet={pet} />
         </TabsPanel>
         <TabsPanel value="prescriptions">
-          <PrescriptionsTab petId={pet.id} />
+          <PrescriptionsTab pet={pet} />
         </TabsPanel>
         <TabsPanel value="weight">
           <WeightTab petId={pet.id} />
@@ -390,19 +392,26 @@ function EncountersTab({ pet }: { pet: PetRead }) {
   );
 }
 
-function VaccinesTab({ petId }: { petId: string }) {
+function VaccinesTab({ pet }: { pet: PetRead }) {
   const q = useQuery({
-    queryKey: ["vaccines", "by-pet", petId],
-    queryFn: () => petsApi.listVaccines(petId),
+    queryKey: ["vaccines", "by-pet", pet.id],
+    queryFn: () => petsApi.listVaccines(pet.id),
   });
 
   return (
     <Card className="overflow-hidden p-0">
-      <SectionHeader
-        icon={<Syringe className="size-4" />}
-        title="Vacunas aplicadas"
-        sub="Histórico + próximas dosis"
-      />
+      <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-5 py-3">
+        <div className="flex items-center gap-3">
+          <div className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+            <Syringe className="size-4" />
+          </div>
+          <div>
+            <div className="text-sm font-semibold text-foreground">Vacunas aplicadas</div>
+            <div className="text-xs text-muted-foreground">Histórico + próximas dosis</div>
+          </div>
+        </div>
+        <RecordVaccineDialog defaultPet={pet} />
+      </div>
       {q.isLoading ? (
         <RowSkeleton />
       ) : q.data && q.data.length > 0 ? (
@@ -436,32 +445,51 @@ function VaccinesTab({ petId }: { petId: string }) {
         <EmptyTab
           icon={<Syringe className="size-7" />}
           title="Sin vacunas registradas"
-          sub="Se podrán registrar desde la pantalla Vacunas (sprint F4)."
+          sub="Usa “Registrar aplicación” para añadir la primera."
         />
       )}
     </Card>
   );
 }
 
-function PrescriptionsTab({ petId }: { petId: string }) {
+function PrescriptionsTab({ pet }: { pet: PetRead }) {
+  const router = useRouter();
   const q = useQuery({
-    queryKey: ["prescriptions", "by-pet", petId],
-    queryFn: () => petsApi.listPrescriptions(petId),
+    queryKey: ["prescriptions", "by-pet", pet.id],
+    queryFn: () => petsApi.listPrescriptions(pet.id),
   });
 
   return (
     <Card className="overflow-hidden p-0">
-      <SectionHeader
-        icon={<FileText className="size-4" />}
-        title="Recetas emitidas"
-        sub="Histórico de prescripciones"
-      />
+      <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-5 py-3">
+        <div className="flex items-center gap-3">
+          <div className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+            <FileText className="size-4" />
+          </div>
+          <div>
+            <div className="text-sm font-semibold text-foreground">Recetas emitidas</div>
+            <div className="text-xs text-muted-foreground">Histórico de prescripciones</div>
+          </div>
+        </div>
+        <Link
+          href={`/recetas/nueva?pet_id=${pet.id}`}
+          className={cn(buttonVariants({ size: "default" }))}
+        >
+          <FileText className="size-4" />
+          Nueva receta
+        </Link>
+      </div>
       {q.isLoading ? (
         <RowSkeleton />
       ) : q.data && q.data.length > 0 ? (
         <div className="divide-y divide-border">
           {q.data.map((p) => (
-            <div key={p.id} className="px-5 py-4">
+            <button
+              type="button"
+              key={p.id}
+              onClick={() => router.push(`/recetas/${p.id}`)}
+              className="block w-full cursor-pointer px-5 py-4 text-left transition-colors hover:bg-muted/40"
+            >
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <div className="text-sm font-medium">
@@ -483,14 +511,14 @@ function PrescriptionsTab({ petId }: { petId: string }) {
                   </li>
                 ))}
               </ul>
-            </div>
+            </button>
           ))}
         </div>
       ) : (
         <EmptyTab
           icon={<FileText className="size-7" />}
           title="Sin recetas emitidas"
-          sub="Las recetas se emitirán desde la pantalla Recetas (sprint F4)."
+          sub="Usa “Nueva receta” para emitir la primera."
         />
       )}
     </Card>

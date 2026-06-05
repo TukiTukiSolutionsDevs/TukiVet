@@ -103,12 +103,15 @@ Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 - [x] Atajo `⌘S` / `Ctrl+S` para guardar SOAP
 - [x] Asentamientos (assessment) editables con status y código por línea
 
-### Sprint F4 — Vacunas + Recetas
-- [ ] Catálogo de vacunas
-- [ ] Registrar aplicación
-- [ ] Due-list con "Enviar WhatsApp" inline
-- [ ] Editor de recetas con calculadora de dosis embebida
-- [ ] Dispense con testigo si controlado
+### Sprint F4 — Vacunas + Recetas ✅ COMPLETO
+- [x] `/vacunas` con tabs Pendientes (due-list con ventanas 0/30/60/90d) + Catálogo
+- [x] Catálogo de vacunas: lista filtrable + diálogo crear/editar + toggle activo
+- [x] Diálogo "Registrar aplicación" (pet picker → catálogo por especie → lote/dosis/notas)
+- [x] Due-list con botón WhatsApp inline (template `vet_vaccine_due`) + "Aplicar" inline
+- [x] `/recetas` lista por mascota (búsqueda) + botón "Nueva receta"
+- [x] `/recetas/nueva` editor con calculadora de dosis embebida por ítem (peso × dosis ÷ presentación)
+- [x] `/recetas/[id]` vista con dispense (con testigo si controlado) + anular
+- [x] Pet detail: VaccinesTab y PrescriptionsTab con botones de creación y filas clickeables
 
 ### Sprint F5 — Inventario + POS + Caja
 - [ ] Productos + Lotes + Movimientos
