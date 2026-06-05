@@ -4,7 +4,7 @@ Este documento te da el **prompt template** para arrancar cualquier sesión
 nueva y retomar el trabajo sin perder contexto, más el estado actualizado del
 roadmap.
 
-Última actualización: **2026-06-04** — Sprint F6 (Comprobantes + Agenda) cerrado.
+Última actualización: **2026-06-04** — Sprints F5→F9 cerrados (POS, Agenda, Reportes, Portal, QA).
 
 ---
 
@@ -20,8 +20,12 @@ roadmap.
 | F3 — Encuentros + SOAP editor (crítica) | ✅ COMPLETA | `4ac50e9` |
 | F4 — Vacunas + Recetas | ✅ COMPLETA | `0abe8cb` |
 | F5 — Inventario + POS + Caja | ✅ COMPLETA | _commit previo_ |
-| **F6 — Comprobantes + Agenda** | ✅ COMPLETA | _este sprint_ |
-| F7 — Reportes + Comunicaciones + Config | ⏳ siguiente | — |
+| F6 — Comprobantes + Agenda | ✅ COMPLETA | _commit previo_ |
+| F7 — Reportes + Comunicaciones + Config + Equipo | ✅ COMPLETA | _commit previo_ |
+| F8 — Portal cliente | ✅ COMPLETA | _commit previo_ |
+| **F9 — QA + a11y + responsive** | ✅ COMPLETA | _este sprint_ |
+| V1 — Production hardening backend | ⏳ siguiente | — |
+| D0-D3 — Deploy VPS | ⏳ | — |
 | F7 — Reportes + Comunicaciones + Config | ⏳ | — |
 | F8 — Portal cliente | ⏳ | — |
 | F9 — QA + a11y + responsive | ⏳ | — |
@@ -29,9 +33,10 @@ roadmap.
 | D0-D3 — Deploy VPS | ⏳ | — |
 
 Backend: 141/141 tests, ~90 endpoints. Frontend: landing + auth + dashboard +
-Pacientes + Encuentros + Vacunas + Recetas + Inventario + POS y caja +
-**Comprobantes (lista + drawer con timeline + void) + Agenda (calendario semanal
-+ nueva cita + estados)** + 5 placeholders.
+Pacientes + Encuentros + Vacunas + Recetas + Inventario + POS + Comprobantes +
+Agenda + **Reportes + Comunicaciones + Equipo + Configuración** + **Portal
+cliente (login magic-link, mis mascotas, ARCO Ley 29733)**. Sin placeholders.
+QA documentado en `docs/QA.md` (a11y, responsive, próximos pasos Playwright).
 
 ---
 

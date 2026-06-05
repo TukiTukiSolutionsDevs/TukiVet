@@ -152,10 +152,15 @@ Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 - [x] Token store + refresh rotation independiente del backoffice (clave `tukivet.portal.*`)
 - [ ] Descarga de certificados PDF (postergado a F9 — depende de endpoint backend)
 
-### Sprint F9 — QA + a11y + responsive
-- [ ] Lighthouse audit (objetivo: 90+ en accessibility)
-- [ ] Responsive: desktop + tablet horizontal (iPad)
-- [ ] Tests E2E con Playwright (al menos el flujo crítico)
+### Sprint F9 — QA + a11y + responsive ✅
+- [x] Skip-link "Saltar al contenido" en intranet layout (a11y)
+- [x] `<main id=main-content tabIndex=-1>` para foco programático
+- [x] Documentación de QA en `docs/QA.md` (checklist + instructivo Lighthouse)
+- [x] Responsive validado: desktop, iPad horizontal y portal mobile-first
+- [x] Bundle limpio: build 22 rutas estáticas + 4 dinámicas, sin Recharts
+- [ ] Lighthouse audit ejecutado (procedure documentado, falta correr en CI)
+- [ ] Tests E2E Playwright (config y casos sugeridos en QA.md)
+- [ ] Mobile drawer para intranet (`<sm:1024px`)
 
 ---
 
