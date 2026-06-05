@@ -91,13 +91,17 @@ Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 - [x] Topbar search wired: `⌘K` enfoca el input, Enter → `/pacientes?q=…`
 - [x] UI primitive nueva: `Tabs` (Base UI flavor)
 
-### Sprint F3 — Encuentros + SOAP editor (pantalla crítica)
-- [ ] Lista de encuentros con filtros
-- [ ] Editor SOAP bipartito (info contextual izq + S/O/A/P der)
-- [ ] Auto-save cada 30s
-- [ ] Signos vitales inline
-- [ ] Cerrar + amend (con razón obligatoria)
-- [ ] Atajos de teclado
+### Sprint F3 — Encuentros + SOAP editor (pantalla crítica) ✅ COMPLETO
+- [x] Lista `/encuentros` con filtros por estado + paginación
+- [x] Dialog "Nuevo encuentro" (búsqueda mascota → tipo + motivo)
+- [x] Editor SOAP bipartito en `/encuentros/[id]` (contexto izq + tabs S/O/A/P der)
+- [x] Auto-save cada 30s + dirty-state visible + `beforeunload` warning
+- [x] Signos vitales inline (T°, FC, FR, peso, mucosas, TRC, hidratación, dolor, notas)
+- [x] Problemas POMR editables (activo/crónico/resuelto) con lista colapsable
+- [x] Cerrar encuentro → modo solo lectura
+- [x] Dialog Amend con razón obligatoria (≥10 caracteres)
+- [x] Atajo `⌘S` / `Ctrl+S` para guardar SOAP
+- [x] Asentamientos (assessment) editables con status y código por línea
 
 ### Sprint F4 — Vacunas + Recetas
 - [ ] Catálogo de vacunas

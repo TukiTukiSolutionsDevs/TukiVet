@@ -2,6 +2,7 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -49,6 +50,7 @@ import {
 import { ApiError } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { WeightChart } from "../_components/weight-chart";
+import { NewEncounterDialog } from "../../encuentros/_components/new-encounter-dialog";
 
 export default function PetDetailPage({
   params,
@@ -112,7 +114,7 @@ function PetDetail({ pet }: { pet: PetRead }) {
           <OverviewTab pet={pet} />
         </TabsPanel>
         <TabsPanel value="encounters">
-          <EncountersTab petId={pet.id} />
+          <EncountersTab pet={pet} />
         </TabsPanel>
         <TabsPanel value="vaccines">
           <VaccinesTab petId={pet.id} />
@@ -237,7 +239,8 @@ function StatusBadge({ status }: { status: string }) {
 function OverviewTab({ pet }: { pet: PetRead }) {
   const customerQ = useQuery({
     queryKey: ["customers", pet.customer_id],
-    queryFn: () => customersApi.get(pet.customer_id),
+    queryFn: () => customersApi.get(pet.customer_id as string),
+    enabled: !!pet.customer_id,
   });
 
   return (
@@ -320,19 +323,27 @@ function Field({ label, value }: { label: string; value: string }) {
   );
 }
 
-function EncountersTab({ petId }: { petId: string }) {
+function EncountersTab({ pet }: { pet: PetRead }) {
+  const router = useRouter();
   const q = useQuery({
-    queryKey: ["encounters", "by-pet", petId],
-    queryFn: () => petsApi.listEncounters(petId, 100),
+    queryKey: ["encounters", "by-pet", pet.id],
+    queryFn: () => petsApi.listEncounters(pet.id, 100),
   });
 
   return (
     <Card className="overflow-hidden p-0">
-      <SectionHeader
-        icon={<Stethoscope className="size-4" />}
-        title="Encuentros clínicos"
-        sub="Histórico de visitas y consultas"
-      />
+      <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-5 py-3">
+        <div className="flex items-center gap-3">
+          <div className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+            <Stethoscope className="size-4" />
+          </div>
+          <div>
+            <div className="text-sm font-semibold text-foreground">Encuentros clínicos</div>
+            <div className="text-xs text-muted-foreground">Histórico de visitas y consultas</div>
+          </div>
+        </div>
+        <NewEncounterDialog defaultPet={pet} />
+      </div>
       {q.isLoading ? (
         <RowSkeleton />
       ) : q.data && q.data.items.length > 0 ? (
@@ -348,7 +359,11 @@ function EncountersTab({ petId }: { petId: string }) {
           </TableHeader>
           <TableBody>
             {q.data.items.map((e) => (
-              <TableRow key={e.id}>
+              <TableRow
+                key={e.id}
+                className="cursor-pointer"
+                onClick={() => router.push(`/encuentros/${e.id}`)}
+              >
                 <TableCell className="text-sm">{formatDateTime(e.started_at)}</TableCell>
                 <TableCell className="capitalize text-sm">{e.type}</TableCell>
                 <TableCell className="max-w-xs truncate text-sm">
@@ -368,7 +383,7 @@ function EncountersTab({ petId }: { petId: string }) {
         <EmptyTab
           icon={<Stethoscope className="size-7" />}
           title="Sin encuentros aún"
-          sub="El primer encuentro se creará desde la pantalla Encuentros (sprint F3)."
+          sub="Crea el primero con el botón “Nuevo encuentro”."
         />
       )}
     </Card>

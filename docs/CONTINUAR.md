@@ -4,7 +4,7 @@ Este documento te da el **prompt template** para arrancar cualquier sesión
 nueva y retomar el trabajo sin perder contexto, más el estado actualizado del
 roadmap.
 
-Última actualización: **2026-06-04** — Sprint F2 (Pacientes) cerrado.
+Última actualización: **2026-06-04** — Sprint F3 (Encuentros + SOAP) cerrado.
 
 ---
 
@@ -16,9 +16,9 @@ roadmap.
 | V0 — Smoke + framework hardening | ✅ COMPLETA | `022e735` |
 | F0 — Bootstrap Next.js + auth + Dashboard | ✅ COMPLETA | `5eb418d` |
 | F1 — Landing pública + Register wizard | ✅ COMPLETA | `c0cc475` |
-| **F2 — Pacientes (lista + detalle con tabs)** | ✅ COMPLETA | _este sprint_ |
-| F3 — Encuentros + SOAP editor (crítica) | ⏳ siguiente | — |
-| F4 — Vacunas + Recetas | ⏳ | — |
+| F2 — Pacientes (lista + detalle con tabs) | ✅ COMPLETA | `f238a91` |
+| **F3 — Encuentros + SOAP editor (crítica)** | ✅ COMPLETA | _este sprint_ |
+| F4 — Vacunas + Recetas | ⏳ siguiente | — |
 | F5 — Inventario + POS + Caja | ⏳ | — |
 | F6 — Comprobantes + Agenda | ⏳ | — |
 | F7 — Reportes + Comunicaciones + Config | ⏳ | — |
@@ -68,10 +68,13 @@ Soy Jaime Andrés (TukiTuki Solutions SAC, RUC 20613614509).
   - `src/app/(app)/pacientes/page.tsx` — lista con búsqueda + filtros
   - `src/app/(app)/pacientes/[petId]/page.tsx` — detalle con 6 tabs
   - `src/app/(app)/pacientes/_components/{new-patient-dialog,weight-chart}.tsx`
+  - `src/app/(app)/encuentros/page.tsx` — lista con chips de filtro
+  - `src/app/(app)/encuentros/[encounterId]/page.tsx` — bipartite SOAP
+  - `src/app/(app)/encuentros/_components/{new-encounter-dialog,soap-editor,vital-signs-form,problems-list,amend-dialog}.tsx`
   - `src/components/shell/{sidebar,topbar,nav,placeholder-screen}.tsx`
   - `src/components/ui/tabs.tsx` — Base UI tabs wrapper
   - `src/components/marketing/public-header.tsx`
-  - `src/lib/{api,auth-api,customers-api,pets-api,reports-api,pagination,storage,format,env,utils}.ts`
+  - `src/lib/{api,auth-api,customers-api,pets-api,encounters-api,reports-api,pagination,storage,format,env,utils}.ts`
   - `src/contexts/auth-context.tsx`
 
 ## Documentación canónica — LEE EN ESTE ORDEN antes de codear
