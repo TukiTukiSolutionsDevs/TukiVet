@@ -28,17 +28,26 @@ Plan global del producto. Estado por sprint con commit hash. Sprints futuros sin
 
 ---
 
-## Fase 2 — Validación + Hardening (2 sprints) ⏳ SIGUIENTE
+## Fase 2 — Validación + Hardening (2 sprints) ⏳ EN CURSO
 
-### Sprint V0 — Smoke test real
-**Objetivo**: levantar todo, correr los 70 tests, arreglar lo que rompa.
+### Sprint V0 — Smoke test real ✅ COMPLETO (`022e735`)
+**Objetivo**: levantar todo, correr los tests, arreglar lo que rompa.
 
-- [ ] `make up` exitoso, todos los contenedores healthy
-- [ ] `make migrate` aplica las 12 migraciones sin errores
-- [ ] `make test` con tukivet_test DB — debugger de fixtures si falla
-- [ ] Smoke E2E manual del flujo completo:
-  - register-org → login → crear cliente → crear mascota → encounter → SOAP → cerrar → POS → cobrar → emitir comprobante (mock) → WhatsApp notif
-- [ ] Documentar todos los issues encontrados como tareas
+- [x] `make up` exitoso, todos los contenedores healthy
+- [x] `make migrate` aplica las 12 migraciones sin errores
+- [x] `make test` con tukivet_test DB — **141/141 passing (100%)**
+- [ ] Smoke E2E manual del flujo completo (pendiente — automatizable)
+- [x] 12 bugs documentados y corregidos:
+  - infra: alembic.ini bind mount, FK names >63 chars
+  - config: pydantic-settings v2 `NoDecode` para listas separadas por coma
+  - API: `response_model=None` en 4 endpoints 204
+  - DB: `json_serializer` global con Decimal/date para JSONB
+  - vaccine_service: relación in-memory para evitar `MissingGreenlet`
+  - portal: 401 (no 404) en `consume_magic_link` cuando no hay org
+  - tests: `loop_scope='session'` via hook (pytest-asyncio 0.24 quirk)
+  - notifications endpoint seed-defaults: status_code 201
+  - test helpers: service codes únicos via uuid; name min_length=2
+  - test_inventory: comparar `Decimal` en vez de string formato
 
 ### Sprint V1 — Production hardening
 - [ ] Sentry SDK integrado en `app/main.py`
