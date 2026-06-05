@@ -2,31 +2,60 @@
 
 import { Bell, Building2, ChevronDown, Moon, Search, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function Topbar() {
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [q, setQ] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => setMounted(true), []);
   const isDark = theme === "dark";
 
+  // ⌘K / Ctrl+K → focus search
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  function submitSearch() {
+    const term = q.trim();
+    const url = term ? `/pacientes?q=${encodeURIComponent(term)}` : "/pacientes";
+    router.push(url);
+  }
+
   return (
     <header className="relative z-30 flex h-16 flex-shrink-0 items-center gap-4 border-b border-border bg-card px-6">
-      {/* Global search (placeholder; ⌘K wiring vendrá en F-search sprint) */}
-      <button
-        type="button"
-        className="flex h-10 w-[380px] max-w-[36vw] cursor-text items-center gap-2.5 rounded-md border border-border bg-muted px-3 text-sm text-muted-foreground transition-colors hover:bg-secondary"
+      {/* Global search → navega a /pacientes con el query */}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          submitSearch();
+        }}
+        className="flex h-10 w-[380px] max-w-[36vw] items-center gap-2.5 rounded-md border border-border bg-muted px-3 text-sm text-muted-foreground transition-colors focus-within:ring-2 focus-within:ring-ring/40 hover:bg-secondary"
       >
-        <Search className="size-[18px]" />
-        <span className="flex-1 text-left">
-          Buscar cliente, mascota, chip, teléfono…
-        </span>
-        <kbd className="rounded-sm border border-border bg-card px-1.5 py-0.5 text-[11px] font-semibold text-muted-foreground">
+        <Search className="size-[18px] shrink-0" />
+        <input
+          ref={inputRef}
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Buscar cliente, mascota, chip, teléfono…"
+          className="flex-1 bg-transparent text-foreground outline-none placeholder:text-muted-foreground"
+        />
+        <kbd className="hidden rounded-sm border border-border bg-card px-1.5 py-0.5 text-[11px] font-semibold text-muted-foreground sm:inline">
           ⌘K
         </kbd>
-      </button>
+      </form>
 
       <div className="flex-1" />
 

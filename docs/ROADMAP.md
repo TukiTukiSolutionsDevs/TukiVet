@@ -83,10 +83,13 @@ Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 - [x] `/register` wizard 3 pasos (Veterinaria → Sede → Owner) contra `POST /api/v1/auth/register-org`
 - [x] `/login` y `/dashboard` ya cubiertos en F0
 
-### Sprint F2 — Pacientes (tutores + mascotas)
-- [ ] Lista de pacientes con filtros + búsqueda global del topbar
-- [ ] Detalle de mascota con 6 tabs (Resumen, Encuentros, Vacunas, Recetas, Peso con gráfico, Documentos)
-- [ ] Wizard "Nuevo tutor + mascota"
+### Sprint F2 — Pacientes (tutores + mascotas) ✅ COMPLETO
+- [x] Lista de pacientes con filtros (especie, microchip) + búsqueda con debounce + paginación + URL-sync de `?q=`
+- [x] Detalle de mascota con 6 tabs (Resumen, Encuentros, Vacunas, Recetas, Peso, Documentos)
+- [x] Tab Peso con gráfico SVG nativo + formulario inline para registrar nuevo peso
+- [x] Wizard "Nuevo tutor + mascota" (2 pasos, selecciona o crea tutor → datos de mascota)
+- [x] Topbar search wired: `⌘K` enfoca el input, Enter → `/pacientes?q=…`
+- [x] UI primitive nueva: `Tabs` (Base UI flavor)
 
 ### Sprint F3 — Encuentros + SOAP editor (pantalla crítica)
 - [ ] Lista de encuentros con filtros

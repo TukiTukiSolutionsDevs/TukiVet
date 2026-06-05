@@ -4,7 +4,7 @@ Este documento te da el **prompt template** para arrancar cualquier sesión
 nueva y retomar el trabajo sin perder contexto, más el estado actualizado del
 roadmap.
 
-Última actualización: **2026-06-04** — Sprint F1 (Landing + Register) cerrado.
+Última actualización: **2026-06-04** — Sprint F2 (Pacientes) cerrado.
 
 ---
 
@@ -15,9 +15,9 @@ roadmap.
 | Backend MVP (Sprint 0-12) | ✅ COMPLETA | `9253a8c` |
 | V0 — Smoke + framework hardening | ✅ COMPLETA | `022e735` |
 | F0 — Bootstrap Next.js + auth + Dashboard | ✅ COMPLETA | `5eb418d` |
-| **F1 — Landing pública + Register wizard** | ✅ COMPLETA | _este sprint_ |
-| F2 — Pacientes (lista + detalle con tabs) | ⏳ siguiente | — |
-| F3 — Encuentros + SOAP editor (crítica) | ⏳ | — |
+| F1 — Landing pública + Register wizard | ✅ COMPLETA | `c0cc475` |
+| **F2 — Pacientes (lista + detalle con tabs)** | ✅ COMPLETA | _este sprint_ |
+| F3 — Encuentros + SOAP editor (crítica) | ⏳ siguiente | — |
 | F4 — Vacunas + Recetas | ⏳ | — |
 | F5 — Inventario + POS + Caja | ⏳ | — |
 | F6 — Comprobantes + Agenda | ⏳ | — |
@@ -27,8 +27,8 @@ roadmap.
 | V1 — Production hardening backend | ⏳ paralelo | — |
 | D0-D3 — Deploy VPS | ⏳ | — |
 
-Backend: 141/141 tests, ~90 endpoints. Frontend: 5 pantallas públicas + auth +
-dashboard funcional + 12 placeholders.
+Backend: 141/141 tests, ~90 endpoints. Frontend: landing + auth + dashboard +
+**Pacientes (lista + detalle 6-tabs + wizard tutor/mascota)** + 11 placeholders.
 
 ---
 
@@ -65,9 +65,13 @@ Soy Jaime Andrés (TukiTuki Solutions SAC, RUC 20613614509).
   - `src/app/login/page.tsx` — login
   - `src/app/register/page.tsx` — wizard 3 pasos (org → sede → owner)
   - `src/app/(app)/<screen>/page.tsx` — pantallas autenticadas con shell
+  - `src/app/(app)/pacientes/page.tsx` — lista con búsqueda + filtros
+  - `src/app/(app)/pacientes/[petId]/page.tsx` — detalle con 6 tabs
+  - `src/app/(app)/pacientes/_components/{new-patient-dialog,weight-chart}.tsx`
   - `src/components/shell/{sidebar,topbar,nav,placeholder-screen}.tsx`
+  - `src/components/ui/tabs.tsx` — Base UI tabs wrapper
   - `src/components/marketing/public-header.tsx`
-  - `src/lib/{api,auth-api,reports-api,storage,format,env,utils}.ts`
+  - `src/lib/{api,auth-api,customers-api,pets-api,reports-api,pagination,storage,format,env,utils}.ts`
   - `src/contexts/auth-context.tsx`
 
 ## Documentación canónica — LEE EN ESTE ORDEN antes de codear
