@@ -63,15 +63,19 @@ Plan global del producto. Estado por sprint con commit hash. Sprints futuros sin
 
 ---
 
-## Fase 3 — Frontend MVP con Cloud Design (~8 sprints)
+## Fase 3 — Frontend MVP con Cloud Design (~9 sprints) ⏳ EN CURSO
 
-Insumo: `docs/DESIGN.md`.
+Insumo: `docs/DESIGN.md` + bundle Claude Design (15 screens prototipadas).
 
-### Sprint F0 — Design system + Next.js bootstrap
-- [ ] `apps/web/` Next.js 15 + TypeScript + Tailwind + shadcn/ui
-- [ ] Cloud Design genera átomos + moléculas (~25 componentes)
-- [ ] Cliente HTTP con interceptor JWT + refresh rotation
-- [ ] Provider de auth + storage de tokens
+### Sprint F0 — Design system + Next.js bootstrap ✅ COMPLETO (`5eb418d`)
+- [x] `apps/web/` Next.js 16 + TypeScript + Tailwind v4 + shadcn/ui
+- [x] Design tokens del bundle → `globals.css` (paleta teal/naranja, Geist, warm canvas, dark mode)
+- [x] Cliente HTTP con interceptor JWT + refresh rotation automático
+- [x] Auth provider + tokenStore en localStorage + login/registerOrg/logout
+- [x] Shell completo: Sidebar oscuro con 13 items + Topbar con theme toggle
+- [x] Dashboard funcional contra `GET /api/v1/reports/kpis` (8 KPI cards reales)
+- [x] 12 placeholders para el resto del NAV
+- [x] Smoke E2E verificado: register-org → login → dashboard con KPIs reales
 
 ### Sprint F1 — Landing + Auth + Dashboard
 - [ ] Landing pública (8 secciones de DESIGN.md §3)
