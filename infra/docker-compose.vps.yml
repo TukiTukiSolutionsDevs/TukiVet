@@ -133,6 +133,8 @@ services:
     build:
       context: ../apps/web
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://${API_HOST}
     image: razas/web:latest
     container_name: razas-web
     restart: unless-stopped
