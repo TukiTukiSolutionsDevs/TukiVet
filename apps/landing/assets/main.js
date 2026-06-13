@@ -193,20 +193,7 @@
     setTimeout(hidePre, 3200); // safety net
   }
 
-  /* ---- Page transition on internal links ---- */
-  var internalRe = /(^|\/)(index|servicios|nosotros|contacto)\.html(\?[^#]*)?$/i;
-  document.addEventListener('click', function (e) {
-    var a = e.target.closest ? e.target.closest('a') : null;
-    if (!a) return;
-    var href = a.getAttribute('href') || '';
-    if (a.target === '_blank' || a.hasAttribute('download')) return;
-    if (/^(https?:|tel:|mailto:|#)/i.test(href) || href.indexOf('wa.me') > -1) return;
-    if (internalRe.test(href) && !animOffNow()) {
-      e.preventDefault();
-      document.body.classList.add('is-leaving');
-      setTimeout(function () { window.location.href = href; }, 270);
-    }
-  }, true);
+  /* ---- Page transition on internal links: disabled (instant navigation) ---- */
   window.addEventListener('pageshow', function (ev) { if (ev.persisted) document.body.classList.remove('is-leaving'); });
 
   /* ---- WhatsApp greeting bubble ---- */
