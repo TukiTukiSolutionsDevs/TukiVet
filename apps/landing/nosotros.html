@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nosotros | Centro Veterinario Razas · Arequipa</title>
+<meta name="description" content="Conoce al Centro Veterinario Razas: más de 5 años cuidando perros, gatos y aves exóticas en Tahuaycani 32, Sachaca, Arequipa. Nuestra historia, valores y equipo." />
+<meta property="og:title" content="Nosotros · Centro Veterinario Razas" />
+<meta property="og:description" content="Un equipo que ama a los animales, en Sachaca, Arequipa." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+<script src="assets/image-slot.js"></script>
+<style>
+  /* hero */
+  .ab-hero { position: relative; padding: clamp(56px,7vw,92px) 0 clamp(48px,6vw,80px); background: linear-gradient(180deg, var(--cream) 0%, #fff 100%); overflow: hidden; }
+  .ab-hero::before { content: ""; position: absolute; top: -16%; left: -8%; width: 560px; height: 560px; background: radial-gradient(circle, var(--primary-light), rgba(254,240,231,0) 68%); z-index: 0; }
+  .ab-hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px,5vw,72px); align-items: center; }
+  .crumbs { display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--charcoal-light); margin-bottom: 18px; }
+  .crumbs a:hover { color: var(--primary); } .crumbs .sep { opacity: .5; } .crumbs .cur { color: var(--primary); }
+  .ab-hero h1 { font-size: clamp(40px,5.2vw,64px); font-weight: 900; margin-bottom: 18px; }
+  .ab-hero .lead { font-size: clamp(17px,1.7vw,20px); margin-bottom: 26px; }
+  .ab-hero-media { position: relative; }
+  .ab-hero-media .ah-main { will-change: transform; position: relative; z-index: 2; }
+  .ab-hero-media .ah-main image-slot { width: 100%; height: clamp(360px,42vw,480px); border-radius: 28px; box-shadow: var(--shadow-lg); }
+  .ab-hero-media .ah-sub { position: absolute; z-index: 3; bottom: -30px; left: -28px; width: 200px; border-radius: 18px; border: 6px solid #fff; box-shadow: var(--shadow-lg); overflow: hidden; will-change: transform; }
+  .ab-hero-media .ah-sub image-slot { width: 100%; height: 150px; border-radius: 12px; }
+  .ab-hero-media .ah-ring { position: absolute; top: -22px; right: -18px; width: 150px; height: 150px; border: 2px dashed rgba(242,101,34,.35); border-radius: 50%; z-index: 1; }
+
+  /* story */
+  .story-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(40px,6vw,84px); align-items: center; }
+  .story-media { position: relative; }
+  .story-media .st-img { will-change: transform; position: relative; z-index: 2; }
+  .story-media image-slot { width: 100%; height: clamp(380px,44vw,520px); border-radius: 26px; box-shadow: var(--shadow-lg); }
+  .story-media .st-dots { position: absolute; bottom: -24px; right: -24px; width: 140px; height: 140px; z-index: 1; background-image: radial-gradient(var(--primary) 2px, transparent 2px); background-size: 17px 17px; opacity: .3; }
+  .story-media .st-quote { position: absolute; z-index: 3; bottom: 22px; left: -28px; max-width: 240px; background: var(--primary); color: #fff; border-radius: 18px; padding: 20px 22px; box-shadow: var(--shadow-glow); }
+  .story-media .st-quote .script { font-size: 26px; display: block; line-height: 1; margin-bottom: 6px; }
+  .story-media .st-quote p { font-size: 14px; color: rgba(255,255,255,.92); }
+  .story-copy h2 { font-size: clamp(30px,4vw,46px); font-weight: 800; margin: 16px 0 18px; }
+  .story-copy > p { font-size: 17px; margin-bottom: 16px; }
+  .story-copy .sign { display: flex; align-items: center; gap: 16px; margin-top: 26px; }
+  .story-copy .sign .script { font-size: 36px; color: var(--charcoal); line-height: 1; }
+  .story-copy .sign b { font-family: 'Nunito',sans-serif; color: var(--charcoal); font-size: 15px; display: block; }
+  .story-copy .sign small { font-size: 13px; }
+
+  /* mission / vision */
+  .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .mv { position: relative; border-radius: 24px; padding: 40px 36px; overflow: hidden; }
+  .mv--mission { background: var(--charcoal-deep); color: rgba(255,255,255,.78); }
+  .mv--vision { background: var(--primary-light); }
+  .mv .mv-ic { width: 62px; height: 62px; border-radius: 17px; display: grid; place-items: center; margin-bottom: 22px; }
+  .mv--mission .mv-ic { background: rgba(242,101,34,.2); color: var(--primary); }
+  .mv--vision .mv-ic { background: #fff; color: var(--primary); }
+  .mv .mv-ic .icon { width: 30px; height: 30px; }
+  .mv h3 { font-size: 26px; font-weight: 800; margin-bottom: 12px; }
+  .mv--mission h3 { color: #fff; }
+  .mv p { font-size: 16.5px; }
+  .mv--vision p { color: var(--charcoal-light); }
+  .mv .mv-deco { position: absolute; right: -40px; bottom: -40px; width: 160px; height: 160px; border-radius: 50%; }
+  .mv--mission .mv-deco { background: rgba(242,101,34,.12); } .mv--vision .mv-deco { background: rgba(242,101,34,.12); }
+
+  /* values */
+  .vals { display: grid; grid-template-columns: repeat(4,1fr); gap: 22px; }
+  .val { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 30px 24px; transition: transform .35s var(--ease), box-shadow .35s, border-color .35s; }
+  .val:hover { transform: translateY(-6px); box-shadow: var(--shadow-glow); border-color: rgba(242,101,34,.35); }
+  .val .v-ic { width: 54px; height: 54px; border-radius: 15px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; margin-bottom: 18px; }
+  .val .v-ic .icon { width: 27px; height: 27px; }
+  .val h4 { font-size: 19px; font-weight: 800; margin-bottom: 8px; }
+  .val p { font-size: 14.5px; }
+
+  /* stats */
+  .stats { position: relative; background: var(--charcoal-deep); overflow: hidden; }
+  .stats .paw-bg { position: absolute; inset: -20% 0; z-index: 0; opacity: .5; will-change: transform; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='%23F26522' fill-opacity='0.06'%3E%3Cellipse cx='40' cy='52' rx='9' ry='12'/%3E%3Cellipse cx='62' cy='42' rx='8' ry='10'/%3E%3Cellipse cx='18' cy='42' rx='8' ry='10'/%3E%3Cpath d='M40 62c10 0 18 8 18 17 0 6-8 9-18 9s-18-3-18-9c0-9 8-17 18-17z'/%3E%3C/g%3E%3C/svg%3E"); }
+  .stats-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4,1fr); gap: 30px; text-align: center; }
+  .stat .num { font-family: 'Nunito',sans-serif; font-weight: 900; font-size: clamp(40px,5vw,60px); color: #fff; line-height: 1; letter-spacing: -.02em; }
+  .stat .num .u { color: var(--primary); }
+  .stat .lbl { margin-top: 10px; font-size: 15px; color: rgba(255,255,255,.66); }
+  .stat + .stat { border-left: 1px solid rgba(255,255,255,.1); }
+
+  /* team */
+  .team { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+  .member { text-align: center; }
+  .member .m-photo { position: relative; height: 280px; margin-bottom: 18px; perspective: 1100px; }
+  .member .m-flip { position: relative; width: 100%; height: 100%; transition: transform .6s var(--ease); transform-style: preserve-3d; }
+  .member:hover .m-flip, .member.flipped .m-flip { transform: rotateY(180deg); }
+  .member.no-flip .m-flip { transform: none !important; }
+  .anim-off .member .m-flip { transition: none; }
+  .m-front, .m-back { position: absolute; inset: 0; border-radius: 22px; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .m-front image-slot { display: block; width: 100%; height: 280px; border-radius: 22px; }
+  .m-back { transform: rotateY(180deg); background: linear-gradient(155deg, var(--charcoal-deep), #2b2b2b); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; padding: 22px; text-align: center; }
+  .m-back .mb-ic { width: 46px; height: 46px; border-radius: 13px; background: rgba(242,101,34,.22); color: var(--primary); display: grid; place-items: center; }
+  .m-back .mb-ic .icon { width: 24px; height: 24px; }
+  .m-back .mb-tag { font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--primary); }
+  .m-back p { font-size: 13.5px; color: rgba(255,255,255,.84); line-height: 1.5; }
+  .m-badge { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); background: #fff; color: var(--primary); font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 12.5px; padding: 6px 14px; border-radius: 999px; box-shadow: var(--shadow-md); white-space: nowrap; z-index: 2; }
+  .m-flip-btn { position: absolute; top: 12px; right: 12px; z-index: 3; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.92); border: none; cursor: pointer; color: var(--primary); display: grid; place-items: center; box-shadow: var(--shadow-sm); transition: background .2s, transform .3s; }
+  .m-flip-btn:hover { background: #fff; transform: rotate(180deg); }
+  .m-flip-btn svg { width: 18px; height: 18px; }
+  .member h4 { font-size: 19px; font-weight: 800; margin-bottom: 3px; }
+  .member p { font-size: 14.5px; }
+  .team-note { text-align: center; margin-top: 28px; font-size: 14.5px; color: var(--charcoal-light); }
+
+  /* instalaciones gallery */
+  .facil { display: grid; grid-template-columns: repeat(4,1fr); grid-auto-rows: 190px; gap: 16px; }
+  .facil image-slot { width: 100%; height: 190px; border-radius: 18px; }
+  .facil .f-tall image-slot { height: 396px; }
+  .facil .f-wide { grid-column: span 2; } .facil .f-tall { grid-row: span 2; }
+
+  /* social */
+  .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .soc { position: relative; border-radius: 24px; padding: 38px 34px; overflow: hidden; color: #fff; display: flex; flex-direction: column; gap: 16px; }
+  .soc--fb { background: linear-gradient(135deg, #1877F2, #0a5bcc); }
+  .soc--ig { background: linear-gradient(135deg, #833AB4, #C13584 40%, #F77737 80%, #FCAF45); }
+  .soc .soc-ic { width: 56px; height: 56px; border-radius: 16px; background: rgba(255,255,255,.18); display: grid; place-items: center; }
+  .soc .soc-ic .icon, .soc .soc-ic svg { width: 30px; height: 30px; }
+  .soc h3 { color: #fff; font-size: 24px; font-weight: 800; }
+  .soc p { color: rgba(255,255,255,.9); font-size: 15.5px; }
+  .soc .soc-handle { font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 15px; opacity: .95; }
+  .soc .btn { align-self: flex-start; margin-top: 6px; background: #fff; color: var(--charcoal); }
+  .soc .btn:hover { color: var(--charcoal); }
+  .soc .soc-deco { position: absolute; right: -50px; top: -50px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,.12); }
+
+  /* cta */
+  .cta-band { position: relative; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); border-radius: 32px; padding: clamp(44px,6vw,72px); overflow: hidden; color: #fff; text-align: center; }
+  .cta-band::before, .cta-band::after { content: ""; position: absolute; border-radius: 50%; background: rgba(255,255,255,.1); }
+  .cta-band::before { width: 320px; height: 320px; top: -140px; left: -80px; } .cta-band::after { width: 260px; height: 260px; bottom: -120px; right: -60px; }
+  .cta-band > * { position: relative; z-index: 1; }
+  .cta-band h2 { color: #fff; font-size: clamp(30px,4vw,46px); font-weight: 900; margin-bottom: 14px; }
+  .cta-band p { color: rgba(255,255,255,.92); font-size: 18px; max-width: 560px; margin: 0 auto 30px; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+
+  /* ---- Timeline ---- */
+  .timeline { position: relative; max-width: 840px; margin: 0 auto; }
+  .timeline::before { content: ""; position: absolute; left: 50%; top: 6px; bottom: 6px; width: 2px; background: var(--border); transform: translateX(-50%); }
+  .tl-item { position: relative; width: 50%; padding: 8px 44px 32px; box-sizing: border-box; }
+  .tl-item:nth-child(odd) { left: 0; text-align: right; }
+  .tl-item:nth-child(even) { left: 50%; text-align: left; }
+  .tl-dot { position: absolute; top: 14px; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); border: 4px solid #fff; box-shadow: 0 0 0 2px var(--primary); z-index: 1; }
+  .tl-item:nth-child(odd) .tl-dot { right: -9px; } .tl-item:nth-child(even) .tl-dot { left: -9px; }
+  .tl-year { font-family: 'Nunito',sans-serif; font-weight: 900; font-size: 26px; color: var(--primary); line-height: 1; }
+  .tl-card { display: inline-block; text-align: left; background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 18px 22px; margin-top: 10px; box-shadow: var(--shadow-sm); transition: transform .3s var(--ease), box-shadow .3s; }
+  .tl-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .tl-card h4 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .tl-card p { font-size: 14.5px; }
+
+  /* ---- Instagram showcase ---- */
+  .ig-head { display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 26px; flex-wrap: wrap; }
+  .ig-ava { width: 62px; height: 62px; border-radius: 50%; background: #fff; border: 2px solid var(--primary); display: grid; place-items: center; overflow: hidden; flex: none; }
+  .ig-ava img { width: 46px; height: auto; }
+  .ig-handle b { font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 18px; color: var(--charcoal); display: block; }
+  .ig-handle span { font-size: 13.5px; color: var(--charcoal-light); }
+  .ig-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; max-width: 720px; margin: 0 auto; }
+  .ig-cell { position: relative; overflow: hidden; border-radius: 14px; }
+  .ig-cell image-slot { display: block; width: 100%; height: 200px; border-radius: 14px; }
+  .ig-ov { position: absolute; inset: 0; background: rgba(53,53,53,.5); display: grid; place-items: center; opacity: 0; transition: opacity .3s; pointer-events: none; }
+  .ig-cell:hover .ig-ov { opacity: 1; }
+  .ig-ov svg { width: 34px; height: 34px; color: #fff; }
+  .ig-cta { text-align: center; margin-top: 26px; }
+
+  /* ---- Valores icon micro-animation on reveal ---- */
+  .vals.in .v-ic { animation: valPop .65s var(--ease) both; }
+  .vals.in .val:nth-child(2) .v-ic { animation-delay: .1s; }
+  .vals.in .val:nth-child(3) .v-ic { animation-delay: .2s; }
+  .vals.in .val:nth-child(4) .v-ic { animation-delay: .3s; }
+  @keyframes valPop { 0% { transform: scale(.3) rotate(-15deg); opacity: 0; } 60% { transform: scale(1.15) rotate(6deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+  .anim-off .vals.in .v-ic { animation: none; }
+
+  @media (max-width: 640px) {
+    .timeline::before { left: 18px; }
+    .tl-item { width: 100%; left: 0 !important; text-align: left !important; padding: 6px 0 30px 50px; }
+    .tl-item .tl-dot { left: 9px !important; right: auto !important; }
+  }
+
+  @media (max-width: 980px) {
+    .ab-hero-grid, .story-grid, .mv-grid, .social-grid { grid-template-columns: 1fr; }
+    .ab-hero-media { order: -1; }
+    .vals, .team { grid-template-columns: repeat(2,1fr); }
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
+    .stat:nth-child(3) { border-left: 0; }
+    .facil { grid-template-columns: repeat(2,1fr); }
+    .facil .f-wide { grid-column: span 2; }
+  }
+  @media (max-width: 560px) {
+    .vals, .team, .stats-grid { grid-template-columns: 1fr; }
+    .stat + .stat { border-left: 0; border-top: 1px solid rgba(255,255,255,.1); padding-top: 18px; }
+    .facil { grid-template-columns: 1fr; } .facil .f-wide, .facil .f-tall { grid-column: span 1; grid-row: span 1; }
+    .ab-hero-media .ah-sub { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div id="preloader"><div class="pre-inner"><span class="pre-ring"></span><img class="pre-logo" src="assets/logo.png" alt="Centro Veterinario Razas" /></div></div>
+
+  <!-- TOPBAR + NAV -->
+  <div class="topbar"><div class="wrap topbar-inner"><div class="topbar-left"><span><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Tahuaycani 32, Sachaca · Arequipa</span><a href="tel:054588055"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg> (054) 588055</a></div><div class="topbar-right"><span style="color:rgba(255,255,255,.55)">Lun–Sáb · 09:00–18:00</span><a href="https://www.facebook.com/p/RAZAS-Centro-Veterinario-100063516641675/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg></a><a href="https://www.instagram.com/razas_centroveterinario/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div></div></div>
+  <header class="nav" id="nav"><div class="wrap nav-inner"><a class="brand" href="index.html"><img src="assets/logo.png" alt="Centro Veterinario Razas" /><span class="brand-text"><b>Razas</b><small>Centro Veterinario</small></span></a><nav><ul class="nav-links"><li><a href="index.html">Inicio</a></li><li><a href="servicios.html">Servicios</a></li><li><a href="nosotros.html" class="active">Nosotros</a></li><li><a href="contacto.html">Contacto</a></li></ul></nav><div class="nav-right"><a class="btn btn--primary" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.84 14.16c-.25.69-1.45 1.32-1.99 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.97-1.28-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39.002.56.01.18.008.42-.07.66.5.25.59.84 2.05.91 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.39-.45.52-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.14 1.02 2.1 1.33 2.4 1.48.3.15.47.13.65-.08.18-.2.74-.86.94-1.16.2-.3.4-.25.66-.15.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.12.07.71-.18 1.4Z"/></svg> Reservar cita</a><button class="hamburger" id="hamburger" aria-label="Abrir menú"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></div></header>
+  <div class="scrim" id="scrim"></div>
+  <aside class="mobile-menu" id="mobileMenu"><div class="mm-head"><span class="brand-text"><b style="font-size:22px">Razas</b><small>Centro Veterinario</small></span><button class="mm-close" id="mmClose" aria-label="Cerrar menú"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><ul><li><a href="index.html">Inicio</a></li><li><a href="servicios.html">Servicios</a></li><li><a href="nosotros.html" class="active">Nosotros</a></li><li><a href="contacto.html">Contacto</a></li></ul><a class="btn btn--whatsapp" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener">Reservar por WhatsApp</a></aside>
+
+  <!-- HERO -->
+  <section class="ab-hero">
+    <div class="wrap ab-hero-grid">
+      <div class="ab-hero-copy">
+        <div class="crumbs reveal"><a href="index.html">Inicio</a><span class="sep">/</span><span class="cur">Nosotros</span></div>
+        <span class="eyebrow reveal">Conócenos</span>
+        <h1 class="reveal" style="margin-top:14px;">Más que una veterinaria, una familia</h1>
+        <p class="lead reveal">En el Centro Veterinario Razas llevamos años cuidando la salud de perros, gatos y aves exóticas en Sachaca, Arequipa, con un trato cercano, profesional y humano.</p>
+        <div class="reveal" style="display:flex;gap:14px;flex-wrap:wrap;">
+          <a class="btn btn--primary" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener">Reservar cita</a>
+          <a class="btn btn--ghost" href="servicios.html">Ver servicios</a>
+        </div>
+      </div>
+      <div class="ab-hero-media reveal-scale">
+        <div class="ah-ring" data-parallax="0.08"></div>
+        <div class="ah-main" data-parallax="0.05">
+          <image-slot id="ab-hero" shape="rounded" radius="28" placeholder="Foto del equipo o la fachada de Razas" src="https://images.unsplash.com/photo-1607923432780-7a9c30adcb72?auto=format&fit=crop&w=900&q=80"></image-slot>
+        </div>
+        <div class="ah-sub" data-parallax="0.1">
+          <image-slot id="ab-hero2" shape="rounded" radius="12" placeholder="Foto" src="https://images.unsplash.com/photo-1559190394-df5a28aab5c5?auto=format&fit=crop&w=500&q=80"></image-slot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORIA -->
+  <section class="section">
+    <div class="wrap story-grid">
+      <div class="story-media reveal-l">
+        <div class="st-dots" data-parallax="0.05"></div>
+        <div class="st-img" data-parallax="0.04">
+          <image-slot id="story" shape="rounded" radius="26" placeholder="Foto de la clínica en acción" src="https://images.unsplash.com/photo-1581888227599-779811939961?auto=format&fit=crop&w=800&q=80"></image-slot>
+        </div>
+        <div class="st-quote">
+          <span class="script">Razas</span>
+          <p>Tu mascota como parte de la familia.</p>
+        </div>
+      </div>
+      <div class="story-copy reveal-r">
+        <span class="eyebrow">Nuestra historia</span>
+        <h2>Nacimos del amor por los animales</h2>
+        <p>El Centro Veterinario Razas nació en Sachaca, Arequipa, con una idea simple pero poderosa: ofrecer atención veterinaria seria y de calidad, sin perder la calidez y la cercanía que toda familia merece cuando se trata de su mascota.</p>
+        <p>Con los años hemos acompañado a cientos de familias arequipeñas, atendiendo a perros, gatos y aves exóticas en cada etapa de su vida. Cada paciente que cruza nuestra puerta es tratado con el mismo cuidado con el que trataríamos a los nuestros.</p>
+        <p>Hoy seguimos creciendo, pero nuestra esencia es la misma: profesionalismo, empatía y un genuino amor por los animales.</p>
+        <div class="sign">
+          <span class="script">Razas</span>
+          <div><b>Equipo Veterinario Razas</b><small>Comprometidos con tu mascota desde el primer día</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="section section--cream">
+    <div class="wrap">
+      <div class="shead shead--center reveal">
+        <span class="eyebrow eyebrow--center">Nuestra trayectoria</span>
+        <h2>Una historia que sigue creciendo</h2>
+        <p>Los hitos que han marcado el camino del Centro Veterinario Razas.</p>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal-r"><span class="tl-dot"></span><div class="tl-year">2020</div><div class="tl-card"><h4>Abrimos nuestras puertas</h4><p>Nace el Centro Veterinario Razas en Sachaca, con la misión de cuidar a las mascotas de Arequipa con calidez y profesionalismo.</p></div></div>
+        <div class="tl-item reveal-l"><span class="tl-dot"></span><div class="tl-year">2022</div><div class="tl-card"><h4>Ampliamos nuestros servicios</h4><p>Sumamos cirugía, peluquería y hospedaje para ofrecer una atención veterinaria realmente integral.</p></div></div>
+        <div class="tl-item reveal-r"><span class="tl-dot"></span><div class="tl-year">2024</div><div class="tl-card"><h4>+2,000 mascotas atendidas</h4><p>Crecemos junto a las familias arequipeñas que confían en nosotros año tras año.</p></div></div>
+        <div class="tl-item reveal-l"><span class="tl-dot"></span><div class="tl-year">Hoy</div><div class="tl-card"><h4>Tu centro de confianza</h4><p>Seguimos cuidando perros, gatos y aves con el mismo cariño del primer día.</p></div></div>
+      </div>
+      <p class="team-note reveal" style="margin-top:34px">Las fechas son editables: ajusta los años y los hitos a la historia real de la clínica.</p>
+    </div>
+  </section>
+
+  <!-- MISIÓN / VISIÓN -->
+  <section class="section section--cream">
+    <div class="wrap">
+      <div class="shead shead--center reveal">
+        <span class="eyebrow eyebrow--center">Lo que nos mueve</span>
+        <h2>Misión y visión</h2>
+        <p>El propósito detrás de cada atención que brindamos.</p>
+      </div>
+      <div class="mv-grid" data-stagger>
+        <div class="mv mv--mission">
+          <div class="mv-deco"></div>
+          <div class="mv-ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></div>
+          <h3>Nuestra misión</h3>
+          <p>Velar por la salud y el bienestar de las mascotas de Arequipa, brindando una atención veterinaria profesional, accesible y cargada de calidez humana, donde cada familia se sienta acompañada y cada animal, cuidado de verdad.</p>
+        </div>
+        <div class="mv mv--vision">
+          <div class="mv-deco"></div>
+          <div class="mv-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h3>Nuestra visión</h3>
+          <p>Ser el centro veterinario de referencia en Arequipa, reconocido por la calidad de su atención médica, la confianza de sus clientes y un trato que pone siempre a la mascota y a su familia en el centro de todo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALORES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="shead shead--center reveal">
+        <span class="eyebrow eyebrow--center">Nuestros valores</span>
+        <h2>Los principios que nos guían</h2>
+        <p>Más que palabras: la forma en que tratamos a tu mascota y a ti.</p>
+      </div>
+      <div class="vals" data-stagger>
+        <div class="val">
+          <div class="v-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>
+          <h4>Empatía</h4>
+          <p>Entendemos el vínculo único entre tú y tu mascota, y lo respetamos en cada decisión.</p>
+        </div>
+        <div class="val">
+          <div class="v-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h4>Profesionalismo</h4>
+          <p>Atención basada en conocimiento, protocolos seguros y mejora continua.</p>
+        </div>
+        <div class="val">
+          <div class="v-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h4>Transparencia</h4>
+          <p>Te explicamos todo con claridad, sin tecnicismos y sin sorpresas.</p>
+        </div>
+        <div class="val">
+          <div class="v-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M20 7h-9M14 17H5M17 17a3 3 0 1 0 0 .01M7 7a3 3 0 1 0 0 .01"/></svg></div>
+          <h4>Compromiso</h4>
+          <p>Acompañamos a cada paciente hasta su recuperación, con seguimiento real.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section stats">
+    <div class="paw-bg" data-parallax="0.12"></div>
+    <div class="wrap stats-grid">
+      <div class="stat reveal"><div class="num" data-count="5" data-prefix="+"></div><div class="lbl">Años de experiencia</div></div>
+      <div class="stat reveal"><div class="num" data-count="2000" data-prefix="+"></div><div class="lbl">Mascotas atendidas</div></div>
+      <div class="stat reveal"><div class="num"><span data-count="3"></span></div><div class="lbl">Especies bajo cuidado</div></div>
+      <div class="stat reveal"><div class="num"><span data-count="6"></span><span class="u">d</span></div><div class="lbl">Días a la semana</div></div>
+    </div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section class="section section--cream">
+    <div class="wrap">
+      <div class="shead shead--center reveal">
+        <span class="eyebrow eyebrow--center">Nuestro equipo</span>
+        <h2>Personas que cuidan personas... y mascotas</h2>
+        <p>Un equipo multidisciplinario unido por el amor a los animales.</p>
+      </div>
+      <div class="team" data-stagger><div class="member"><div class="m-photo"><div class="m-flip"><div class="m-front"><image-slot id="t1" shape="rect" placeholder="Foto de Médico Veterinario" src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=500&q=80"></image-slot><span class="m-badge">Atención médica</span><button class="m-flip-btn" aria-label="Ver bio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg></button></div><div class="m-back"><div class="mb-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2h-.5a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6 6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-.4a.3.3 0 1 0 .1.3"/><path d="M8 15v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg></div><span class="mb-tag">Atención médica</span><p>Atiende consultas, diagnósticos y tratamientos con un enfoque cercano y profesional para cada paciente.</p></div></div></div><h4>Médico Veterinario</h4><p>Diagnóstico y tratamiento clínico</p></div><div class="member"><div class="m-photo"><div class="m-flip"><div class="m-front"><image-slot id="t2" shape="rect" placeholder="Foto de Equipo de Cirugía" src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=500&q=80"></image-slot><span class="m-badge">Cirugía</span><button class="m-flip-btn" aria-label="Ver bio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg></button></div><div class="m-back"><div class="mb-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M14.5 2 21 8.5 8.5 21H2v-6.5L14.5 2Z"/><path d="m12 4.5 7.5 7.5"/></svg></div><span class="mb-tag">Cirugía</span><p>Realiza cirugías con protocolos seguros y monitoreo constante del paciente en cada etapa del proceso.</p></div></div></div><h4>Equipo de Cirugía</h4><p>Procedimientos quirúrgicos seguros</p></div><div class="member"><div class="m-photo"><div class="m-flip"><div class="m-front"><image-slot id="t3" shape="rect" placeholder="Foto de Peluquería Canina" src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=500&q=80"></image-slot><span class="m-badge">Estética</span><button class="m-flip-btn" aria-label="Ver bio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg></button></div><div class="m-back"><div class="mb-ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg></div><span class="mb-tag">Estética</span><p>Cuida la higiene y la imagen de tu mascota con técnicas adaptadas a cada raza y tipo de pelaje.</p></div></div></div><h4>Peluquería Canina</h4><p>Grooming e higiene profesional</p></div><div class="member"><div class="m-photo"><div class="m-flip"><div class="m-front"><image-slot id="t4" shape="rect" placeholder="Foto de Recepción y Cuidado" src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=500&q=80"></image-slot><span class="m-badge">Atención al cliente</span><button class="m-flip-btn" aria-label="Ver bio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg></button></div><div class="m-back"><div class="mb-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><span class="mb-tag">Atención al cliente</span><p>Te recibe, agenda tu cita y acompaña a tu mascota durante toda su visita al centro veterinario.</p></div></div></div><h4>Recepción y Cuidado</h4><p>Te acompañamos en cada visita</p></div></div>
+      <p class="team-note reveal">¿Quieres mostrar a tu equipo real? Reemplaza las fotos y agrega los nombres de cada profesional.</p>
+    </div>
+  </section>
+
+  <!-- INSTALACIONES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="shead shead--center reveal">
+        <span class="eyebrow eyebrow--center">Instalaciones</span>
+        <h2>Un espacio pensado para su bienestar</h2>
+        <p>Ambientes limpios, cómodos y equipados para una atención de calidad.</p>
+      </div>
+      <div class="facil reveal-scale">
+        <image-slot id="f1" class="f-wide f-tall" shape="rounded" radius="18" placeholder="Foto instalaciones" src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80"></image-slot>
+        <image-slot id="f2" shape="rounded" radius="18" placeholder="Foto" src="https://images.unsplash.com/photo-1597633425046-08f5110420b5?auto=format&fit=crop&w=500&q=80"></image-slot>
+        <image-slot id="f3" shape="rounded" radius="18" placeholder="Foto" src="https://images.unsplash.com/photo-1584467735815-f778f274e296?auto=format&fit=crop&w=500&q=80"></image-slot>
+        <image-slot id="f4" shape="rounded" radius="18" placeholder="Foto" src="https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=500&q=80"></image-slot>
+        <image-slot id="f5" shape="rounded" radius="18" placeholder="Foto" src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=500&q=80"></image-slot>
+      </div>
+    </div>
+  </section>
+
+  <!-- REDES -->
+  <section class="section section--cream">
+    <div class="wrap">
+      <div class="shead shead--center reveal">
+        <span class="eyebrow eyebrow--center">Síguenos</span>
+        <h2>Conéctate con Razas</h2>
+        <p>Mira el día a día de la clínica, consejos para tu mascota y novedades en nuestras redes.</p>
+      </div>
+      <div class="ig-showcase reveal"><div class="ig-head"><span class="ig-ava"><img src="assets/logo.png" alt="Razas" /></span><div class="ig-handle"><b>@razas_centroveterinario</b><span>Centro Veterinario · Sachaca, Arequipa</span></div><a class="btn btn--primary" href="https://www.instagram.com/razas_centroveterinario/" target="_blank" rel="noopener" style="margin-left:6px;">Seguir</a></div><div class="ig-grid"><div class="ig-cell"><image-slot id="ig1" shape="rect" placeholder="Post de Instagram" src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=400&q=80"></image-slot><span class="ig-ov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span></div><div class="ig-cell"><image-slot id="ig2" shape="rect" placeholder="Post de Instagram" src="https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?auto=format&fit=crop&w=400&q=80"></image-slot><span class="ig-ov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span></div><div class="ig-cell"><image-slot id="ig3" shape="rect" placeholder="Post de Instagram" src="https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=400&q=80"></image-slot><span class="ig-ov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span></div><div class="ig-cell"><image-slot id="ig4" shape="rect" placeholder="Post de Instagram" src="https://images.unsplash.com/photo-1444212477490-ca407925329e?auto=format&fit=crop&w=400&q=80"></image-slot><span class="ig-ov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span></div><div class="ig-cell"><image-slot id="ig5" shape="rect" placeholder="Post de Instagram" src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=400&q=80"></image-slot><span class="ig-ov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span></div><div class="ig-cell"><image-slot id="ig6" shape="rect" placeholder="Post de Instagram" src="https://images.unsplash.com/photo-1425082661705-1834bfd09dca?auto=format&fit=crop&w=400&q=80"></image-slot><span class="ig-ov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span></div></div><div class="ig-cta"><a class="btn btn--ghost" href="https://www.instagram.com/razas_centroveterinario/" target="_blank" rel="noopener">Ver más en Instagram →</a></div></div>
+      <div class="social-grid" data-stagger>
+        <a class="soc soc--fb" href="https://www.facebook.com/p/RAZAS-Centro-Veterinario-100063516641675/" target="_blank" rel="noopener">
+          <div class="soc-deco"></div>
+          <div class="soc-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg></div>
+          <h3>Facebook</h3>
+          <span class="soc-handle">RAZAS - Centro Veterinario</span>
+          <p>Comunidad de cientos de seguidores. Síguenos para novedades, consejos y casos del día a día.</p>
+          <span class="btn">Visitar página <svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+        <a class="soc soc--ig" href="https://www.instagram.com/razas_centroveterinario/" target="_blank" rel="noopener">
+          <div class="soc-deco"></div>
+          <div class="soc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></div>
+          <h3>Instagram</h3>
+          <span class="soc-handle">@razas_centroveterinario</span>
+          <p>Las fotos más tiernas de nuestros pacientes y momentos especiales de la clínica.</p>
+          <span class="btn">Seguir en Instagram <svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta-band reveal-scale">
+        <span class="eyebrow eyebrow--center eyebrow--light">Te esperamos</span>
+        <h2 style="margin-top:16px;">Ven a conocernos en Sachaca</h2>
+        <p>Estamos en Tahuaycani 32, Sachaca. Escríbenos por WhatsApp y agenda la visita de tu mascota.</p>
+        <div class="cta-actions">
+          <a class="btn btn--white btn--lg" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg>
+            Reservar por WhatsApp
+          </a>
+          <a class="btn btn--lg" style="background:rgba(255,255,255,.16);color:#fff;backdrop-filter:blur(4px)" href="contacto.html">Cómo llegar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="wrap foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo.png" alt="Centro Veterinario Razas" />
+        <p>La salud de tu mascota, nuestra misión. Atención veterinaria profesional y cálida en Sachaca, Arequipa.</p>
+        <div class="foot-social">
+          <a href="https://www.facebook.com/p/RAZAS-Centro-Veterinario-100063516641675/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg></a>
+          <a href="https://www.instagram.com/razas_centroveterinario/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://wa.me/51054588055" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col"><h5>Navegación</h5><ul><li><a href="index.html">Inicio</a></li><li><a href="servicios.html">Servicios</a></li><li><a href="nosotros.html">Nosotros</a></li><li><a href="contacto.html">Contacto</a></li></ul></div>
+      <div class="foot-col"><h5>Servicios</h5><ul><li><a href="servicios.html">Consulta médica</a></li><li><a href="servicios.html">Vacunación</a></li><li><a href="servicios.html">Cirugía</a></li><li><a href="servicios.html">Peluquería</a></li><li><a href="servicios.html">Hospedaje</a></li></ul></div>
+      <div class="foot-col"><h5>Contacto</h5><ul><li class="with-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Tahuaycani 32, Sachaca, Arequipa</li><li class="with-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg> (054) 588055</li><li class="with-ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Lun–Sáb 09:00–18:00</li></ul></div>
+    </div>
+    <div class="wrap foot-bottom"><span>© 2025 Centro Veterinario Razas · Arequipa, Perú</span><span>Hecho con cariño para las mascotas de Arequipa 🐾</span></div>
+  </footer>
+
+  <div class="fab"><a href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.84 14.16c-.25.69-1.45 1.32-1.99 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.97-1.28-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39.002.56.01.18.008.42-.07.66.5.25.59.84 2.05.91 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.39-.45.52-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.14 1.02 2.1 1.33 2.4 1.48.3.15.47.13.65-.08.18-.2.74-.86.94-1.16.2-.3.4-.25.66-.15.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.12.07.71-.18 1.4Z"/></svg><span class="fab-label">Reservar cita</span></a></div>
+
+  <script src="assets/main.js"></script>
+</body>
+</html>

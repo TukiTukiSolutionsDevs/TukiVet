@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contacto | Centro Veterinario Razas · Sachaca, Arequipa</title>
+<meta name="description" content="Contáctanos: Tahuaycani 32, Sachaca, Arequipa. Teléfono (054) 588055, WhatsApp y horarios. Lunes a Sábado 9:00–18:00. Reserva la cita de tu mascota en Razas." />
+<meta property="og:title" content="Contacto · Centro Veterinario Razas" />
+<meta property="og:description" content="Visítanos en Sachaca, Arequipa o escríbenos por WhatsApp." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+<script src="assets/image-slot.js"></script>
+<style>
+  /* hero */
+  .ct-hero { position: relative; padding: clamp(56px,7vw,88px) 0 clamp(36px,4vw,52px); background: linear-gradient(180deg, var(--cream) 0%, #fff 100%); overflow: hidden; text-align: center; }
+  .ct-hero::before { content: ""; position: absolute; top: -24%; left: 50%; transform: translateX(-50%); width: 680px; height: 680px; background: radial-gradient(circle, var(--primary-light), rgba(254,240,231,0) 66%); z-index: 0; }
+  .ct-hero .wrap { position: relative; z-index: 1; }
+  .crumbs { display: flex; justify-content: center; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--charcoal-light); margin-bottom: 18px; }
+  .crumbs a:hover { color: var(--primary); } .crumbs .sep { opacity: .5; } .crumbs .cur { color: var(--primary); }
+  .ct-hero h1 { font-size: clamp(40px,5.2vw,64px); font-weight: 900; margin-bottom: 16px; }
+  .ct-hero .lead { font-size: clamp(17px,1.7vw,20px); max-width: 600px; margin: 0 auto; }
+
+  /* info cards */
+  .info-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-top: 46px; }
+  .ic { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; transition: transform .35s var(--ease), box-shadow .35s, border-color .35s; display: flex; flex-direction: column; align-items: center; }
+  .ic:hover { transform: translateY(-6px); box-shadow: var(--shadow-glow); border-color: rgba(242,101,34,.35); }
+  .ic .ic-ic { width: 58px; height: 58px; border-radius: 16px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; margin-bottom: 18px; }
+  .ic .ic-ic .icon { width: 28px; height: 28px; }
+  .ic.is-wa .ic-ic { background: rgba(37,211,102,.14); color: var(--whatsapp); }
+  .ic h3 { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+  .ic p { font-size: 14.5px; margin-bottom: 14px; }
+  .ic .ic-link { margin-top: auto; font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 14px; color: var(--primary); display: inline-flex; align-items: center; gap: 6px; }
+  .ic.is-wa .ic-link { color: var(--whatsapp); }
+
+  /* main grid: hours + map */
+  .ct-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: stretch; }
+  .hours-card { background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 34px; display: flex; flex-direction: column; }
+  .status { display: inline-flex; align-items: center; gap: 9px; align-self: flex-start; padding: 8px 16px; border-radius: 999px; font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 14px; margin-bottom: 22px; }
+  .status .dot { width: 9px; height: 9px; border-radius: 50%; position: relative; }
+  .status.open { background: rgba(34,197,94,.12); color: #15803D; }
+  .status.open .dot { background: var(--success); box-shadow: 0 0 0 0 rgba(34,197,94,.5); animation: ping 1.8s ease-out infinite; }
+  .status.closed { background: rgba(239,68,68,.1); color: #B91C1C; }
+  .status.closed .dot { background: var(--emergency); }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,.5); } 70%,100% { box-shadow: 0 0 0 7px rgba(34,197,94,0); } }
+  .hours-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 18px; }
+  .hours-list { list-style: none; display: flex; flex-direction: column; }
+  .hours-list li { display: flex; justify-content: space-between; align-items: center; padding: 13px 14px; border-radius: 10px; font-size: 15.5px; }
+  .hours-list li .day { font-family: 'Nunito',sans-serif; font-weight: 700; color: var(--charcoal); }
+  .hours-list li .hrs { color: var(--charcoal-light); font-weight: 500; }
+  .hours-list li.closed-day .hrs { color: var(--emergency); }
+  .hours-list li.today { background: var(--primary-light); }
+  .hours-list li.today .day { color: var(--primary); }
+  .hours-list li.today .day::after { content: "Hoy"; margin-left: 9px; font-size: 11px; background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
+  .peak { margin-top: 20px; padding: 16px 18px; background: var(--cream); border-radius: 14px; display: flex; gap: 12px; align-items: flex-start; }
+  .peak .icon { width: 20px; height: 20px; color: var(--primary); flex: none; margin-top: 2px; }
+  .peak p { font-size: 13.5px; color: var(--charcoal-light); }
+  .peak b { color: var(--charcoal); font-family: 'Nunito',sans-serif; }
+
+  .map-card { border-radius: 24px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); position: relative; min-height: 440px; }
+  .map-card iframe { width: 100%; height: 100%; min-height: 440px; border: 0; display: block; filter: sepia(.22) saturate(1.25) hue-rotate(-12deg) contrast(1.02) brightness(1.02); }
+  .map-float { position: absolute; left: 18px; bottom: 18px; right: 18px; background: #fff; border-radius: 16px; padding: 16px 18px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 14px; }
+  .map-float .mf-ic { width: 46px; height: 46px; border-radius: 13px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; flex: none; }
+  .map-float strong { font-family: 'Nunito',sans-serif; color: var(--charcoal); font-size: 15px; display: block; }
+  .map-float small { font-size: 13px; color: var(--charcoal-light); }
+  .map-float .btn { margin-left: auto; flex: none; }
+
+  /* form */
+  .form-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: clamp(36px,5vw,72px); align-items: center; }
+  .form-media { position: relative; }
+  .form-media .fm-img { will-change: transform; position: relative; z-index: 2; }
+  .form-media image-slot { width: 100%; height: clamp(360px,42vw,480px); border-radius: 26px; box-shadow: var(--shadow-lg); }
+  .form-media .fm-dots { position: absolute; top: -22px; left: -22px; width: 120px; height: 120px; z-index: 1; background-image: radial-gradient(var(--primary) 2px, transparent 2px); background-size: 17px 17px; opacity: .3; }
+  .form-media .fm-badge { position: absolute; z-index: 3; bottom: -22px; right: -18px; background: var(--whatsapp); color: #fff; border-radius: 16px; padding: 14px 18px; box-shadow: 0 14px 32px rgba(37,211,102,.32); display: flex; align-items: center; gap: 11px; }
+  .form-media .fm-badge svg { width: 26px; height: 26px; }
+  .form-media .fm-badge strong { font-family: 'Nunito',sans-serif; font-size: 14px; display: block; line-height: 1.2; } .form-media .fm-badge small { font-size: 12px; opacity: .9; }
+
+  .form-card h2 { font-size: clamp(28px,3.6vw,40px); font-weight: 800; margin: 14px 0 10px; }
+  .form-card > p { font-size: 16.5px; margin-bottom: 26px; }
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 14px; color: var(--charcoal); margin-bottom: 8px; }
+  .field input, .field select, .field textarea { width: 100%; font-family: 'Inter',sans-serif; font-size: 15.5px; color: var(--charcoal); background: var(--cream); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; transition: border-color .2s, background .2s, box-shadow .2s; }
+  .field input::placeholder, .field textarea::placeholder { color: #A8A29E; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px var(--primary-glow); }
+  .field textarea { resize: vertical; min-height: 110px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .form-card .btn { width: 100%; margin-top: 6px; }
+  .form-note { font-size: 13px; color: var(--charcoal-light); text-align: center; margin-top: 14px; }
+
+  /* cta */
+  .cta-band { position: relative; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); border-radius: 32px; padding: clamp(44px,6vw,72px); overflow: hidden; color: #fff; text-align: center; }
+  .cta-band::before, .cta-band::after { content: ""; position: absolute; border-radius: 50%; background: rgba(255,255,255,.1); }
+  .cta-band::before { width: 320px; height: 320px; top: -140px; left: -80px; } .cta-band::after { width: 260px; height: 260px; bottom: -120px; right: -60px; }
+  .cta-band > * { position: relative; z-index: 1; }
+  .cta-band h2 { color: #fff; font-size: clamp(30px,4vw,46px); font-weight: 900; margin-bottom: 14px; }
+  .cta-band p { color: rgba(255,255,255,.92); font-size: 18px; max-width: 560px; margin: 0 auto 30px; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+
+  /* ---- Copy button ---- */
+  .copy-btn { margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 12.5px; color: var(--charcoal-light); background: var(--cream); border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: all .2s; }
+  .copy-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .copy-btn.copied { background: var(--success); border-color: var(--success); color: #fff; }
+  .copy-btn svg { width: 14px; height: 14px; }
+
+  /* ---- Response badge ---- */
+  .resp-badge { display: inline-flex; align-items: center; gap: 9px; font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 13.5px; color: #15803D; background: rgba(34,197,94,.1); padding: 8px 15px; border-radius: 999px; margin-bottom: 24px; }
+  .rb-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 0 rgba(34,197,94,.5); animation: ping 1.8s ease-out infinite; }
+  .anim-off .rb-dot { animation: none; }
+
+  /* ---- Form validation + success ---- */
+  .field.error input, .field.error select, .field.error textarea { border-color: var(--emergency); background: #FEF2F2; }
+  .field-error { display: block; color: var(--emergency); font-size: 12.5px; font-weight: 600; margin-top: 6px; min-height: 0; }
+  .btn.sent { background: var(--success) !important; }
+  .btn.sent::after { display: none; }
+
+  /* ---- Busy times chart ---- */
+  .busy { background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: clamp(24px,3vw,34px); box-shadow: var(--shadow-sm); }
+  .busy-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .busy-title { font-size: 22px; font-weight: 800; margin-top: 12px; }
+  .busy-now { font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 13px; color: var(--primary); background: var(--primary-light); padding: 9px 15px; border-radius: 999px; white-space: nowrap; }
+  .busy-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+  .busy-tab { width: 42px; height: 42px; border-radius: 12px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 14px; color: var(--charcoal); transition: all .2s; }
+  .busy-tab:hover { border-color: var(--primary); color: var(--primary); }
+  .busy-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .busy-tab.closed { opacity: .45; cursor: default; }
+  .busy-chart { display: flex; align-items: flex-end; gap: clamp(5px,1vw,10px); height: 170px; }
+  .bar { flex: 1; display: flex; align-items: flex-end; height: 100%; position: relative; }
+  .bar-fill { width: 100%; background: var(--primary-light); border-radius: 8px 8px 4px 4px; height: 0; transition: height .85s var(--ease), background .3s; }
+  .bar.peak .bar-fill { background: var(--primary); }
+  .bar.now .bar-fill { background: var(--charcoal-deep); }
+  .bar.now::after { content: 'Ahora'; position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 10px; color: #fff; background: var(--charcoal-deep); padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .busy-axis { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; color: var(--charcoal-light); }
+  .busy-cap { margin-top: 16px; font-size: 13.5px; color: var(--charcoal-light); }
+  .busy-closed { text-align: center; padding: 54px 0; color: var(--charcoal-light); font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 16px; }
+  .anim-off .bar-fill { transition: none; }
+
+  @media (max-width: 980px) {
+    .info-cards { grid-template-columns: repeat(2,1fr); }
+    .ct-grid, .form-grid { grid-template-columns: 1fr; }
+    .form-media { order: -1; }
+    .map-card { min-height: 360px; } .map-card iframe { min-height: 360px; }
+  }
+  @media (max-width: 560px) {
+    .info-cards { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+    .map-float { flex-wrap: wrap; } .map-float .btn { margin-left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+  <div id="preloader"><div class="pre-inner"><span class="pre-ring"></span><img class="pre-logo" src="assets/logo.png" alt="Centro Veterinario Razas" /></div></div>
+
+  <!-- TOPBAR + NAV -->
+  <div class="topbar"><div class="wrap topbar-inner"><div class="topbar-left"><span><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Tahuaycani 32, Sachaca · Arequipa</span><a href="tel:054588055"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg> (054) 588055</a></div><div class="topbar-right"><span style="color:rgba(255,255,255,.55)">Lun–Sáb · 09:00–18:00</span><a href="https://www.facebook.com/p/RAZAS-Centro-Veterinario-100063516641675/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg></a><a href="https://www.instagram.com/razas_centroveterinario/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div></div></div>
+  <header class="nav" id="nav"><div class="wrap nav-inner"><a class="brand" href="index.html"><img src="assets/logo.png" alt="Centro Veterinario Razas" /><span class="brand-text"><b>Razas</b><small>Centro Veterinario</small></span></a><nav><ul class="nav-links"><li><a href="index.html">Inicio</a></li><li><a href="servicios.html">Servicios</a></li><li><a href="nosotros.html">Nosotros</a></li><li><a href="contacto.html" class="active">Contacto</a></li></ul></nav><div class="nav-right"><a class="btn btn--primary" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.84 14.16c-.25.69-1.45 1.32-1.99 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.97-1.28-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39.002.56.01.18.008.42-.07.66.5.25.59.84 2.05.91 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.39-.45.52-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.14 1.02 2.1 1.33 2.4 1.48.3.15.47.13.65-.08.18-.2.74-.86.94-1.16.2-.3.4-.25.66-.15.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.12.07.71-.18 1.4Z"/></svg> Reservar cita</a><button class="hamburger" id="hamburger" aria-label="Abrir menú"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></div></header>
+  <div class="scrim" id="scrim"></div>
+  <aside class="mobile-menu" id="mobileMenu"><div class="mm-head"><span class="brand-text"><b style="font-size:22px">Razas</b><small>Centro Veterinario</small></span><button class="mm-close" id="mmClose" aria-label="Cerrar menú"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><ul><li><a href="index.html">Inicio</a></li><li><a href="servicios.html">Servicios</a></li><li><a href="nosotros.html">Nosotros</a></li><li><a href="contacto.html" class="active">Contacto</a></li></ul><a class="btn btn--whatsapp" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener">Reservar por WhatsApp</a></aside>
+
+  <!-- HERO + INFO CARDS -->
+  <section class="ct-hero">
+    <div class="wrap">
+      <div class="crumbs reveal"><a href="index.html">Inicio</a><span class="sep">/</span><span class="cur">Contacto</span></div>
+      <span class="eyebrow eyebrow--center reveal">Estamos para ayudarte</span>
+      <h1 class="reveal" style="margin-top:14px;">Hablemos de tu mascota</h1>
+      <p class="lead reveal">Visítanos en Sachaca, llámanos o escríbenos por WhatsApp. Te respondemos al instante y agendamos la cita en el horario que más te convenga.</p>
+
+      <div class="info-cards" data-stagger>
+        <div class="ic">
+          <div class="ic-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <h3>Dirección</h3>
+          <p>F, Tahuaycani 32,<br/>Sachaca · Arequipa</p>
+          <a class="ic-link" href="https://www.google.com/maps?q=Tahuaycani+32,+Sachaca,+Arequipa" target="_blank" rel="noopener">Cómo llegar <svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M7 17 17 7M9 7h8v8"/></svg></a><button class="copy-btn" data-copy="F, Tahuaycani 32, Sachaca, Arequipa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg> Copiar dirección</button>
+        </div>
+        <div class="ic">
+          <div class="ic-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg></div>
+          <h3>Teléfono</h3>
+          <p>Llámanos en horario<br/>de atención</p>
+          <a class="ic-link" href="tel:054588055">(054) 588055 <svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><button class="copy-btn" data-copy="(054) 588055"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg> Copiar número</button>
+        </div>
+        <div class="ic is-wa">
+          <div class="ic-ic"><svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg></div>
+          <h3>WhatsApp</h3>
+          <p>La forma más rápida<br/>de contactarnos</p>
+          <a class="ic-link" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20hacer%20una%20consulta" target="_blank" rel="noopener">Escribir ahora <svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="ic">
+          <div class="ic-ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <h3>Horario</h3>
+          <p>Lunes a Sábado<br/>09:00 – 18:00</p>
+          <span class="ic-link" id="icStatus">Ver estado</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOURS + MAP -->
+  <section class="section" style="padding-top:clamp(48px,6vw,72px)">
+    <div class="wrap ct-grid">
+      <div class="hours-card reveal-l">
+        <span class="status" id="openStatus"><span class="dot"></span><span id="openText">Consultando horario…</span></span>
+        <h3>Horario de atención</h3>
+        <ul class="hours-list" id="hoursList">
+          <li data-day="1"><span class="day">Lunes</span><span class="hrs">09:00 – 18:00</span></li>
+          <li data-day="2"><span class="day">Martes</span><span class="hrs">09:00 – 18:00</span></li>
+          <li data-day="3"><span class="day">Miércoles</span><span class="hrs">09:00 – 18:00</span></li>
+          <li data-day="4"><span class="day">Jueves</span><span class="hrs">09:00 – 18:00</span></li>
+          <li data-day="5"><span class="day">Viernes</span><span class="hrs">09:00 – 18:00</span></li>
+          <li data-day="6"><span class="day">Sábado</span><span class="hrs">09:00 – 18:00</span></li>
+          <li data-day="0" class="closed-day"><span class="day">Domingo</span><span class="hrs">Cerrado</span></li>
+        </ul>
+      </div>
+
+      <div class="map-card reveal-r">
+        <iframe title="Ubicación Centro Veterinario Razas" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Tahuaycani%2032%2C%20Sachaca%2C%20Arequipa%2C%20Per%C3%BA&output=embed"></iframe>
+        <div class="map-float">
+          <div class="mf-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><strong>Centro Veterinario Razas</strong><small>F, Tahuaycani 32, Sachaca</small></div>
+          <a class="btn btn--primary" href="https://www.google.com/maps?q=Tahuaycani+32,+Sachaca,+Arequipa" target="_blank" rel="noopener">Indicaciones</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUSY TIMES -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="busy reveal" id="busyChart">
+        <div class="busy-head">
+          <div><span class="eyebrow">Horario de concurrencia</span><h3 class="busy-title">¿Cuándo hay menos gente?</h3></div>
+          <div class="busy-now" id="busyNow">—</div>
+        </div>
+        <div class="busy-tabs" id="busyTabs"></div>
+        <div class="busy-chart" id="busyBars"></div>
+        <div class="busy-axis"><span>9 a.m.</span><span>12 p.m.</span><span>3 p.m.</span><span>6 p.m.</span></div>
+        <p class="busy-cap" id="busyCap"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="section section--cream">
+    <div class="wrap form-grid">
+      <div class="form-media reveal-l">
+        <div class="fm-dots" data-parallax="0.05"></div>
+        <div class="fm-img" data-parallax="0.04">
+          <image-slot id="ct-form" shape="rounded" radius="26" placeholder="Foto de una mascota feliz" src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=800&q=80"></image-slot>
+        </div>
+        <div class="fm-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg>
+          <div><strong>Respuesta rápida</strong><small>Te contestamos por WhatsApp</small></div>
+        </div>
+      </div>
+      <div class="form-card reveal-r">
+        <span class="eyebrow">Escríbenos</span>
+        <h2>Cuéntanos qué necesita tu mascota</h2>
+        <p>Completa el formulario y se abrirá WhatsApp con tu mensaje listo para enviar. Así agilizamos tu atención.</p>
+        <div class="resp-badge"><span class="rb-dot"></span> Respondemos en ~5 min en horario de atención</div>
+        <form id="contactForm" novalidate>
+          <div class="field-row">
+            <div class="field"><label for="nombre">Tu nombre</label><input id="nombre" name="nombre" type="text" placeholder="Ej. María Torres" required /></div>
+            <div class="field"><label for="telefono">Teléfono</label><input id="telefono" name="telefono" type="tel" placeholder="Ej. 999 888 777" /></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="mascota">Tipo de mascota</label><select id="mascota" name="mascota"><option value="Perro">Perro</option><option value="Gato">Gato</option><option value="Ave exótica">Ave exótica</option><option value="Otra">Otra</option></select></div>
+            <div class="field"><label for="servicio">Servicio de interés</label><select id="servicio" name="servicio"><option value="Consulta médica">Consulta médica</option><option value="Vacunación">Vacunación</option><option value="Cirugía">Cirugía</option><option value="Peluquería">Peluquería</option><option value="Hospedaje">Hospedaje</option><option value="Emergencia">Emergencia</option></select></div>
+          </div>
+          <div class="field"><label for="mensaje">Mensaje</label><textarea id="mensaje" name="mensaje" placeholder="Cuéntanos brevemente cómo podemos ayudarte..."></textarea></div>
+          <button class="btn btn--whatsapp" type="submit">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg>
+            Enviar por WhatsApp
+          </button>
+          <p class="form-note">Al enviar se abrirá WhatsApp con tu mensaje. No se almacena ningún dato en esta web.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta-band reveal-scale">
+        <span class="eyebrow eyebrow--center eyebrow--light">¿Es una urgencia?</span>
+        <h2 style="margin-top:16px;">Estamos a un mensaje de distancia</h2>
+        <p>Si tu mascota necesita atención inmediata, escríbenos ahora mismo y te indicamos cómo proceder.</p>
+        <div class="cta-actions">
+          <a class="btn btn--white btn--lg" href="https://wa.me/51054588055?text=Hola%20Razas,%20tengo%20una%20urgencia%20con%20mi%20mascota" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg>
+            Escribir por WhatsApp
+          </a>
+          <a class="btn btn--lg" style="background:rgba(255,255,255,.16);color:#fff;backdrop-filter:blur(4px)" href="tel:054588055">Llamar (054) 588055</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="wrap foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo.png" alt="Centro Veterinario Razas" />
+        <p>La salud de tu mascota, nuestra misión. Atención veterinaria profesional y cálida en Sachaca, Arequipa.</p>
+        <div class="foot-social">
+          <a href="https://www.facebook.com/p/RAZAS-Centro-Veterinario-100063516641675/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg></a>
+          <a href="https://www.instagram.com/razas_centroveterinario/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://wa.me/51054588055" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col"><h5>Navegación</h5><ul><li><a href="index.html">Inicio</a></li><li><a href="servicios.html">Servicios</a></li><li><a href="nosotros.html">Nosotros</a></li><li><a href="contacto.html">Contacto</a></li></ul></div>
+      <div class="foot-col"><h5>Servicios</h5><ul><li><a href="servicios.html">Consulta médica</a></li><li><a href="servicios.html">Vacunación</a></li><li><a href="servicios.html">Cirugía</a></li><li><a href="servicios.html">Peluquería</a></li><li><a href="servicios.html">Hospedaje</a></li></ul></div>
+      <div class="foot-col"><h5>Contacto</h5><ul><li class="with-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Tahuaycani 32, Sachaca, Arequipa</li><li class="with-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg> (054) 588055</li><li class="with-ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Lun–Sáb 09:00–18:00</li></ul></div>
+    </div>
+    <div class="wrap foot-bottom"><span>© 2025 Centro Veterinario Razas · Arequipa, Perú</span><span>Hecho con cariño para las mascotas de Arequipa 🐾</span></div>
+  </footer>
+
+  <div class="fab"><a href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.84 14.16c-.25.69-1.45 1.32-1.99 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.97-1.28-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39.002.56.01.18.008.42-.07.66.5.25.59.84 2.05.91 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.39-.45.52-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.14 1.02 2.1 1.33 2.4 1.48.3.15.47.13.65-.08.18-.2.74-.86.94-1.16.2-.3.4-.25.66-.15.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.12.07.71-.18 1.4Z"/></svg><span class="fab-label">Reservar cita</span></a></div>
+
+  <script src="assets/main.js"></script>
+  <script>
+    (function () {
+      // ----- Open-now status (Lun–Sáb 9:00–18:00) -----
+      var now = new Date();
+      var day = now.getDay();           // 0=Dom ... 6=Sáb
+      var mins = now.getHours() * 60 + now.getMinutes();
+      var OPEN = 9 * 60, CLOSE = 18 * 60;
+      var isWorkday = day >= 1 && day <= 6;
+      var isOpen = isWorkday && mins >= OPEN && mins < CLOSE;
+
+      var badge = document.getElementById('openStatus');
+      var txt = document.getElementById('openText');
+      var icStatus = document.getElementById('icStatus');
+      if (badge && txt) {
+        if (isOpen) {
+          var leftMin = CLOSE - mins;
+          var closeSoon = leftMin <= 60;
+          badge.classList.add('open');
+          txt.textContent = closeSoon ? ('Abierto · cierra pronto (18:00)') : ('Abierto ahora · hasta las 18:00');
+          if (icStatus) { icStatus.textContent = 'Abierto ahora'; icStatus.style.color = '#15803D'; }
+        } else {
+          badge.classList.add('closed');
+          var msg;
+          if (isWorkday && mins < OPEN) msg = 'Cerrado · abre hoy a las 09:00';
+          else if (day === 0) msg = 'Cerrado · abre el lunes a las 09:00';
+          else if (day === 6 && mins >= CLOSE) msg = 'Cerrado · abre el lunes a las 09:00';
+          else msg = 'Cerrado · abre mañana a las 09:00';
+          txt.textContent = msg;
+          if (icStatus) { icStatus.textContent = 'Cerrado ahora'; icStatus.style.color = '#B91C1C'; }
+        }
+      }
+      // highlight today's row
+      var row = document.querySelector('.hours-list li[data-day="' + day + '"]');
+      if (row) row.classList.add('today');
+
+      // ----- Copy to clipboard -----
+      document.querySelectorAll('.copy-btn').forEach(function (b) {
+        var orig = b.innerHTML;
+        b.addEventListener('click', function () {
+          var t = b.getAttribute('data-copy') || '';
+          function done() { b.classList.add('copied'); b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> ¡Copiado!'; setTimeout(function () { b.classList.remove('copied'); b.innerHTML = orig; }, 1600); }
+          if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(done, done); }
+          else { var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (err) {} document.body.removeChild(ta); done(); }
+        });
+      });
+
+      // ----- Busy times chart -----
+      (function () {
+        var BUSY = { 1:[30,55,80,62,40,46,70,86,52], 2:[26,50,72,58,38,44,66,80,48], 3:[34,60,85,68,44,50,72,88,55], 4:[28,52,75,60,40,46,66,82,50], 5:[40,68,90,74,54,58,80,95,60], 6:[50,80,100,84,60,55,78,92,66] };
+        var tabsEl = document.getElementById('busyTabs'), barsEl = document.getElementById('busyBars'), capEl = document.getElementById('busyCap'), nowEl = document.getElementById('busyNow');
+        if (!tabsEl) return;
+        var labels = { 1:'L', 2:'M', 3:'M', 4:'J', 5:'V', 6:'S', 0:'D' };
+        var names = { 1:'lunes', 2:'martes', 3:'miércoles', 4:'jueves', 5:'viernes', 6:'sábados', 0:'domingo' };
+        var order = [1,2,3,4,5,6,0];
+        var nowHour = new Date().getHours();
+        var sel = (day >= 1 && day <= 6) ? day : 6;
+        order.forEach(function (d) {
+          var t = document.createElement('button'); t.className = 'busy-tab' + (d === 0 ? ' closed' : '') + (d === sel ? ' active' : '');
+          t.textContent = labels[d]; t.setAttribute('aria-label', names[d]);
+          if (d !== 0) t.addEventListener('click', function () { sel = d; render(); });
+          tabsEl.appendChild(t);
+        });
+        function render() {
+          Array.prototype.forEach.call(tabsEl.children, function (t, i) { t.classList.toggle('active', order[i] === sel); });
+          barsEl.innerHTML = '';
+          if (sel === 0) { barsEl.innerHTML = '<div class="busy-closed">Cerrado los domingos</div>'; capEl.textContent = ''; return; }
+          var data = BUSY[sel], max = Math.max.apply(null, data), peakIdx = data.indexOf(max);
+          data.forEach(function (v, i) {
+            var bar = document.createElement('div'); bar.className = 'bar' + (i === peakIdx ? ' peak' : '');
+            if (sel === day && (nowHour - 9) === i && day >= 1 && day <= 6) bar.className += ' now';
+            var fill = document.createElement('div'); fill.className = 'bar-fill'; bar.appendChild(fill); barsEl.appendChild(bar);
+            requestAnimationFrame(function () { requestAnimationFrame(function () { fill.style.height = Math.max(6, v) + '%'; }); });
+          });
+          capEl.textContent = 'Los ' + names[sel] + ' suelen estar más concurridos a media mañana y al cierre de la tarde; lo más tranquilo es temprano o después del mediodía.';
+        }
+        render();
+        if (day >= 1 && day <= 6 && nowHour >= 9 && nowHour < 18) {
+          var cv = BUSY[day][nowHour - 9] || 0;
+          nowEl.textContent = cv < 45 ? 'Ahora: tranquilo' : (cv < 72 ? 'Ahora: algo concurrido' : 'Ahora: muy concurrido');
+        } else { nowEl.textContent = 'Cerrado ahora'; }
+      })();
+
+      // ----- Contact form: live validation + success -----
+      var form = document.getElementById('contactForm');
+      if (form) {
+        var nombreEl = document.getElementById('nombre'), telEl = document.getElementById('telefono'), btn = form.querySelector('button[type="submit"]');
+        function fieldOf(el) { return el.closest('.field'); }
+        function setErr(el, msg) { var f = fieldOf(el); f.classList.add('error'); var e = f.querySelector('.field-error'); if (!e) { e = document.createElement('span'); e.className = 'field-error'; f.appendChild(e); } e.textContent = msg; }
+        function clrErr(el) { var f = fieldOf(el); f.classList.remove('error'); var e = f.querySelector('.field-error'); if (e) e.textContent = ''; }
+        nombreEl.addEventListener('input', function () { if (nombreEl.value.trim()) clrErr(nombreEl); });
+        telEl.addEventListener('input', function () { var d = telEl.value.replace(/\D/g, ''); if (!telEl.value.trim() || d.length >= 6) clrErr(telEl); });
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var ok = true;
+          if (!nombreEl.value.trim()) { setErr(nombreEl, 'Por favor escribe tu nombre.'); ok = false; }
+          var digits = telEl.value.replace(/\D/g, '');
+          if (telEl.value.trim() && digits.length < 6) { setErr(telEl, 'Ingresa un teléfono válido.'); ok = false; }
+          if (!ok) { var first = form.querySelector('.field.error input'); if (first) first.focus(); return; }
+          var lines = ['Hola Razas, soy ' + nombreEl.value.trim() + '.', 'Mascota: ' + document.getElementById('mascota').value, 'Servicio de interés: ' + document.getElementById('servicio').value];
+          if (telEl.value.trim()) lines.push('Teléfono: ' + telEl.value.trim());
+          var msg = (document.getElementById('mensaje').value || '').trim();
+          if (msg) lines.push('Mensaje: ' + msg);
+          var url = 'https://wa.me/51054588055?text=' + encodeURIComponent(lines.join('\n'));
+          var origBtn = btn.innerHTML;
+          btn.classList.add('sent');
+          btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> ¡Listo! Abriendo WhatsApp…';
+          setTimeout(function () { window.open(url, '_blank', 'noopener'); }, 850);
+          setTimeout(function () { btn.classList.remove('sent'); btn.innerHTML = origBtn; }, 3200);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

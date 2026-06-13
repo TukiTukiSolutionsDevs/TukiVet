@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Servicios | Centro Veterinario Razas · Arequipa</title>
+<meta name="description" content="Servicios veterinarios en Razas: consulta médica, vacunación, cirugía, peluquería, hospedaje y emergencias para perros, gatos y aves en Sachaca, Arequipa." />
+<meta property="og:title" content="Servicios · Centro Veterinario Razas" />
+<meta property="og:description" content="Cuidado veterinario integral para tu mascota en Sachaca, Arequipa." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+<script src="assets/image-slot.js"></script>
+<style>
+  /* ---- Services hero ---- */
+  .svc-hero { position: relative; padding: clamp(56px,7vw,92px) 0 clamp(48px,6vw,80px); background: linear-gradient(180deg, var(--cream) 0%, #fff 100%); overflow: hidden; }
+  .svc-hero::before { content: ""; position: absolute; top: -16%; right: -8%; width: 560px; height: 560px; background: radial-gradient(circle, var(--primary-light), rgba(254,240,231,0) 68%); z-index: 0; }
+  .svc-hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(36px,5vw,72px); align-items: center; }
+  .crumbs { display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--charcoal-light); margin-bottom: 18px; }
+  .crumbs a:hover { color: var(--primary); } .crumbs .sep { opacity: .5; } .crumbs .cur { color: var(--primary); }
+  .svc-hero h1 { font-size: clamp(40px,5.2vw,64px); font-weight: 900; margin-bottom: 18px; }
+  .svc-hero .lead { font-size: clamp(17px,1.7vw,20px); max-width: 540px; margin-bottom: 30px; }
+  .hero-mini-stats { display: flex; gap: 30px; flex-wrap: wrap; }
+  .hero-mini-stats .ms b { font-family: 'Nunito',sans-serif; font-weight: 900; font-size: 30px; color: var(--primary); display: block; line-height: 1; }
+  .hero-mini-stats .ms span { font-size: 13.5px; color: var(--charcoal-light); }
+  .svc-hero-media { position: relative; }
+  .svc-hero-media .shm-main { will-change: transform; }
+  .svc-hero-media image-slot { width: 100%; height: clamp(360px,40vw,460px); border-radius: 28px; box-shadow: var(--shadow-lg); }
+  .svc-hero-media .shm-badge { position: absolute; bottom: -24px; left: -24px; background: #fff; border-radius: 18px; box-shadow: var(--shadow-lg); padding: 16px 20px; display: flex; align-items: center; gap: 13px; }
+  .svc-hero-media .shm-badge .icon { width: 40px; height: 40px; padding: 9px; border-radius: 12px; background: var(--primary-light); color: var(--primary); box-sizing: content-box; }
+  .svc-hero-media .shm-badge strong { font-family: 'Nunito',sans-serif; color: var(--charcoal); font-size: 15px; display: block; } .svc-hero-media .shm-badge small { font-size: 12.5px; }
+
+  /* ---- Quick nav (sticky) ---- */
+  .quicknav { position: sticky; top: var(--nav-h); z-index: 50; background: rgba(255,255,255,.9); backdrop-filter: blur(12px); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .quicknav-inner { display: flex; gap: 8px; overflow-x: auto; padding: 14px 0; scrollbar-width: none; }
+  .quicknav-inner::-webkit-scrollbar { display: none; }
+  .quicknav a { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; font-family: 'Nunito',sans-serif; font-weight: 700; font-size: 14.5px; color: var(--charcoal); padding: 9px 16px; border-radius: 999px; border: 1px solid var(--border); transition: all .2s; }
+  .quicknav a .icon { width: 17px; height: 17px; }
+  .quicknav a:hover { border-color: var(--primary); color: var(--primary); }
+  .quicknav a.active { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 8px 20px var(--primary-glow); transform: translateY(-1px); }
+  .quicknav a.active .icon { transform: scale(1.08); }
+
+  /* ---- Service rows ---- */
+  .srow { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px,5vw,80px); align-items: center; padding: clamp(56px,6vw,90px) 0; border-bottom: 1px solid var(--border); scroll-margin-top: calc(var(--nav-h) + 70px); }
+  .srow:last-of-type { border-bottom: 0; }
+  .srow.rev .srow-media { order: 2; }
+  .srow-media { position: relative; }
+  .srow-media .sm-img { will-change: transform; position: relative; z-index: 2; }
+  .srow-media image-slot { width: 100%; height: clamp(320px,38vw,440px); border-radius: 24px; box-shadow: var(--shadow-lg); }
+  .srow-media .sm-num { position: absolute; z-index: 1; font-family: 'Nunito',sans-serif; font-weight: 900; font-size: clamp(110px,14vw,180px); color: var(--primary); opacity: .08; line-height: .7; top: -30px; }
+  .srow.rev .sm-num { right: -10px; } .srow:not(.rev) .sm-num { left: -10px; }
+  .srow-media .sm-tag { position: absolute; z-index: 3; bottom: 18px; left: 18px; background: #fff; border-radius: 12px; padding: 9px 14px; box-shadow: var(--shadow-md); font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 13.5px; color: var(--charcoal); display: inline-flex; align-items: center; gap: 8px; }
+  .srow-media .sm-tag i { width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; }
+  .srow-copy .eyebrow { margin-bottom: 16px; }
+  .srow-copy h2 { font-size: clamp(28px,3.6vw,40px); font-weight: 800; margin-bottom: 14px; }
+  .srow-copy > p { font-size: 17px; margin-bottom: 24px; }
+  .includes { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 13px 22px; margin-bottom: 26px; }
+  .includes li { display: flex; gap: 11px; align-items: flex-start; font-size: 15px; color: var(--charcoal); font-weight: 500; }
+  .includes .ck { width: 24px; height: 24px; border-radius: 7px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; flex: none; }
+  .includes .ck .icon { width: 14px; height: 14px; stroke-width: 2.6; }
+  .species { display: flex; gap: 8px; flex-wrap: wrap; }
+  .species .sp { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--charcoal-light); background: var(--cream); border: 1px solid var(--border); padding: 6px 13px; border-radius: 999px; }
+  .species .sp .icon { width: 15px; height: 15px; color: var(--primary); }
+
+  /* ---- Planes ---- */
+  .plans { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; align-items: stretch; }
+  .plan { position: relative; background: #fff; border: 1px solid var(--border); border-radius: 22px; padding: 34px 28px; display: flex; flex-direction: column; transition: transform .35s var(--ease), box-shadow .35s; }
+  .plan:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+  .plan.feat { border-color: var(--primary); box-shadow: var(--shadow-glow); }
+  .plan.feat::before { content: "Más elegido"; position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 12px; letter-spacing: .05em; padding: 5px 16px; border-radius: 999px; }
+  .plan-ic { width: 54px; height: 54px; border-radius: 15px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; margin-bottom: 18px; }
+  .plan-ic .icon { width: 28px; height: 28px; }
+  .plan h3 { font-size: 23px; font-weight: 800; margin-bottom: 6px; }
+  .plan .ptag { font-size: 14px; color: var(--charcoal-light); margin-bottom: 20px; }
+  .plan ul { list-style: none; display: grid; gap: 12px; margin-bottom: 26px; }
+  .plan ul li { display: flex; gap: 10px; font-size: 14.5px; color: var(--charcoal); align-items: flex-start; }
+  .plan ul .icon { width: 18px; height: 18px; color: var(--primary); flex: none; margin-top: 2px; }
+  .plan .btn { margin-top: auto; width: 100%; }
+  .plans-note { text-align: center; margin-top: 26px; font-size: 14.5px; color: var(--charcoal-light); }
+
+  /* ---- Species filter ---- */
+  .svc-filter { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .svc-filter .fl-label { font-family:'Nunito',sans-serif; font-weight:700; font-size:14px; color:var(--charcoal-light); margin-right:4px; }
+  .fl-pill { display:inline-flex; align-items:center; gap:8px; font-family:'Nunito',sans-serif; font-weight:800; font-size:14.5px; color:var(--charcoal); background:#fff; border:1.5px solid var(--border); padding:9px 18px; border-radius:999px; cursor:pointer; transition: all .2s var(--ease); }
+  .fl-pill .icon { width:17px; height:17px; }
+  .fl-pill:hover { border-color:var(--primary); color:var(--primary); }
+  .fl-pill.active { background:var(--primary); border-color:var(--primary); color:#fff; box-shadow: var(--shadow-glow); }
+  .srow { transition: opacity .45s var(--ease), filter .45s var(--ease); }
+  .srow.dimmed { opacity:.3; filter: grayscale(.65); }
+
+  /* ---- Service row icon (animated on hover) ---- */
+  .srow-ic { width: 58px; height: 58px; border-radius: 16px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; margin-bottom: 18px; transition: transform .35s var(--ease), background .35s; }
+  .srow-ic .icon { width: 29px; height: 29px; }
+  .srow-ic.is-emergency { background:#FEECEC; color:var(--emergency); }
+  .srow:hover .srow-ic { transform: translateY(-3px) scale(1.05); }
+  .srow:hover .srow-ic .icon { animation: svcWiggle .6s ease; }
+  @keyframes svcWiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-9deg)} 55%{transform:rotate(7deg)} 80%{transform:rotate(-3deg)} }
+  .anim-off .srow:hover .srow-ic .icon { animation:none; }
+
+  /* ---- Before / After slider ---- */
+  .ba { position: relative; width: 100%; height: clamp(320px,38vw,440px); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow-lg); user-select: none; touch-action: pan-y; }
+  .ba-layer { position: absolute; inset: 0; }
+  .ba-layer image-slot { display:block; width: 100%; height: clamp(320px,38vw,440px); border-radius: 0; }
+  .ba-before { clip-path: inset(0 calc(100% - var(--ba-pos,50%)) 0 0); }
+  .ba-label { position: absolute; bottom: 14px; font-family:'Nunito',sans-serif; font-weight:800; font-size:12.5px; color:#fff; background: rgba(53,53,53,.66); padding:5px 12px; border-radius:999px; backdrop-filter: blur(4px); z-index:4; }
+  .ba-label-before { left: 14px; } .ba-label-after { right: 14px; }
+  .ba-hint { position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:4; font-family:'Nunito',sans-serif; font-weight:700; font-size:12px; color:#fff; background:rgba(53,53,53,.55); padding:5px 12px; border-radius:999px; backdrop-filter:blur(4px); pointer-events:none; transition: opacity .3s; }
+  .ba.dragging .ba-hint { opacity:0; }
+  .ba-handle { position: absolute; top:0; bottom:0; left: var(--ba-pos,50%); width: 3px; background:#fff; transform: translateX(-50%); cursor: ew-resize; z-index:5; box-shadow: 0 0 0 1px rgba(0,0,0,.06); }
+  .ba-grip { position:absolute; top:50%; left:50%; transform: translate(-50%,-50%); width:44px; height:44px; border-radius:50%; background:#fff; box-shadow: var(--shadow-md); display:grid; place-items:center; color:var(--primary); }
+  .ba-grip svg { width:22px; height:22px; }
+
+  /* ---- Plans comparison table ---- */
+  .plan-compare { margin-top: 44px; overflow-x: auto; }
+  .plan-table { width:100%; border-collapse: collapse; min-width: 540px; background:#fff; border:1px solid var(--border); border-radius:18px; overflow:hidden; }
+  .plan-table th, .plan-table td { padding: 15px 18px; text-align:center; border-bottom:1px solid var(--border); font-size:14.5px; }
+  .plan-table thead th { font-family:'Nunito',sans-serif; font-weight:800; color:var(--charcoal); font-size:15px; background:var(--cream); }
+  .plan-table thead th.feat-col { background:#fff; }
+  .plan-table tbody th { text-align:left; font-family:'Inter',sans-serif; font-weight:500; color:var(--charcoal); }
+  .plan-table .feat-col { width:34%; }
+  .plan-table td.hi, .plan-table th.hi { background: var(--primary-light); }
+  .plan-table thead th.hi { color: var(--primary); }
+  .plan-table .yes { color:var(--success); display:inline-flex; }
+  .plan-table .no { color:#C9C4BD; display:inline-flex; }
+  .plan-table .icon { width:19px; height:19px; }
+  .plan-table tr:last-child td, .plan-table tr:last-child th { border-bottom:none; }
+
+  /* ---- FAQ ---- */
+  .faq-wrap { max-width: 820px; margin: 0 auto; display: grid; gap: 14px; }
+  .faq-item { background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color .25s, box-shadow .25s; }
+  .faq-item.open { border-color: rgba(242,101,34,.4); box-shadow: var(--shadow-sm); }
+  .faq-q { width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; gap: 18px; font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 17px; color: var(--charcoal); }
+  .faq-q .chev { width: 30px; height: 30px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; flex: none; transition: transform .3s var(--ease), background .25s; }
+  .faq-item.open .faq-q .chev { transform: rotate(180deg); background: var(--primary); color: #fff; }
+  .faq-q .chev .icon { width: 16px; height: 16px; stroke-width: 2.6; }
+  .faq-a { overflow: hidden; max-height: 0; transition: max-height .4s var(--ease); }
+  .faq-item.open .faq-a { max-height: 420px; }
+  .faq-a-inner { overflow: hidden; }
+  .faq-a p { padding: 0 24px 24px; font-size: 15.5px; }
+
+  /* ---- CTA band ---- */
+  .cta-band { position: relative; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); border-radius: 32px; padding: clamp(44px,6vw,72px); overflow: hidden; color: #fff; text-align: center; }
+  .cta-band::before, .cta-band::after { content: ""; position: absolute; border-radius: 50%; background: rgba(255,255,255,.1); }
+  .cta-band::before { width: 320px; height: 320px; top: -140px; left: -80px; } .cta-band::after { width: 260px; height: 260px; bottom: -120px; right: -60px; }
+  .cta-band > * { position: relative; z-index: 1; }
+  .cta-band h2 { color: #fff; font-size: clamp(30px,4vw,46px); font-weight: 900; margin-bottom: 14px; }
+  .cta-band p { color: rgba(255,255,255,.92); font-size: 18px; max-width: 560px; margin: 0 auto 30px; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+
+  @media (max-width: 980px) {
+    .svc-hero-grid { grid-template-columns: 1fr; } .svc-hero-media { order: -1; }
+    .srow { grid-template-columns: 1fr; gap: 30px; }
+    .srow.rev .srow-media { order: -1; }
+    .plans { grid-template-columns: 1fr; max-width: 460px; margin: 0 auto; }
+  }
+  @media (max-width: 560px) {
+    .includes { grid-template-columns: 1fr; }
+    .hero-mini-stats { gap: 22px; }
+    .svc-hero-media .shm-badge { left: 8px; }
+  }
+</style>
+</head>
+<body>
+  <div id="preloader"><div class="pre-inner"><span class="pre-ring"></span><img class="pre-logo" src="assets/logo.png" alt="Centro Veterinario Razas" /></div></div>
+
+  <!-- TOPBAR + NAV -->
+  <div class="topbar"><div class="wrap topbar-inner"><div class="topbar-left"><span><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Tahuaycani 32, Sachaca · Arequipa</span><a href="tel:054588055"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg> (054) 588055</a></div><div class="topbar-right"><span style="color:rgba(255,255,255,.55)">Lun–Sáb · 09:00–18:00</span><a href="https://www.facebook.com/p/RAZAS-Centro-Veterinario-100063516641675/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg></a><a href="https://www.instagram.com/razas_centroveterinario/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div></div></div>
+  <header class="nav" id="nav"><div class="wrap nav-inner"><a class="brand" href="index.html"><img src="assets/logo.png" alt="Centro Veterinario Razas" /><span class="brand-text"><b>Razas</b><small>Centro Veterinario</small></span></a><nav><ul class="nav-links"><li><a href="index.html">Inicio</a></li><li><a href="servicios.html" class="active">Servicios</a></li><li><a href="nosotros.html">Nosotros</a></li><li><a href="contacto.html">Contacto</a></li></ul></nav><div class="nav-right"><a class="btn btn--primary" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.84 14.16c-.25.69-1.45 1.32-1.99 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.97-1.28-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39.002.56.01.18.008.42-.07.66.5.25.59.84 2.05.91 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.39-.45.52-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.14 1.02 2.1 1.33 2.4 1.48.3.15.47.13.65-.08.18-.2.74-.86.94-1.16.2-.3.4-.25.66-.15.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.12.07.71-.18 1.4Z"/></svg> Reservar cita</a><button class="hamburger" id="hamburger" aria-label="Abrir menú"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></div></header>
+  <div class="scrim" id="scrim"></div>
+  <aside class="mobile-menu" id="mobileMenu"><div class="mm-head"><span class="brand-text"><b style="font-size:22px">Razas</b><small>Centro Veterinario</small></span><button class="mm-close" id="mmClose" aria-label="Cerrar menú"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><ul><li><a href="index.html">Inicio</a></li><li><a href="servicios.html" class="active">Servicios</a></li><li><a href="nosotros.html">Nosotros</a></li><li><a href="contacto.html">Contacto</a></li></ul><a class="btn btn--whatsapp" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener">Reservar por WhatsApp</a></aside>
+
+  <!-- HERO -->
+  <section class="svc-hero">
+    <div class="wrap svc-hero-grid">
+      <div class="svc-hero-copy">
+        <div class="crumbs reveal"><a href="index.html">Inicio</a><span class="sep">/</span><span class="cur">Servicios</span></div>
+        <span class="eyebrow reveal">Nuestros servicios</span>
+        <h1 class="reveal" style="margin-top:14px;">Cuidado completo, bajo un mismo techo</h1>
+        <p class="lead reveal">De la consulta de rutina a la cirugía especializada: en Razas tu mascota recibe atención profesional y cariñosa en cada etapa de su vida.</p>
+        <div class="hero-mini-stats reveal">
+          <div class="ms"><b>6</b><span>servicios integrales</span></div>
+          <div class="ms"><b>3</b><span>especies atendidas</span></div>
+          <div class="ms"><b>+5</b><span>años de experiencia</span></div>
+        </div>
+      </div>
+      <div class="svc-hero-media reveal-scale">
+        <div class="shm-main" data-parallax="0.05">
+          <image-slot id="svc-hero" shape="rounded" radius="28" placeholder="Foto de atención veterinaria" src="https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=900&q=80"></image-slot>
+        </div>
+        <div class="shm-badge">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+          <div><strong>Equipo certificado</strong><small>Profesionales colegiados</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK NAV -->
+  <div class="quicknav">
+    <div class="wrap quicknav-inner" data-spy>
+      <a href="#consulta"><svg class="icon" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2h-.5a2 2 0 0 0-2 2v5a6 6 0 0 0 12 0V4a2 2 0 0 0-2-2"/><circle cx="20" cy="10" r="2"/></svg> Consulta</a>
+      <a href="#vacunacion"><svg class="icon" viewBox="0 0 24 24"><path d="m18 2 4 4M17 7 3 21M19 9 9 19M11 5l8 8"/></svg> Vacunación</a>
+      <a href="#cirugia"><svg class="icon" viewBox="0 0 24 24"><path d="M14.5 2 21 8.5 8.5 21H2v-6.5L14.5 2Z"/></svg> Cirugía</a>
+      <a href="#peluqueria"><svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20"/></svg> Peluquería</a>
+      <a href="#hospedaje"><svg class="icon" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5Z"/></svg> Hospedaje</a>
+      <a href="#emergencias"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l2-7 4 14 2-7h4"/></svg> Emergencias</a>
+    </div>
+  </div>
+
+  <!-- SERVICE ROWS -->
+  <div class="wrap">
+
+    <section class="srow" id="consulta" data-species="perros gatos aves">
+      <div class="srow-media reveal-l">
+        <span class="sm-num">01</span>
+        <div class="sm-img" data-parallax="0.05"><image-slot id="r-consulta" shape="rounded" radius="24" placeholder="Foto consulta médica" src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=800&q=80"></image-slot></div>
+        <span class="sm-tag"><i></i> Cita en el día</span>
+      </div>
+      <div class="srow-copy reveal-r">
+        <div class="srow-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2h-.5a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6 6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-.4a.3.3 0 1 0 .1.3"/><path d="M8 15v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg></div><span class="eyebrow">Servicio 01</span>
+        <h2>Consulta Médica</h2>
+        <p>Una evaluación clínica completa para detectar a tiempo cualquier problema de salud. Examinamos a tu mascota a fondo y te explicamos cada hallazgo con claridad y sin tecnicismos.</p>
+        <ul class="includes">
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Examen físico completo</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Diagnóstico profesional</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Plan de tratamiento</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Orientación nutricional</li>
+        </ul>
+        <div class="species">
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="8" cy="14" r="3"/><path d="M14 14c2 0 3 1 3 3s-3 4-6 4-6-2-6-4 1-3 3-3"/></svg> Perros</span>
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5C7 5 4 9 4 14a8 8 0 0 0 16 0c0-5-3-9-8-9Z"/><path d="M9 13h.01M15 13h.01"/></svg> Gatos</span>
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><path d="M16 7h.01M22 10c0 6-5 10-10 10S2 17 2 12a6 6 0 0 1 11-3l9 1Z"/></svg> Aves exóticas</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="srow rev" id="vacunacion" data-species="perros gatos">
+      <div class="srow-media reveal-r">
+        <span class="sm-num">02</span>
+        <div class="sm-img" data-parallax="0.05"><image-slot id="r-vacuna" shape="rounded" radius="24" placeholder="Foto vacunación" src="https://images.unsplash.com/photo-1612531386530-97286d97c2d2?auto=format&fit=crop&w=800&q=80"></image-slot></div>
+        <span class="sm-tag"><i></i> Con carné de control</span>
+      </div>
+      <div class="srow-copy reveal-l">
+        <div class="srow-ic"><svg class="icon" viewBox="0 0 24 24"><path d="m18 2 4 4M17 7 3 21M19 9 9 19M11 5l8 8"/></svg></div><span class="eyebrow">Servicio 02</span>
+        <h2>Vacunación y Desparasitación</h2>
+        <p>Protege a tu mascota de las principales enfermedades con un calendario de vacunas a la medida. Llevamos el control de cada dosis para que nunca pierdas una fecha importante.</p>
+        <ul class="includes">
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Vacunas múltiples y antirrábica</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Desparasitación interna y externa</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Calendario personalizado</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Carné de vacunación oficial</li>
+        </ul>
+        <div class="species">
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="8" cy="14" r="3"/><path d="M14 14c2 0 3 1 3 3s-3 4-6 4-6-2-6-4 1-3 3-3"/></svg> Perros</span>
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5C7 5 4 9 4 14a8 8 0 0 0 16 0c0-5-3-9-8-9Z"/><path d="M9 13h.01M15 13h.01"/></svg> Gatos</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="srow" id="cirugia" data-species="perros gatos">
+      <div class="srow-media reveal-l">
+        <span class="sm-num">03</span>
+        <div class="sm-img" data-parallax="0.05"><image-slot id="r-cirugia" shape="rounded" radius="24" placeholder="Foto cirugía / quirófano" src="https://images.unsplash.com/photo-1666886573626-22c8c08c8aa0?auto=format&fit=crop&w=800&q=80"></image-slot></div>
+        <span class="sm-tag"><i></i> Monitoreo permanente</span>
+      </div>
+      <div class="srow-copy reveal-r">
+        <div class="srow-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M14.5 2 21 8.5 8.5 21H2v-6.5L14.5 2Z"/><path d="m12 4.5 7.5 7.5"/></svg></div><span class="eyebrow">Servicio 03</span>
+        <h2>Cirugía</h2>
+        <p>Procedimientos quirúrgicos con protocolos seguros y equipamiento moderno. Desde esterilizaciones hasta cirugías de tejidos blandos, con monitoreo anestésico en todo momento.</p>
+        <ul class="includes">
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Esterilización y castración</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Cirugía de tejidos blandos</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Monitoreo anestésico</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Control post-operatorio</li>
+        </ul>
+        <div class="species">
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="8" cy="14" r="3"/><path d="M14 14c2 0 3 1 3 3s-3 4-6 4-6-2-6-4 1-3 3-3"/></svg> Perros</span>
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5C7 5 4 9 4 14a8 8 0 0 0 16 0c0-5-3-9-8-9Z"/><path d="M9 13h.01M15 13h.01"/></svg> Gatos</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="srow rev" id="peluqueria" data-species="perros gatos">
+      <div class="srow-media reveal-r">
+        <span class="sm-num">04</span>
+        <div class="sm-img"><div class="ba" data-ba><div class="ba-layer ba-after"><image-slot id="pelu-after" shape="rect" placeholder="Foto DESPUÉS del grooming" src="https://images.unsplash.com/photo-1591946614720-90a587da4a36?auto=format&fit=crop&w=800&q=80"></image-slot><span class="ba-label ba-label-after">Después</span></div><div class="ba-layer ba-before"><image-slot id="pelu-before" shape="rect" placeholder="Foto ANTES del grooming" src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=800&q=80"></image-slot><span class="ba-label ba-label-before">Antes</span></div><span class="ba-hint">Arrastra para comparar</span><div class="ba-handle"><span class="ba-grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7 4 12l4 5M16 7l4 5-4 5"/></svg></span></div></div></div>
+        <span class="sm-tag"><i></i> Por tipo de pelaje</span>
+      </div>
+      <div class="srow-copy reveal-l">
+        <div class="srow-ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg></div><span class="eyebrow">Servicio 04</span>
+        <h2>Peluquería y Estética</h2>
+        <p>Mucho más que un baño: cuidamos la higiene y la imagen de tu mascota con productos suaves y un corte pensado para su raza. Salen relucientes y felices.</p>
+        <ul class="includes">
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Baño medicado e hidratante</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Corte según la raza</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Corte de uñas y deslanado</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Limpieza de oídos</li>
+        </ul>
+        <div class="species">
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="8" cy="14" r="3"/><path d="M14 14c2 0 3 1 3 3s-3 4-6 4-6-2-6-4 1-3 3-3"/></svg> Perros</span>
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5C7 5 4 9 4 14a8 8 0 0 0 16 0c0-5-3-9-8-9Z"/><path d="M9 13h.01M15 13h.01"/></svg> Gatos</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="srow" id="hospedaje" data-species="perros gatos">
+      <div class="srow-media reveal-l">
+        <span class="sm-num">05</span>
+        <div class="sm-img" data-parallax="0.05"><image-slot id="r-hosp" shape="rounded" radius="24" placeholder="Foto hospedaje / hotel" src="https://images.unsplash.com/photo-1453227588063-bb302b62f50b?auto=format&fit=crop&w=800&q=80"></image-slot></div>
+        <span class="sm-tag"><i></i> Reporte diario</span>
+      </div>
+      <div class="srow-copy reveal-r">
+        <div class="srow-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5Z"/></svg></div><span class="eyebrow">Servicio 05</span>
+        <h2>Hospedaje</h2>
+        <p>¿De viaje? Tu mascota se queda en buenas manos. Un espacio limpio, seguro y monitoreado, con supervisión médica y mucho cariño mientras no estás.</p>
+        <ul class="includes">
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Espacios limpios y seguros</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Alimentación supervisada</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Paseos y recreación</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Supervisión veterinaria</li>
+        </ul>
+        <div class="species">
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="8" cy="14" r="3"/><path d="M14 14c2 0 3 1 3 3s-3 4-6 4-6-2-6-4 1-3 3-3"/></svg> Perros</span>
+          <span class="sp"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5C7 5 4 9 4 14a8 8 0 0 0 16 0c0-5-3-9-8-9Z"/><path d="M9 13h.01M15 13h.01"/></svg> Gatos</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="srow rev" id="emergencias" data-species="perros gatos aves">
+      <div class="srow-media reveal-r">
+        <span class="sm-num">06</span>
+        <div class="sm-img" data-parallax="0.05"><image-slot id="r-emerg" shape="rounded" radius="24" placeholder="Foto atención de emergencia" src="https://images.unsplash.com/photo-1597633425046-08f5110420b5?auto=format&fit=crop&w=800&q=80"></image-slot></div>
+        <span class="sm-tag" style="background:#FEECEC;color:var(--emergency)"><i style="background:var(--emergency)"></i> Respuesta inmediata</span>
+      </div>
+      <div class="srow-copy reveal-l">
+        <div class="srow-ic is-emergency"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l2-7 4 14 2-7h4"/></svg></div><span class="eyebrow" style="color:var(--emergency)"><span style="background:var(--emergency)"></span>Servicio 06</span>
+        <h2>Emergencias</h2>
+        <p>Cuando cada minuto cuenta, estamos para ayudarte. Atendemos urgencias dentro de nuestro horario con estabilización y atención inmediata para tu mascota.</p>
+        <ul class="includes">
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Atención prioritaria</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Estabilización del paciente</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Sueroterapia y soporte</li>
+          <li><span class="ck"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span> Derivación si es necesario</li>
+        </ul>
+        <a class="btn btn--primary" href="https://wa.me/51054588055?text=Hola%20Razas,%20tengo%20una%20emergencia%20con%20mi%20mascota" target="_blank" rel="noopener" style="background:var(--emergency);box-shadow:0 14px 32px rgba(239,68,68,.28)">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg>
+          Contactar por emergencia
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- PLANES PREVENTIVOS -->
+  <section class="section section--cream">
+    <div class="wrap">
+      <div class="shead shead--center reveal">
+        <span class="eyebrow eyebrow--center">Planes preventivos</span>
+        <h2>Prevenir cuesta menos que curar</h2>
+        <p>Paquetes pensados para cada etapa de vida de tu mascota. Escríbenos y armamos el plan ideal según sus necesidades.</p>
+      </div>
+      <div class="plans" data-stagger>
+        <div class="plan">
+          <div class="plan-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>
+          <h3>Cachorro / Gatito</h3>
+          <p class="ptag">Para el inicio de la vida de tu mascota</p>
+          <ul>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Esquema completo de vacunas</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Desparasitación inicial</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Controles de crecimiento</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Asesoría de alimentación</li>
+          </ul>
+          <a class="btn btn--ghost" href="https://wa.me/51054588055?text=Hola%20Razas,%20me%20interesa%20el%20plan%20Cachorro/Gatito" target="_blank" rel="noopener">Cotizar plan</a>
+        </div>
+        <div class="plan feat">
+          <div class="plan-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h3>Bienestar Anual</h3>
+          <p class="ptag">El favorito para mascotas adultas sanas</p>
+          <ul>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Refuerzo anual de vacunas</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Desparasitación periódica</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> 2 consultas de control al año</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> 1 sesión de peluquería</li>
+          </ul>
+          <a class="btn btn--primary" href="https://wa.me/51054588055?text=Hola%20Razas,%20me%20interesa%20el%20plan%20Bienestar%20Anual" target="_blank" rel="noopener">Cotizar plan</a>
+        </div>
+        <div class="plan">
+          <div class="plan-ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <h3>Senior</h3>
+          <p class="ptag">Cuidado especial para mascotas mayores</p>
+          <ul>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Chequeos preventivos frecuentes</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Control de enfermedades crónicas</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Evaluación geriátrica</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Asesoría nutricional adaptada</li>
+          </ul>
+          <a class="btn btn--ghost" href="https://wa.me/51054588055?text=Hola%20Razas,%20me%20interesa%20el%20plan%20Senior" target="_blank" rel="noopener">Cotizar plan</a>
+        </div>
+      </div>
+      <p class="plans-note reveal">Los planes se adaptan a la especie, raza y edad de tu mascota. Consulta precios y disponibilidad por WhatsApp.</p>
+      <div class="plan-compare reveal">
+        <table class="plan-table">
+          <thead><tr><th class="feat-col">Incluye</th><th>Cachorro / Gatito</th><th class="hi">Bienestar Anual</th><th>Senior</th></tr></thead>
+          <tbody>
+            <tr><th>Esquema / refuerzo de vacunas</th><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td><td class="hi"><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td></tr>
+            <tr><th>Desparasitación</th><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td><td class="hi"><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td></tr>
+            <tr><th>Consultas de control</th><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td><td class="hi"><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td></tr>
+            <tr><th>Sesión de peluquería</th><td><span class="no"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"/></svg></span></td><td class="hi"><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td><td><span class="no"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"/></svg></span></td></tr>
+            <tr><th>Evaluación geriátrica</th><td><span class="no"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"/></svg></span></td><td class="hi"><span class="no"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"/></svg></span></td><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td></tr>
+            <tr><th>Control de enfermedades crónicas</th><td><span class="no"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"/></svg></span></td><td class="hi"><span class="no"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"/></svg></span></td><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td></tr>
+            <tr><th>Asesoría nutricional</th><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td><td class="hi"><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td><td><span class="yes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="wrap">
+      <div class="shead shead--center reveal">
+        <span class="eyebrow eyebrow--center">Preguntas frecuentes</span>
+        <h2>Resolvemos tus dudas</h2>
+        <p>Lo que más nos consultan antes de la primera visita.</p>
+      </div>
+      <div class="faq-wrap reveal" data-accordion>
+        <div class="faq-item open">
+          <button class="faq-q" aria-expanded="true">¿Necesito reservar cita o puedo ir directamente?<span class="chev"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>Puedes acercarte directamente en nuestro horario de atención, pero te recomendamos reservar por WhatsApp para asegurar tu horario y evitar esperas, sobre todo para peluquería y cirugías programadas.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">¿Atienden aves y mascotas exóticas?<span class="chev"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>Sí. Además de perros y gatos, atendemos aves exóticas. Si tienes otra especie, escríbenos antes para confirmar que podemos brindarle la atención adecuada.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">¿A qué edad debo vacunar a mi cachorro o gatito?<span class="chev"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>El esquema de vacunación suele iniciar alrededor de las 6 a 8 semanas de vida. En la primera consulta evaluamos a tu mascota y armamos un calendario personalizado con las fechas de cada dosis.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">¿Cómo preparo a mi mascota para una cirugía?<span class="chev"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>En general se requiere un ayuno previo y una evaluación pre-quirúrgica. Te daremos todas las indicaciones específicas según el procedimiento durante la consulta previa.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">¿El hospedaje incluye atención veterinaria?<span class="chev"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>Sí. Durante el hospedaje tu mascota cuenta con supervisión médica permanente, alimentación supervisada y recreación, para que esté cómoda y segura mientras no estás.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">¿Atienden emergencias fuera del horario?<span class="chev"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>Atendemos urgencias dentro de nuestro horario de clínica. Ante una emergencia, escríbenos de inmediato por WhatsApp y te indicaremos cómo proceder lo antes posible.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta-band reveal-scale">
+        <span class="eyebrow eyebrow--center eyebrow--light">Reserva hoy</span>
+        <h2 style="margin-top:16px;">¿Listo para cuidar a tu mascota?</h2>
+        <p>Cuéntanos qué necesita y te ayudamos a elegir el servicio ideal. Respondemos al instante por WhatsApp.</p>
+        <div class="cta-actions">
+          <a class="btn btn--white btn--lg" href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg>
+            Reservar por WhatsApp
+          </a>
+          <a class="btn btn--lg" style="background:rgba(255,255,255,.16);color:#fff;backdrop-filter:blur(4px)" href="contacto.html">Ver ubicación y horarios</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="wrap foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo.png" alt="Centro Veterinario Razas" />
+        <p>La salud de tu mascota, nuestra misión. Atención veterinaria profesional y cálida en Sachaca, Arequipa.</p>
+        <div class="foot-social">
+          <a href="https://www.facebook.com/p/RAZAS-Centro-Veterinario-100063516641675/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg></a>
+          <a href="https://www.instagram.com/razas_centroveterinario/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://wa.me/51054588055" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col"><h5>Navegación</h5><ul><li><a href="index.html">Inicio</a></li><li><a href="servicios.html">Servicios</a></li><li><a href="nosotros.html">Nosotros</a></li><li><a href="contacto.html">Contacto</a></li></ul></div>
+      <div class="foot-col"><h5>Servicios</h5><ul><li><a href="#consulta">Consulta médica</a></li><li><a href="#vacunacion">Vacunación</a></li><li><a href="#cirugia">Cirugía</a></li><li><a href="#peluqueria">Peluquería</a></li><li><a href="#hospedaje">Hospedaje</a></li></ul></div>
+      <div class="foot-col"><h5>Contacto</h5><ul><li class="with-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Tahuaycani 32, Sachaca, Arequipa</li><li class="with-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg> (054) 588055</li><li class="with-ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Lun–Sáb 09:00–18:00</li></ul></div>
+    </div>
+    <div class="wrap foot-bottom"><span>© 2025 Centro Veterinario Razas · Arequipa, Perú</span><span>Hecho con cariño para las mascotas de Arequipa 🐾</span></div>
+  </footer>
+
+  <div class="fab"><a href="https://wa.me/51054588055?text=Hola%20Razas,%20quiero%20reservar%20una%20cita" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.84 14.16c-.25.69-1.45 1.32-1.99 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.97-1.28-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39.002.56.01.18.008.42-.07.66.5.25.59.84 2.05.91 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.39-.45.52-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.14 1.02 2.1 1.33 2.4 1.48.3.15.47.13.65-.08.18-.2.74-.86.94-1.16.2-.3.4-.25.66-.15.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.12.07.71-.18 1.4Z"/></svg><span class="fab-label">Reservar cita</span></a></div>
+
+  <script src="assets/main.js"></script>
+</body>
+</html>
