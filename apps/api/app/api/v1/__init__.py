@@ -4,6 +4,9 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
+from app.api.v1.ai import router as ai_router
+from app.api.v1.audit import router as audit_router
+from app.api.v1.organizations import router as organizations_router
 from app.api.v1.appointments import router as appointments_router
 from app.api.v1.auth import router as auth_router
 from app.api.v1.cash import router as cash_router
@@ -41,3 +44,6 @@ api_router.include_router(notifications_router, prefix="/notifications", tags=["
 api_router.include_router(webhooks_router, prefix="/webhooks", tags=["webhooks"])
 api_router.include_router(portal_router, prefix="/portal", tags=["portal"])
 api_router.include_router(reports_router, prefix="/reports", tags=["reports"])
+api_router.include_router(ai_router, prefix="/ai", tags=["ai"])
+api_router.include_router(audit_router, prefix="/audit-logs", tags=["audit"])
+api_router.include_router(organizations_router, prefix="/organizations", tags=["organizations"])

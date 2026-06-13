@@ -18,6 +18,7 @@ import {
   User as UserIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+import { DocumentsTab } from "../_components/documents-tab";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -128,7 +129,7 @@ function PetDetail({ pet }: { pet: PetRead }) {
           <WeightTab petId={pet.id} />
         </TabsPanel>
         <TabsPanel value="documents">
-          <DocumentsTab />
+          <DocumentsTab petId={pet.id} />
         </TabsPanel>
       </Tabs>
     </div>
@@ -636,18 +637,6 @@ function WeightTab({ petId }: { petId: string }) {
         </Button>
       </Card>
     </div>
-  );
-}
-
-function DocumentsTab() {
-  return (
-    <Card>
-      <EmptyTab
-        icon={<FileText className="size-7" />}
-        title="Documentos por venir"
-        sub="Subida de exámenes, recibos de adopción y certificados estará lista en el siguiente sprint."
-      />
-    </Card>
   );
 }
 

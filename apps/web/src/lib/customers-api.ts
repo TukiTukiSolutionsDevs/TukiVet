@@ -50,6 +50,23 @@ export type CustomerCreate = {
   notes?: string | null;
 };
 
+export type CustomerUpdate = {
+  first_name?: string;
+  last_name?: string;
+  business_name?: string | null;
+  email?: string | null;
+  phone_primary?: string;
+  phone_secondary?: string | null;
+  whatsapp_opted_in?: boolean;
+  email_opted_in?: boolean;
+  address?: string | null;
+  district?: string | null;
+  city?: string;
+  birth_date?: string | null;
+  referral_source?: string | null;
+  notes?: string | null;
+};
+
 export type DocumentValidationResponse = {
   document_type: DocumentType;
   document_number: string;
@@ -79,6 +96,8 @@ export const customersApi = {
   get: (id: string) => api.get<CustomerRead>(`/api/v1/customers/${id}`),
   create: (payload: CustomerCreate) =>
     api.post<CustomerRead>("/api/v1/customers", payload),
+  update: (id: string, payload: CustomerUpdate) =>
+    api.put<CustomerRead>(`/api/v1/customers/${id}`, payload),
   validateDoc: (document_type: DocumentType, document_number: string) =>
     api.post<DocumentValidationResponse>("/api/v1/customers/validate-doc", {
       document_type,
@@ -88,7 +107,9 @@ export const customersApi = {
     api.get<PetRead[]>(`/api/v1/customers/${customerId}/pets`),
 };
 
-export function customerFullName(c: Pick<CustomerRead, "first_name" | "last_name" | "business_name">): string {
+export function customerFullName(
+  c: Pick<CustomerRead, "first_name" | "last_name" | "business_name">,
+): string {
   if (c.business_name) return c.business_name;
   return `${c.first_name} ${c.last_name}`.trim();
 }

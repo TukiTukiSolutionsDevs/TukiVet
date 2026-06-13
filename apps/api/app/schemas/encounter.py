@@ -18,6 +18,8 @@ EncounterType = Literal[
     "follow_up",
     "checkup",
     "hospitalization",
+    "grooming",
+    "boarding",
 ]
 
 EncounterStatus = Literal["draft", "in_progress", "closed", "amended"]

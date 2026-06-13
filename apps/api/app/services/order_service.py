@@ -233,10 +233,18 @@ async def create_order(
     ):
         raise NotFoundError("Cliente no encontrado")
 
+    next_number_result = await db.execute(
+        select(func.coalesce(func.max(Order.number), 0) + 1).where(
+            Order.organization_id == organization_id
+        )
+    )
+    next_number = next_number_result.scalar_one()
+
     order = Order(
         organization_id=organization_id,
         customer_id=customer.id,
         encounter_id=payload.encounter_id,
+        number=next_number,
         status="draft",
         issued_at=datetime.now(tz=timezone.utc),
         notes=payload.notes,

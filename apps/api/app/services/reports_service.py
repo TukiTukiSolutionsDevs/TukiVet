@@ -260,7 +260,7 @@ async def financial_report(
     # Revenue por categoría de producto/servicio (simplificado: por type de doc)
     revenue_by_category = [
         RevenueByCategoryRow(
-            category="invoices_total",
+            category="Comprobantes emitidos",
             count=sum(doc_counts.values()),
             total=(gross or Decimal("0")).quantize(Decimal("0.01")),
         )

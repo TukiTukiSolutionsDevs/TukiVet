@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, Query, Request, status
+from fastapi import APIRouter, Depends, Form, Query, Request, UploadFile, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -14,10 +14,13 @@ from app.api.deps import (
     require_permission,
 )
 from app.core.audit import audit
+from app.db.base import new_ulid
 from app.models import Pet, PetOwner
+from app.models.pet_document import PetDocument
 from app.schemas.common import Page
 from app.schemas.pet import PetCreate, PetRead, PetUpdate, PetWeightCreate, PetWeightRead
-from app.services import pet_service
+from app.schemas.pet_document import PetDocumentRead
+from app.services import pet_service, storage_service
 
 router = APIRouter()
 
@@ -245,3 +248,130 @@ async def list_weights(
         db, organization_id=current_user.organization_id, pet_id=pet_id
     )
     return [PetWeightRead.model_validate(w) for w in weights]
+
+
+# ---- Documentos adjuntos -----------------------------------------------
+
+
+@router.get(
+    "/{pet_id}/documents",
+    response_model=list[PetDocumentRead],
+    summary="Listar documentos de la mascota",
+    dependencies=[Depends(require_permission("pet:read"))],
+)
+async def list_documents(
+    pet_id: str,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> list[PetDocumentRead]:
+    result = await db.execute(
+        select(PetDocument)
+        .where(
+            PetDocument.pet_id == pet_id,
+            PetDocument.organization_id == current_user.organization_id,
+        )
+        .order_by(PetDocument.created_at.desc())
+    )
+    docs = result.scalars().all()
+    items = []
+    for doc in docs:
+        url = await storage_service.get_presigned_url(doc.file_key)
+        items.append(
+            PetDocumentRead.model_validate(doc).model_copy(update={"download_url": url})
+        )
+    return items
+
+
+@router.post(
+    "/{pet_id}/documents",
+    response_model=PetDocumentRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Subir documento a la mascota",
+    dependencies=[Depends(require_permission("pet:write"))],
+)
+async def upload_document(
+    pet_id: str,
+    file: UploadFile,
+    request: Request,
+    current_user: CurrentUser,
+    db: DBSession,
+    category: str = Form(default="other"),
+    description: str | None = Form(default=None),
+    encounter_id: str | None = Form(default=None),
+) -> PetDocumentRead:
+    content = await file.read()
+    key = await storage_service.upload_file(
+        content,
+        file.filename or "archivo",
+        file.content_type or "application/octet-stream",
+        folder=f"pets/{pet_id}",
+    )
+    doc = PetDocument(
+        id=new_ulid(),
+        organization_id=current_user.organization_id,
+        pet_id=pet_id,
+        uploaded_by=current_user.id,
+        encounter_id=encounter_id or None,
+        file_key=key,
+        file_name=file.filename or "archivo",
+        file_size=len(content),
+        content_type=file.content_type or "application/octet-stream",
+        category=category,
+        description=description,
+    )
+    db.add(doc)
+    await audit(
+        db,
+        action="pet_document.uploaded",
+        organization_id=current_user.organization_id,
+        actor_user_id=current_user.id,
+        target_type="pet",
+        target_id=pet_id,
+        after={"file_name": doc.file_name, "category": doc.category},
+        ip=get_client_ip(request),
+        user_agent=get_user_agent(request),
+    )
+    await db.commit()
+    url = await storage_service.get_presigned_url(key)
+    return PetDocumentRead.model_validate(doc).model_copy(update={"download_url": url})
+
+
+@router.delete(
+    "/{pet_id}/documents/{doc_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
+    summary="Eliminar documento",
+    dependencies=[Depends(require_permission("pet:write"))],
+)
+async def delete_document(
+    pet_id: str,
+    doc_id: str,
+    request: Request,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> None:
+    result = await db.execute(
+        select(PetDocument).where(
+            PetDocument.id == doc_id,
+            PetDocument.pet_id == pet_id,
+            PetDocument.organization_id == current_user.organization_id,
+        )
+    )
+    doc = result.scalar_one_or_none()
+    if doc is None:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Documento no encontrado.")
+    await storage_service.delete_file(doc.file_key)
+    await db.delete(doc)
+    await audit(
+        db,
+        action="pet_document.deleted",
+        organization_id=current_user.organization_id,
+        actor_user_id=current_user.id,
+        target_type="pet",
+        target_id=pet_id,
+        after={"file_name": doc.file_name},
+        ip=get_client_ip(request),
+        user_agent=get_user_agent(request),
+    )
+    await db.commit()

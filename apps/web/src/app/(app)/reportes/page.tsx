@@ -10,12 +10,26 @@ import {
   Clock,
   CreditCard,
   DollarSign,
+  Download,
   Package,
   Stethoscope,
   Syringe,
   TrendingUp,
   Users,
 } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
@@ -28,9 +42,45 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { reportsApi } from "@/lib/reports-api";
+import { reportsApi, type FinancialReport } from "@/lib/reports-api";
 import { formatCurrencyPEN, formatNumber, formatPercent } from "@/lib/format";
 import { paymentMethodLabel } from "@/lib/orders-api";
+
+function exportFinancialCsv(data: FinancialReport, start: string, end: string) {
+  const rows: string[][] = [];
+  rows.push(["Reporte financiero TukiVet"]);
+  rows.push([`Período: ${start} al ${end}`]);
+  rows.push([]);
+  rows.push(["RESUMEN"]);
+  rows.push(["Ingreso bruto", String(data.gross_revenue)]);
+  rows.push(["IGV recaudado", String(data.igv_collected)]);
+  rows.push(["Ingreso neto", String(data.net_revenue)]);
+  rows.push(["Facturas emitidas", String(data.invoices_emitted)]);
+  rows.push(["Boletas emitidas", String(data.boletas_emitted)]);
+  rows.push(["Comprobantes anulados", String(data.cancelled_documents)]);
+  rows.push([]);
+  rows.push(["PAGOS POR MÉTODO"]);
+  rows.push(["Método", "Total S/"]);
+  for (const [method, total] of Object.entries(data.payments_by_method)) {
+    rows.push([method, String(total)]);
+  }
+  rows.push([]);
+  rows.push(["INGRESOS POR CATEGORÍA"]);
+  rows.push(["Categoría", "Items", "Total S/"]);
+  for (const r of data.revenue_by_category) {
+    rows.push([r.category, String(r.count), String(r.total)]);
+  }
+  const csv = rows
+    .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","))
+    .join("\n");
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `reporte_financiero_${start}_${end}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
@@ -163,6 +213,17 @@ export default function ReportesPage() {
                 onChange={(e) => setEnd(e.target.value)}
               />
             </div>
+            {finQ.data && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="mb-0.5 gap-1.5"
+                onClick={() => exportFinancialCsv(finQ.data!, start, end)}
+              >
+                <Download className="size-4" />
+                Exportar CSV
+              </Button>
+            )}
           </div>
         </Card>
 
@@ -252,7 +313,102 @@ export default function ReportesPage() {
           </div>
         )}
       </section>
+
+      {/* Charts section */}
+      {(finQ.data || kpiQ.data) && (
+        <section>
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Gráficos
+          </h2>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {finQ.data && finQ.data.revenue_by_category.length > 0 && (
+              <Card className="p-5">
+                <h3 className="mb-4 text-sm font-semibold">Ingresos por categoría</h3>
+                <RevenueByCategoryChart data={finQ.data.revenue_by_category} />
+              </Card>
+            )}
+            {finQ.data && Object.keys(finQ.data.payments_by_method).length > 0 && (
+              <Card className="p-5">
+                <h3 className="mb-4 text-sm font-semibold">Distribución métodos de pago</h3>
+                <PaymentMethodPieChart data={finQ.data.payments_by_method} />
+              </Card>
+            )}
+            {kpiQ.data && Object.keys(kpiQ.data.revenue_per_vet_last_30d).length > 0 && (
+              <Card className="p-5 lg:col-span-2">
+                <h3 className="mb-4 text-sm font-semibold">Ingresos por veterinario (30d)</h3>
+                <RevenuePerVetChart data={kpiQ.data.revenue_per_vet_last_30d} />
+              </Card>
+            )}
+          </div>
+        </section>
+      )}
     </div>
+  );
+}
+
+const CHART_COLORS = [
+  "#6366f1", "#22c55e", "#f59e0b", "#ef4444",
+  "#8b5cf6", "#06b6d4", "#ec4899", "#84cc16",
+];
+
+function RevenueByCategoryChart({ data }: { data: { category: string; count: number; total: string }[] }) {
+  const chartData = data.map((r) => ({ name: r.category, total: Number(r.total) }));
+  return (
+    <ResponsiveContainer width="100%" height={220}>
+      <BarChart data={chartData} layout="vertical" margin={{ left: 8, right: 24 }}>
+        <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={(v: number) => `S/ ${v.toLocaleString()}`} />
+        <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={110} />
+        <Tooltip formatter={(v) => [`S/ ${Number(v).toLocaleString("es-PE", { minimumFractionDigits: 2 })}`, "Total"]} />
+        <Bar dataKey="total" radius={[0, 4, 4, 0]}>
+          {chartData.map((_, i) => (
+            <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+function PaymentMethodPieChart({ data }: { data: Record<string, string> }) {
+  const pieData = Object.entries(data).map(([name, value]) => ({ name, value: Number(value) }));
+  return (
+    <ResponsiveContainer width="100%" height={220}>
+      <PieChart>
+        <Pie
+          data={pieData}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          outerRadius={80}
+          label={false}
+        >
+          {pieData.map((_, i) => (
+            <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip formatter={(v) => `S/ ${Number(v).toLocaleString("es-PE", { minimumFractionDigits: 2 })}`} />
+        <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+}
+
+function RevenuePerVetChart({ data }: { data: Record<string, string> }) {
+  const chartData = Object.entries(data).map(([vet, total]) => ({ name: vet, total: Number(total) }));
+  return (
+    <ResponsiveContainer width="100%" height={220}>
+      <BarChart data={chartData} margin={{ left: 8, right: 24 }}>
+        <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+        <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `S/ ${v.toLocaleString()}`} />
+        <Tooltip formatter={(v) => [`S/ ${Number(v).toLocaleString("es-PE", { minimumFractionDigits: 2 })}`, "Ingresos"]} />
+        <Bar dataKey="total" radius={[4, 4, 0, 0]}>
+          {chartData.map((_, i) => (
+            <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   );
 }
 

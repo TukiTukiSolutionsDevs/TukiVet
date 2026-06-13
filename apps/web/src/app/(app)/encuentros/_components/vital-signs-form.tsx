@@ -143,7 +143,7 @@ export function VitalSignsForm({
             <Field label="TRC (s)">
               <Input
                 inputMode="decimal"
-                placeholder="< 2"
+                placeholder="1.5"
                 value={f.capillary_refill_seconds}
                 onChange={(e) => upd("capillary_refill_seconds", e.target.value.replace(",", "."))}
               />

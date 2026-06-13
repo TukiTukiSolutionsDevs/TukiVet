@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.errors import ConflictError, NotFoundError
 from app.core.permissions import DEFAULT_ROLES
 from app.models import Branch, Organization, Role, RolePermission
-from app.schemas.organization import BranchCreate, OrganizationCreate
+from app.schemas.organization import BranchCreate, OrganizationCreate, OrganizationUpdate
 
 
 async def organization_exists(db: AsyncSession) -> bool:
@@ -62,6 +62,26 @@ async def create_main_branch(
     db.add(branch)
     await db.flush()
     return branch
+
+
+async def update_organization(
+    db: AsyncSession,
+    organization_id: str,
+    data: OrganizationUpdate,
+) -> Organization:
+    org = await get_organization(db, organization_id)
+    if data.legal_name is not None:
+        org.legal_name = data.legal_name
+    if data.trade_name is not None:
+        org.trade_name = data.trade_name
+    if data.address is not None:
+        org.address = data.address
+    if data.phone is not None:
+        org.phone = data.phone
+    if data.email is not None:
+        org.email = str(data.email)
+    await db.flush()
+    return org
 
 
 async def seed_default_roles(

@@ -11,8 +11,10 @@ import {
   Loader2,
   Package,
   Pill,
+  Printer,
   ShieldAlert,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -68,6 +70,7 @@ export default function PrescriptionDetailPage({
 
 function PrescriptionDetail({ prescription }: { prescription: PrescriptionRead }) {
   const qc = useQueryClient();
+  const router = useRouter();
   const petQ = useQuery({
     queryKey: ["pets", prescription.pet_id],
     queryFn: () => petsApi.get(prescription.pet_id),
@@ -126,6 +129,14 @@ function PrescriptionDetail({ prescription }: { prescription: PrescriptionRead }
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push(`/recetas/${prescription.id}/print`)}
+            >
+              <Printer className="size-4" />
+              Imprimir
+            </Button>
             {!isVoid && (
               <Button
                 variant="outline"

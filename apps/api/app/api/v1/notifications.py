@@ -122,3 +122,94 @@ async def list_notifications(
         page_size=page_size,
     )
     return [NotificationRead.model_validate(r) for r in rows]
+
+
+# ── Safe recipients whitelist ──────────────────────────────────────────────
+
+
+from pydantic import BaseModel as _BM  # noqa: E402
+
+from app.models import SafeRecipient  # noqa: E402
+from app.schemas.common import ORMModel  # noqa: E402
+
+
+class SafeRecipientRead(ORMModel):
+    id: str
+    phone_number: str
+    label: str | None
+
+
+class SafeRecipientCreate(_BM):
+    phone_number: str
+    label: str | None = None
+
+
+@router.get(
+    "/safe-recipients",
+    response_model=list[SafeRecipientRead],
+    summary="Listar números en lista blanca",
+    dependencies=[Depends(require_permission("organization:update"))],
+)
+async def list_safe_recipients(
+    current_user: CurrentUser, db: DBSession
+) -> list[SafeRecipientRead]:
+    from sqlalchemy import select
+
+    result = await db.execute(
+        select(SafeRecipient)
+        .where(SafeRecipient.organization_id == current_user.organization_id)
+        .order_by(SafeRecipient.created_at.asc())
+    )
+    return [SafeRecipientRead.model_validate(r) for r in result.scalars().all()]
+
+
+@router.post(
+    "/safe-recipients",
+    response_model=SafeRecipientRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Agregar número a la lista blanca",
+    dependencies=[Depends(require_permission("organization:update"))],
+)
+async def add_safe_recipient(
+    payload: SafeRecipientCreate,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> SafeRecipientRead:
+    entry = SafeRecipient(
+        organization_id=current_user.organization_id,
+        phone_number=payload.phone_number.strip(),
+        label=payload.label,
+    )
+    db.add(entry)
+    await db.commit()
+    await db.refresh(entry)
+    return SafeRecipientRead.model_validate(entry)
+
+
+@router.delete(
+    "/safe-recipients/{recipient_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
+    summary="Eliminar número de la lista blanca",
+    dependencies=[Depends(require_permission("organization:update"))],
+)
+async def delete_safe_recipient(
+    recipient_id: str,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> None:
+    from sqlalchemy import select
+
+    from app.core.errors import NotFoundError
+
+    result = await db.execute(
+        select(SafeRecipient).where(
+            SafeRecipient.id == recipient_id,
+            SafeRecipient.organization_id == current_user.organization_id,
+        )
+    )
+    entry = result.scalar_one_or_none()
+    if entry is None:
+        raise NotFoundError("Número no encontrado")
+    await db.delete(entry)
+    await db.commit()

@@ -33,6 +33,11 @@ import { SoapEditor } from "../_components/soap-editor";
 import { VitalSignsForm } from "../_components/vital-signs-form";
 import { ProblemsList } from "../_components/problems-list";
 import { AmendDialog } from "../_components/amend-dialog";
+import { HospitalizationPanel } from "../_components/hospitalization-panel";
+import { OphthalmicPanel } from "../_components/ophthalmic-panel";
+import { DermatologyPanel } from "../_components/dermatology-panel";
+import { AiAssistant } from "../_components/ai-assistant";
+import { DocumentsGallery } from "../_components/documents-gallery";
 
 export default function EncounterDetailPage({
   params,
@@ -181,6 +186,37 @@ function EncounterDetail({ encounter }: { encounter: EncounterRead }) {
           <SoapEditor encounterId={encounter.id} readOnly={isReadOnly} />
         </Card>
       </div>
+
+      {encounter.type === "hospitalization" && (
+        <HospitalizationPanel
+          encounterId={encounter.id}
+          readOnly={isReadOnly}
+        />
+      )}
+
+      {/* AI Assistant — available on all open encounters */}
+      {!isReadOnly && (
+        <AiAssistant encounterId={encounter.id} petId={encounter.pet_id} readOnly={isReadOnly} />
+      )}
+
+      {/* Specialty exam panels — always available on consultations */}
+      {(encounter.type === "consultation" || encounter.type === "emergency" || encounter.type === "follow_up") && (
+        <div className="space-y-3">
+          <OphthalmicPanel encounterId={encounter.id} readOnly={isReadOnly} />
+          <DermatologyPanel encounterId={encounter.id} readOnly={isReadOnly} />
+        </div>
+      )}
+
+      {/* Documents & images gallery */}
+      {encounter.pet_id && (
+        <Card className="p-5">
+          <DocumentsGallery
+            petId={encounter.pet_id}
+            encounterId={encounter.id}
+            readOnly={isReadOnly}
+          />
+        </Card>
+      )}
     </div>
   );
 }

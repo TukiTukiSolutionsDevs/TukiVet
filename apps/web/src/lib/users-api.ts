@@ -38,11 +38,19 @@ export const ROLE_LABELS: Record<RoleCode, string> = {
   accountant: "Contador",
 };
 
+export type UserProfileUpdate = {
+  full_name?: string | null;
+  phone?: string | null;
+  professional_id?: string | null;
+};
+
 export const usersApi = {
   list: () => api.get<UserRead[]>("/api/v1/users"),
   get: (id: string) => api.get<UserRead>(`/api/v1/users/${id}`),
   create: (payload: UserCreate) =>
     api.post<UserRead>("/api/v1/users", payload),
+  updateMe: (payload: UserProfileUpdate) =>
+    api.patch<UserRead>("/api/v1/users/me", payload),
 };
 
 export function isVeterinarian(u: UserRead): boolean {

@@ -23,9 +23,11 @@ from app.models.order import CashSession, Order, OrderItem, Payment, ServiceCata
 from app.models.organization import Branch, Organization
 from app.models.permission import Permission, Role, RolePermission
 from app.models.pet import Pet, PetOwner, PetWeightHistory
+from app.models.pet_document import PetDocument
 from app.models.prescription import Prescription, PrescriptionItem
 from app.models.problem import Problem
 from app.models.refresh_token import RefreshToken
+from app.models.safe_recipient import SafeRecipient
 from app.models.user import User, UserRole, UserStatus
 from app.models.vaccine import VaccineAdministration, VaccineCatalog
 
@@ -56,6 +58,7 @@ __all__ = [
     "Payment",
     "Permission",
     "Pet",
+    "PetDocument",
     "PetOwner",
     "PetWeightHistory",
     "Prescription",
@@ -67,6 +70,7 @@ __all__ = [
     "RolePermission",
     "Room",
     "ServiceCatalog",
+    "SafeRecipient",
     "SoapNote",
     "Supplier",
     "TimeOff",

@@ -34,11 +34,29 @@ def get_messaging_provider() -> MessagingProvider:
     return ConsoleMessagingProvider()
 
 
-def is_recipient_allowed(recipient: str) -> bool:
-    """En modo SAFE_RECIPIENTS_ONLY, sólo se envía a la whitelist."""
+async def is_recipient_allowed(
+    recipient: str,
+    db: AsyncSession | None = None,
+    organization_id: str | None = None,
+) -> bool:
+    """En modo SAFE_RECIPIENTS_ONLY, sólo se envía a la whitelist (env + DB)."""
     if not settings.safe_recipients_only:
         return True
-    return any(recipient.startswith(r) or r == recipient for r in settings.safe_recipients)
+    if any(recipient.startswith(r) or r == recipient for r in settings.safe_recipients):
+        return True
+    if db is None or organization_id is None:
+        return False
+    from sqlalchemy import select as _select
+
+    from app.models.safe_recipient import SafeRecipient
+
+    result = await db.execute(
+        _select(SafeRecipient).where(
+            SafeRecipient.organization_id == organization_id,
+            SafeRecipient.phone_number == recipient,
+        )
+    )
+    return result.scalar_one_or_none() is not None
 
 
 _VAR_RE = re.compile(r"\{\{(\w+)\}\}")
@@ -103,7 +121,7 @@ async def send_message(
     db.add(notif)
     await db.flush()
 
-    if not is_recipient_allowed(recipient):
+    if not await is_recipient_allowed(recipient, db=db, organization_id=organization_id):
         notif.status = "blocked_safe_mode"
         notif.error_message = "Recipient no está en SAFE_RECIPIENTS"
         await db.flush()

@@ -8,7 +8,9 @@ export type EncounterType =
   | "emergency"
   | "follow_up"
   | "checkup"
-  | "hospitalization";
+  | "hospitalization"
+  | "grooming"
+  | "boarding";
 
 export const ENCOUNTER_TYPE_LABELS: Record<EncounterType, string> = {
   consultation: "Consulta",
@@ -18,6 +20,8 @@ export const ENCOUNTER_TYPE_LABELS: Record<EncounterType, string> = {
   follow_up: "Seguimiento",
   checkup: "Chequeo",
   hospitalization: "Hospitalización",
+  grooming: "Peluquería",
+  boarding: "Hospedaje",
 };
 
 export const ENCOUNTER_TYPE_OPTIONS: EncounterType[] = [
@@ -28,6 +32,8 @@ export const ENCOUNTER_TYPE_OPTIONS: EncounterType[] = [
   "follow_up",
   "checkup",
   "hospitalization",
+  "grooming",
+  "boarding",
 ];
 
 export type EncounterStatus = "draft" | "in_progress" | "closed" | "amended";

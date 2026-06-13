@@ -118,6 +118,24 @@ async def _assign_roles_by_code(
     await db.flush()
 
 
+async def update_own_profile(
+    db: AsyncSession,
+    user_id: str,
+    full_name: str | None,
+    phone: str | None,
+    professional_id: str | None,
+) -> User:
+    user = await get_user(db, user_id)
+    if full_name is not None:
+        user.full_name = full_name
+    if phone is not None:
+        user.phone = phone
+    if professional_id is not None:
+        user.professional_id = professional_id
+    await db.flush()
+    return user
+
+
 async def update_last_login(db: AsyncSession, user_id: str) -> None:
     from datetime import datetime, timezone
 

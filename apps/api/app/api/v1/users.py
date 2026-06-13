@@ -15,10 +15,54 @@ from app.api.deps import (
 from app.core.audit import audit
 from app.core.errors import NotFoundError
 from app.models import User
-from app.schemas.user import UserCreate, UserRead
+from app.schemas.user import UserCreate, UserRead, UserUpdate
 from app.services import user_service
 
 router = APIRouter()
+
+
+@router.patch(
+    "/me",
+    response_model=UserRead,
+    summary="Actualizar mi perfil",
+)
+async def update_own_profile(
+    payload: UserUpdate,
+    request: Request,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> UserRead:
+    user = await user_service.update_own_profile(
+        db,
+        user_id=current_user.id,
+        full_name=payload.full_name,
+        phone=payload.phone,
+        professional_id=payload.professional_id,
+    )
+    await audit(
+        db,
+        action="user.profile_updated",
+        organization_id=current_user.organization_id,
+        actor_user_id=current_user.id,
+        target_type="user",
+        target_id=user.id,
+        after=payload.model_dump(exclude_none=True),
+        ip=get_client_ip(request),
+        user_agent=get_user_agent(request),
+    )
+    await db.commit()
+    await db.refresh(user)
+    role_codes = await user_service.get_role_codes(db, user.id)
+    return UserRead(
+        id=user.id,
+        organization_id=user.organization_id,
+        email=user.email,
+        full_name=user.full_name,
+        phone=user.phone,
+        professional_id=user.professional_id,
+        status=user.status,
+        role_codes=role_codes,
+    )
 
 
 @router.post(

@@ -85,6 +85,10 @@ class Settings(BaseSettings):
     # ---- Observability ----
     sentry_dsn: str = ""
 
+    # ---- AI / LLM ----
+    openai_api_key: SecretStr = SecretStr("")
+    ai_model: str = "gpt-4o-mini"
+
     # ---- Feature flags ----
     enable_online_payments: bool = False
     enable_ai_soap: bool = False

@@ -27,6 +27,14 @@ class OrganizationCreate(ORMModel):
         return v
 
 
+class OrganizationUpdate(ORMModel):
+    legal_name: str | None = Field(default=None, min_length=2, max_length=255)
+    trade_name: str | None = Field(default=None, min_length=2, max_length=255)
+    address: str | None = Field(default=None, max_length=500)
+    phone: str | None = Field(default=None, max_length=20)
+    email: EmailStr | None = None
+
+
 class OrganizationRead(ORMModel):
     id: str
     legal_name: str
