@@ -22,7 +22,15 @@ ENV/
 .env.local
 .env.production
 .env.staging
+.env.prod
 !.env.example
+!.env.prod.example
+
+# Agent / tooling state
+.atl/
+.claude/
+.opencode/
+testsprite_tests/
 
 # Testing / linting cache
 .pytest_cache/

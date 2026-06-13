@@ -1,0 +1,41 @@
+# Caddy reverse proxy — Razas
+# Auto-SSL via Let's Encrypt. Reads ACME_EMAIL from env at boot.
+
+{
+	email {$ACME_EMAIL:admin@razas.com.pe}
+}
+
+# Public landing (static HTML served by nginx)
+razas.com.pe, www.razas.com.pe {
+	encode zstd gzip
+	reverse_proxy landing:80
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+}
+
+# Admin app (Next.js)
+app.razas.com.pe {
+	encode zstd gzip
+	reverse_proxy web:3000
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+}
+
+# Public API
+api.razas.com.pe {
+	encode zstd gzip
+	reverse_proxy api:8000
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+}

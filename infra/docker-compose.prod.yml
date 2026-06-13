@@ -1,0 +1,133 @@
+name: razas-prod
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: razas-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-tukivet}
+      POSTGRES_USER: ${POSTGRES_USER:-tukivet}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tukivet} -d ${POSTGRES_DB:-tukivet}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - razas
+
+  redis:
+    image: redis:7-alpine
+    container_name: razas-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks:
+      - razas
+
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: razas-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - razas
+
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    image: razas/api:latest
+    container_name: razas-api
+    restart: unless-stopped
+    env_file: ../.env.prod
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-tukivet}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-tukivet}
+      REDIS_URL: redis://redis:6379/0
+      S3_ENDPOINT: http://minio:9000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    networks:
+      - razas
+
+  web:
+    build:
+      context: ../apps/web
+      dockerfile: Dockerfile
+    image: razas/web:latest
+    container_name: razas-web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: https://api.razas.com.pe
+    depends_on:
+      - api
+    networks:
+      - razas
+
+  landing:
+    build:
+      context: ../apps/landing
+      dockerfile: Dockerfile
+    image: razas/landing:latest
+    container_name: razas-landing
+    restart: unless-stopped
+    networks:
+      - razas
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: razas-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      ACME_EMAIL: ${ACME_EMAIL:-admin@razas.com.pe}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - landing
+      - web
+      - api
+    networks:
+      - razas
+
+volumes:
+  pgdata:
+  redisdata:
+  miniodata:
+  caddy_data:
+  caddy_config:
+
+networks:
+  razas:
+    driver: bridge
