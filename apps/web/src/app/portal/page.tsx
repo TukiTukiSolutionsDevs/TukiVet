@@ -80,7 +80,7 @@ export default function PortalHomePage() {
           </div>
         ) : petsQ.data?.length === 0 ? (
           <Card className="p-6 text-center text-sm text-muted-foreground">
-            Aún no tenés mascotas registradas en TukiVet.
+            Aún no tenés mascotas registradas en Razas.
           </Card>
         ) : (
           <ul className="space-y-2">

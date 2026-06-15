@@ -48,7 +48,7 @@ import { paymentMethodLabel } from "@/lib/orders-api";
 
 function exportFinancialCsv(data: FinancialReport, start: string, end: string) {
   const rows: string[][] = [];
-  rows.push(["Reporte financiero TukiVet"]);
+  rows.push(["Reporte financiero Razas"]);
   rows.push([`Período: ${start} al ${end}`]);
   rows.push([]);
   rows.push(["RESUMEN"]);

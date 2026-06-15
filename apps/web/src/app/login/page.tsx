@@ -49,11 +49,11 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background p-6">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-2 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground text-xl font-bold">
-            TV
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground text-2xl">
+            🐾
           </div>
-          <CardTitle className="text-2xl">TukiVet</CardTitle>
-          <CardDescription>Inicia sesión en tu intranet</CardDescription>
+          <CardTitle className="font-heading text-2xl">Veterinaria Razas</CardTitle>
+          <CardDescription>Inicia sesión en la intranet clínica</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} className="space-y-4">

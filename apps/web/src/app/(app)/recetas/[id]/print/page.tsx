@@ -263,7 +263,7 @@ function PrintDocument({
 
         {/* Footer */}
         <div className="mt-8 border-t border-gray-300 pt-3 text-center text-[10px] text-gray-400">
-          Receta generada electrónicamente por TukiVet · Clínica Veterinaria Razas ·{" "}
+          Receta generada electrónicamente por Centro Veterinario Razas ·{" "}
           {formatDateShort(rx.issued_at)}
         </div>
       </div>

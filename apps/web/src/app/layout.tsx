@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
+  weight: ["600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "TukiVet — Intranet",
-  description: "Gestión veterinaria para Perú",
+  title: "Veterinaria Razas — Intranet",
+  description: "Gestión clínica · Centro Veterinario Razas, Arequipa",
 };
 
 export default function RootLayout({
@@ -25,9 +27,9 @@ export default function RootLayout({
     <html
       lang="es"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${nunito.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
+      <body className="min-h-full font-sans">
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -38,7 +38,7 @@ export default function PortalLayout({
             className="flex items-center gap-2 text-base font-semibold text-foreground"
           >
             <Heart className="size-5 text-primary" />
-            Portal TukiVet
+            Portal Razas
           </Link>
           {!isPublic && (
             <nav className="flex items-center gap-1">

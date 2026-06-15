@@ -12,11 +12,11 @@ export function PublicHeader() {
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-6">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_4px_12px_rgba(45,179,154,0.4)] text-lg">
+          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_4px_12px_rgba(242,101,34,0.4)] text-lg">
             🐾
           </span>
-          <span className="text-lg font-extrabold tracking-tight">
-            TukiVet
+          <span className="font-heading text-lg font-extrabold tracking-tight">
+            Veterinaria Razas
           </span>
         </Link>
 

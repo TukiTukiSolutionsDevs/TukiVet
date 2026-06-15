@@ -6,9 +6,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --font-heading: var(--font-nunito), var(--font-inter), sans-serif;
 
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -59,67 +59,68 @@
 }
 
 /* =================================================================
-   TukiVet design tokens — from DESIGN.md §1 + bundle theme.css
+   Veterinaria Razas — design tokens
+   Brand: Naranja #F26522 + Carbón #4D4D4D (paleta del logo)
    =================================================================*/
 
 :root {
   --radius: 0.75rem; /* 12px */
 
-  /* Neutrals — warm */
-  --background: #F4F1EC;
-  --foreground: #1F2937;
+  /* Neutrals — warm cream */
+  --background: #FAFAF7;
+  --foreground: #4D4D4D;
   --card: #FFFFFF;
-  --card-foreground: #1F2937;
+  --card-foreground: #4D4D4D;
   --popover: #FFFFFF;
-  --popover-foreground: #1F2937;
+  --popover-foreground: #4D4D4D;
 
-  /* Brand teal */
-  --primary: #2DB39A;
+  /* Brand orange (logo cruz médica) */
+  --primary: #F26522;
   --primary-foreground: #FFFFFF;
 
   /* Surfaces */
-  --secondary: #FBFAF7;
-  --secondary-foreground: #1F2937;
-  --muted: #FBFAF7;
-  --muted-foreground: #6B7280;
+  --secondary: #FFF7F1;
+  --secondary-foreground: #4D4D4D;
+  --muted: #F5F1EC;
+  --muted-foreground: #6B6B6B;
 
-  /* Accent orange */
-  --accent: #F4A261;
-  --accent-foreground: #1F2937;
+  /* Accent — warm orange tint */
+  --accent: #FEF0E7;
+  --accent-foreground: #4D4D4D;
 
   /* Status */
   --destructive: #DC2626;
   --destructive-foreground: #FFFFFF;
-  --success: #10B981;
+  --success: #16A34A;
   --warning: #F59E0B;
-  --info: #3B82F6;
+  --info: #2563EB;
 
-  --border: #ECE7DF;
-  --input: #ECE7DF;
-  --ring: #2DB39A;
+  --border: #E8E4DF;
+  --input: #E8E4DF;
+  --ring: #F26522;
 
-  --chart-1: #2DB39A;
-  --chart-2: #F4A261;
-  --chart-3: #3B82F6;
+  --chart-1: #F26522;
+  --chart-2: #4D4D4D;
+  --chart-3: #2563EB;
   --chart-4: #F59E0B;
-  --chart-5: #7A5AE0;
+  --chart-5: #16A34A;
 
-  /* Sidebar (always darker) */
-  --sidebar: #18211F;
-  --sidebar-foreground: #C9D4D0;
-  --sidebar-primary: #2DB39A;
+  /* Sidebar — carbón profundo del logo */
+  --sidebar: #2E2E2E;
+  --sidebar-foreground: #D8D8D8;
+  --sidebar-primary: #F26522;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #25322E;
+  --sidebar-accent: #3D3D3D;
   --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #2B3936;
-  --sidebar-ring: #2DB39A;
+  --sidebar-border: #404040;
+  --sidebar-ring: #F26522;
 
   /* Extended palette (raw access for special cases) */
-  --primary-50: #E9F8F4;
-  --primary-100: #CFF0E8;
-  --primary-300: #6FD2BC;
-  --primary-600: #1F9E87;
-  --primary-700: #167D6B;
+  --primary-50: #FEF0E7;
+  --primary-100: #FCDBC4;
+  --primary-300: #F89E6B;
+  --primary-600: #D4541A;
+  --primary-700: #AE4214;
   --error-bg: #FCEBEB;
   --warning-bg: #FDF3DF;
   --success-bg: #E4F7EF;
@@ -128,45 +129,45 @@
 }
 
 .dark {
-  --background: #0E1614;
-  --foreground: #E9EFED;
-  --card: #18211F;
-  --card-foreground: #E9EFED;
-  --popover: #18211F;
-  --popover-foreground: #E9EFED;
+  --background: #1A1A1A;
+  --foreground: #F0EDE8;
+  --card: #2E2E2E;
+  --card-foreground: #F0EDE8;
+  --popover: #2E2E2E;
+  --popover-foreground: #F0EDE8;
 
-  --primary: #34C7AC;
-  --primary-foreground: #0E1614;
+  --primary: #F47643;
+  --primary-foreground: #1A1A1A;
 
-  --secondary: #1E2826;
-  --secondary-foreground: #E9EFED;
-  --muted: #1E2826;
-  --muted-foreground: #9DB0AB;
+  --secondary: #2E2E2E;
+  --secondary-foreground: #F0EDE8;
+  --muted: #2E2E2E;
+  --muted-foreground: #B5B0AA;
 
-  --accent: #F4A261;
-  --accent-foreground: #0E1614;
+  --accent: #3D3D3D;
+  --accent-foreground: #F0EDE8;
 
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --success: #10B981;
+  --success: #22C55E;
   --warning: #F59E0B;
   --info: #60A5FA;
 
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: #34C7AC;
+  --ring: #F47643;
 
-  --sidebar: #0B1210;
-  --sidebar-foreground: #C2CECA;
-  --sidebar-primary: #34C7AC;
-  --sidebar-primary-foreground: #0E1614;
-  --sidebar-accent: #1A2421;
+  --sidebar: #141414;
+  --sidebar-foreground: #CFCAC4;
+  --sidebar-primary: #F47643;
+  --sidebar-primary-foreground: #1A1A1A;
+  --sidebar-accent: #2E2E2E;
   --sidebar-accent-foreground: #FFFFFF;
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: #34C7AC;
+  --sidebar-ring: #F47643;
 
-  --primary-50: #11302A;
-  --primary-100: #163E36;
+  --primary-50: #3A1B0A;
+  --primary-100: #4D2410;
   --error-bg: #3A1E1E;
   --warning-bg: #372B14;
   --success-bg: #16302A;
