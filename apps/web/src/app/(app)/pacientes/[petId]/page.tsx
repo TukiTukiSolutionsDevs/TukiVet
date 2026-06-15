@@ -5,20 +5,38 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  AlertTriangle,
+  Archive,
   ArrowLeft,
   ChevronRight,
   FileText,
+  HeartPulse,
   Loader2,
+  MoreVertical,
   PawPrint,
+  Pencil,
   Phone,
   Plus,
   Scale,
+  Skull,
   Stethoscope,
   Syringe,
   User as UserIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { DocumentsTab } from "../_components/documents-tab";
+import { EditPetDialog } from "../_components/edit-pet-dialog";
+import {
+  ArchivePetDialog,
+  MarkDeceasedDialog,
+} from "../_components/pet-actions-dialogs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -91,6 +109,10 @@ export default function PetDetailPage({
 }
 
 function PetDetail({ pet }: { pet: PetRead }) {
+  const [editOpen, setEditOpen] = useState(false);
+  const [deceasedOpen, setDeceasedOpen] = useState(false);
+  const [archiveOpen, setArchiveOpen] = useState(false);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -101,7 +123,24 @@ function PetDetail({ pet }: { pet: PetRead }) {
         <span className="text-foreground">{pet.name}</span>
       </div>
 
-      <PetHeader pet={pet} />
+      <PetHeader
+        pet={pet}
+        onEdit={() => setEditOpen(true)}
+        onMarkDeceased={() => setDeceasedOpen(true)}
+        onArchive={() => setArchiveOpen(true)}
+      />
+
+      <EditPetDialog pet={pet} open={editOpen} onOpenChange={setEditOpen} />
+      <MarkDeceasedDialog
+        pet={pet}
+        open={deceasedOpen}
+        onOpenChange={setDeceasedOpen}
+      />
+      <ArchivePetDialog
+        pet={pet}
+        open={archiveOpen}
+        onOpenChange={setArchiveOpen}
+      />
 
       <Tabs defaultValue="overview">
         <TabsList>
@@ -138,12 +177,34 @@ function PetDetail({ pet }: { pet: PetRead }) {
 
 /* ------------------------------------------------------------------ Header */
 
-function PetHeader({ pet }: { pet: PetRead }) {
+function PetHeader({
+  pet,
+  onEdit,
+  onMarkDeceased,
+  onArchive,
+}: {
+  pet: PetRead;
+  onEdit: () => void;
+  onMarkDeceased: () => void;
+  onArchive: () => void;
+}) {
+  const hasAlerts = (pet.alerts?.length ?? 0) > 0;
+  const hasChronic = (pet.chronic_conditions?.length ?? 0) > 0;
+  const isDeceased = pet.status === "deceased";
+
   return (
     <Card className="p-6">
       <div className="flex flex-wrap items-start gap-6">
-        <div className="flex size-20 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-          <PawPrint className="size-9" />
+        <div className="flex size-20 items-center justify-center overflow-hidden rounded-2xl bg-primary/10 text-primary">
+          {pet.photo_url ? (
+            <img
+              src={pet.photo_url}
+              alt={pet.name}
+              className="size-full object-cover"
+            />
+          ) : (
+            <PawPrint className="size-9" />
+          )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-3">
@@ -163,29 +224,69 @@ function PetHeader({ pet }: { pet: PetRead }) {
             · {formatPetAge(pet.birth_date, pet.birth_date_estimated)}
           </p>
 
-          {(pet.alerts?.length || pet.chronic_conditions?.length) && (
+          {(hasAlerts || hasChronic) && (
             <div className="mt-3 flex flex-wrap gap-1.5">
               {pet.alerts?.map((a) => (
                 <Badge
                   key={a}
-                  className="bg-warning/15 text-warning hover:bg-warning/20"
+                  className="gap-1 border border-destructive/30 bg-destructive/15 px-2 py-0.5 text-sm font-semibold text-destructive hover:bg-destructive/20"
                 >
-                  ⚠ {a}
+                  <AlertTriangle className="size-3.5" />
+                  {a}
                 </Badge>
               ))}
               {pet.chronic_conditions?.map((c) => (
                 <Badge
                   key={c}
-                  className="bg-info/15 text-info hover:bg-info/20"
+                  className="gap-1 border border-amber-500/40 bg-amber-500/15 px-2 py-0.5 text-sm font-semibold text-amber-700 hover:bg-amber-500/20 dark:text-amber-300"
                 >
-                  ◌ {c}
+                  <HeartPulse className="size-3.5" />
+                  {c}
                 </Badge>
               ))}
             </div>
           )}
+
+          {isDeceased && pet.deceased_date && (
+            <p className="mt-2 text-xs text-destructive">
+              Fallecida el {formatDateShort(pet.deceased_date)}
+              {pet.deceased_reason ? ` · ${pet.deceased_reason}` : ""}
+            </p>
+          )}
         </div>
 
-        <div className="flex flex-col gap-2 text-right text-sm">
+        <div className="flex flex-col items-end gap-3 text-right text-sm">
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="outline" onClick={onEdit}>
+              <Pencil className="size-3.5" />
+              Editar
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button size="sm" variant="outline" aria-label="Más acciones">
+                    <MoreVertical className="size-4" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end">
+                {!isDeceased && (
+                  <DropdownMenuItem onClick={onMarkDeceased}>
+                    <Skull className="size-4" />
+                    Marcar como fallecida
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={onArchive}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Archive className="size-4" />
+                  Archivar mascota
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <Stat
             label="Peso actual"
             value={

@@ -93,6 +93,25 @@ export type PetCreate = {
   chronic_conditions?: string[] | null;
 };
 
+export type PetUpdate = {
+  name?: string;
+  breed_name?: string | null;
+  sex?: PetSex;
+  birth_date?: string | null;
+  birth_date_estimated?: boolean;
+  color?: string | null;
+  distinguishing_marks?: string | null;
+  microchip?: string | null;
+  sterilized?: boolean;
+  sterilization_date?: string | null;
+  status?: PetStatus;
+  deceased_date?: string | null;
+  deceased_reason?: string | null;
+  alerts?: string[] | null;
+  chronic_conditions?: string[] | null;
+  photo_url?: string | null;
+};
+
 export type PetWeightRead = {
   id: string;
   pet_id: string;
@@ -186,6 +205,9 @@ export const petsApi = {
     api.get<Page<PetRead>>(`/api/v1/pets${buildQueryString(params)}`),
   get: (id: string) => api.get<PetRead>(`/api/v1/pets/${id}`),
   create: (payload: PetCreate) => api.post<PetRead>("/api/v1/pets", payload),
+  update: (id: string, payload: PetUpdate) =>
+    api.put<PetRead>(`/api/v1/pets/${id}`, payload),
+  softDelete: (id: string) => api.delete<void>(`/api/v1/pets/${id}`),
   listWeights: (petId: string) =>
     api.get<PetWeightRead[]>(`/api/v1/pets/${petId}/weights`),
   recordWeight: (petId: string, payload: PetWeightCreate) =>
