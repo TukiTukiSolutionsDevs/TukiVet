@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
@@ -21,15 +22,22 @@ export function Sidebar() {
   return (
     <aside className="flex h-full w-60 flex-shrink-0 flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex items-center gap-3 px-5 pt-5 pb-4">
-        <div className="flex size-9 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground shadow-[0_4px_12px_rgba(242,101,34,0.4)] text-lg">
-          🐾
+        <div className="flex size-11 items-center justify-center rounded-xl bg-white p-1 shadow-[0_4px_14px_rgba(242,101,34,0.45)]">
+          <Image
+            src="/brand/logo-color.png"
+            alt="Centro Veterinario Razas"
+            width={44}
+            height={44}
+            className="size-full object-contain"
+            priority
+          />
         </div>
         <div className="leading-tight">
-          <div className="font-heading text-lg font-extrabold text-white tracking-tight">
-            Veterinaria Razas
+          <div className="font-heading text-base font-extrabold text-white tracking-tight">
+            Veterinaria <span className="font-script text-primary text-xl font-bold leading-none">Razas</span>
           </div>
           <div className="mt-0.5 text-[10.5px] font-semibold uppercase tracking-wider text-sidebar-foreground/60">
-            {user?.organization?.trade_name ?? "Sachaca, Arequipa"}
+            {user?.organization?.trade_name ?? "Sachaca · Arequipa"}
           </div>
         </div>
       </div>

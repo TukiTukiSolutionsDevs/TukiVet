@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
 import { buttonVariants } from "@/components/ui/button";
@@ -12,11 +13,19 @@ export function PublicHeader() {
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-6">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_4px_12px_rgba(242,101,34,0.4)] text-lg">
-            🐾
+          <span className="flex size-10 items-center justify-center rounded-xl bg-white p-1 shadow-[0_4px_12px_rgba(242,101,34,0.25)] ring-1 ring-primary/15">
+            <Image
+              src="/brand/logo-color.png"
+              alt="Centro Veterinario Razas"
+              width={40}
+              height={40}
+              className="size-full object-contain"
+              priority
+            />
           </span>
           <span className="font-heading text-lg font-extrabold tracking-tight">
-            Veterinaria Razas
+            Veterinaria{" "}
+            <span className="font-script text-xl font-bold text-primary leading-none">Razas</span>
           </span>
         </Link>
 
