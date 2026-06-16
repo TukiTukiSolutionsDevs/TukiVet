@@ -22,7 +22,8 @@ _hasher = PasswordHasher(
 )
 
 JWT_ALGORITHM = "HS256"
-TokenType = Literal["access", "refresh"]
+TokenType = Literal["access", "refresh", "reset"]
+RESET_TOKEN_TTL_MINUTES = 30
 
 
 def hash_password(plain: str) -> str:
@@ -91,6 +92,16 @@ def create_access_token(
             "roles": role_codes,
             "perms": permission_codes,
         },
+    )
+    return token, expires_at
+
+
+def create_password_reset_token(*, user_id: str) -> tuple[str, datetime]:
+    """Token de reset de contraseña (TTL corto). Para single-use, rotar password_hash invalida claims."""
+    token, _, expires_at = _build_token(
+        subject=user_id,
+        token_type="reset",
+        expires_delta=timedelta(minutes=RESET_TOKEN_TTL_MINUTES),
     )
     return token, expires_at
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2, Plus, UserPlus } from "lucide-react";
+import { Loader2, MoreVertical, Pencil, Plus, Trash2, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -28,15 +28,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   usersApi,
   ROLE_LABELS,
   ROLE_OPTIONS,
   roleLabel,
   type UserCreate,
+  type UserRead,
 } from "@/lib/users-api";
 import { ApiError } from "@/lib/api";
+import { useAuth } from "@/contexts/auth-context";
+import { EditUserDialog } from "./_components/edit-user-dialog";
 
 export default function EquipoPage() {
+  const { user: currentUser } = useAuth();
+  const isOwner = currentUser?.role_codes.includes("owner") ?? false;
   const q = useQuery({
     queryKey: ["users"],
     queryFn: () => usersApi.list(),
@@ -67,19 +79,20 @@ export default function EquipoPage() {
               <TableHead>CMVP</TableHead>
               <TableHead>Roles</TableHead>
               <TableHead>Estado</TableHead>
+              {isOwner && <TableHead className="w-12 text-right" />}
             </TableRow>
           </TableHeader>
           <TableBody>
             {q.isLoading ? (
               <TableRow>
-                <TableCell colSpan={6}>
+                <TableCell colSpan={isOwner ? 7 : 6}>
                   <Skeleton className="h-6 w-full" />
                 </TableCell>
               </TableRow>
             ) : q.data?.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={6}
+                  colSpan={isOwner ? 7 : 6}
                   className="py-10 text-center text-sm text-muted-foreground"
                 >
                   Sin usuarios. Invitá al primero con "Nuevo usuario".
@@ -87,42 +100,157 @@ export default function EquipoPage() {
               </TableRow>
             ) : (
               q.data?.map((u) => (
-                <TableRow key={u.id}>
-                  <TableCell className="font-medium">{u.full_name}</TableCell>
-                  <TableCell className="text-sm">{u.email}</TableCell>
-                  <TableCell className="text-sm">{u.phone ?? "—"}</TableCell>
-                  <TableCell className="font-mono text-xs">
-                    {u.professional_id ?? "—"}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {u.role_codes.length === 0 ? (
-                        <span className="text-xs text-muted-foreground">
-                          —
-                        </span>
-                      ) : (
-                        u.role_codes.map((r) => (
-                          <Badge key={r} variant="outline">
-                            {roleLabel(r)}
-                          </Badge>
-                        ))
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={u.status === "active" ? "secondary" : "outline"}
-                    >
-                      {u.status}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
+                <UserRow
+                  key={u.id}
+                  user={u}
+                  canManage={isOwner}
+                  isSelf={u.id === currentUser?.id}
+                />
               ))
             )}
           </TableBody>
         </Table>
       </Card>
     </div>
+  );
+}
+
+function UserRow({
+  user,
+  canManage,
+  isSelf,
+}: {
+  user: UserRead;
+  canManage: boolean;
+  isSelf: boolean;
+}) {
+  const qc = useQueryClient();
+  const [editOpen, setEditOpen] = useState(false);
+  const [confirmDel, setConfirmDel] = useState(false);
+
+  const toggleM = useMutation({
+    mutationFn: () =>
+      usersApi.update(user.id, {
+        status: user.status === "active" ? "disabled" : "active",
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["users"] });
+      toast.success(user.status === "active" ? "Usuario desactivado" : "Usuario reactivado");
+    },
+    onError: (e) => toast.error(humanError(e, "No pude actualizar.")),
+  });
+
+  const deleteM = useMutation({
+    mutationFn: () => usersApi.remove(user.id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["users"] });
+      toast.success("Usuario eliminado");
+      setConfirmDel(false);
+    },
+    onError: (e) => toast.error(humanError(e, "No pude eliminar.")),
+  });
+
+  return (
+    <>
+      <TableRow>
+        <TableCell className="font-medium">{user.full_name}</TableCell>
+        <TableCell className="text-sm">{user.email}</TableCell>
+        <TableCell className="text-sm">{user.phone ?? "—"}</TableCell>
+        <TableCell className="font-mono text-xs">{user.professional_id ?? "—"}</TableCell>
+        <TableCell>
+          <div className="flex flex-wrap gap-1">
+            {user.role_codes.length === 0 ? (
+              <span className="text-xs text-muted-foreground">—</span>
+            ) : (
+              user.role_codes.map((r) => (
+                <Badge key={r} variant="outline">
+                  {roleLabel(r)}
+                </Badge>
+              ))
+            )}
+          </div>
+        </TableCell>
+        <TableCell>
+          <Badge variant={user.status === "active" ? "secondary" : "outline"}>
+            {user.status}
+          </Badge>
+        </TableCell>
+        {canManage && (
+          <TableCell className="text-right">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button size="sm" variant="ghost" aria-label="Acciones">
+                    <MoreVertical className="size-4" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setEditOpen(true)}>
+                  <Pencil className="size-4" />
+                  Editar
+                </DropdownMenuItem>
+                {!isSelf && (
+                  <DropdownMenuItem
+                    onClick={() => toggleM.mutate()}
+                    disabled={toggleM.isPending}
+                  >
+                    {user.status === "active" ? "Desactivar" : "Reactivar"}
+                  </DropdownMenuItem>
+                )}
+                {!isSelf && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => setConfirmDel(true)}
+                      className="text-destructive focus:text-destructive"
+                    >
+                      <Trash2 className="size-4" />
+                      Eliminar
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </TableCell>
+        )}
+      </TableRow>
+      {editOpen && (
+        <EditUserDialog
+          user={user}
+          open={editOpen}
+          onOpenChange={setEditOpen}
+        />
+      )}
+      <Dialog open={confirmDel} onOpenChange={setConfirmDel}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Eliminar usuario</DialogTitle>
+            <DialogDescription>
+              ¿Eliminar a {user.full_name}? Se desactivará y dejará de poder
+              iniciar sesión.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="ghost"
+              onClick={() => setConfirmDel(false)}
+              disabled={deleteM.isPending}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={() => deleteM.mutate()}
+              disabled={deleteM.isPending}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleteM.isPending && <Loader2 className="size-4 animate-spin" />}
+              Eliminar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

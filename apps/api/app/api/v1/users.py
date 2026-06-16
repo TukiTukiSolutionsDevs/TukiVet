@@ -11,11 +11,13 @@ from app.api.deps import (
     get_client_ip,
     get_user_agent,
     require_permission,
+    require_role,
 )
 from app.core.audit import audit
-from app.core.errors import NotFoundError
+from app.core.errors import ConflictError, NotFoundError
+from app.core.permissions import ROLE_OWNER
 from app.models import User
-from app.schemas.user import UserCreate, UserRead, UserUpdate
+from app.schemas.user import UserAdminUpdate, UserCreate, UserRead, UserUpdate
 from app.services import user_service
 
 router = APIRouter()
@@ -170,3 +172,88 @@ async def get_user_endpoint(
         status=user.status,
         role_codes=roles,
     )
+
+
+@router.patch(
+    "/{user_id}",
+    response_model=UserRead,
+    summary="Actualizar usuario (solo owner)",
+    dependencies=[Depends(require_role(ROLE_OWNER))],
+)
+async def update_user_endpoint(
+    user_id: str,
+    payload: UserAdminUpdate,
+    request: Request,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> UserRead:
+    if user_id == current_user.id and payload.role_codes is not None:
+        if ROLE_OWNER not in payload.role_codes:
+            raise ConflictError("No puedes removerte el rol owner")
+    user = await user_service.update_user(
+        db,
+        organization_id=current_user.organization_id,
+        user_id=user_id,
+        full_name=payload.full_name,
+        phone=payload.phone,
+        professional_id=payload.professional_id,
+        status=payload.status,
+        role_codes=payload.role_codes,
+    )
+    role_codes = await user_service.get_role_codes(db, user.id)
+    await audit(
+        db,
+        action="user.updated",
+        organization_id=current_user.organization_id,
+        actor_user_id=current_user.id,
+        target_type="user",
+        target_id=user.id,
+        after=payload.model_dump(exclude_none=True),
+        ip=get_client_ip(request),
+        user_agent=get_user_agent(request),
+    )
+    await db.commit()
+    await db.refresh(user)
+    return UserRead(
+        id=user.id,
+        organization_id=user.organization_id,
+        email=user.email,
+        full_name=user.full_name,
+        phone=user.phone,
+        professional_id=user.professional_id,
+        status=user.status,
+        role_codes=role_codes,
+    )
+
+
+@router.delete(
+    "/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
+    summary="Desactivar usuario (soft delete, solo owner)",
+    dependencies=[Depends(require_role(ROLE_OWNER))],
+)
+async def delete_user_endpoint(
+    user_id: str,
+    request: Request,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> None:
+    if user_id == current_user.id:
+        raise ConflictError("No puedes eliminarte a ti mismo")
+    user = await user_service.soft_delete_user(
+        db,
+        organization_id=current_user.organization_id,
+        user_id=user_id,
+    )
+    await audit(
+        db,
+        action="user.deleted",
+        organization_id=current_user.organization_id,
+        actor_user_id=current_user.id,
+        target_type="user",
+        target_id=user.id,
+        ip=get_client_ip(request),
+        user_agent=get_user_agent(request),
+    )
+    await db.commit()

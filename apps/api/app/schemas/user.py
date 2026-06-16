@@ -23,9 +23,35 @@ class UserUpdate(ORMModel):
     status: str | None = None
 
 
+class UserAdminUpdate(ORMModel):
+    """Campos que el owner puede tocar al editar otro usuario."""
+
+    full_name: str | None = Field(default=None, min_length=2, max_length=255)
+    phone: str | None = Field(default=None, max_length=20)
+    professional_id: str | None = Field(default=None, max_length=50)
+    status: str | None = None
+    role_codes: list[str] | None = None
+
+
 class UserPasswordUpdate(ORMModel):
     current_password: SecretStr
     new_password: SecretStr = Field(min_length=10, max_length=128)
+
+
+class ForgotPasswordRequest(ORMModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(ORMModel):
+    token: str
+    new_password: SecretStr = Field(min_length=10, max_length=128)
+
+
+class ForgotPasswordResponse(ORMModel):
+    """En dev devolvemos el link; en prod siempre genérico."""
+
+    message: str
+    reset_link: str | None = None
 
 
 class UserRead(ORMModel):

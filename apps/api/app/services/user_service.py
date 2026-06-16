@@ -144,3 +144,72 @@ async def update_last_login(db: AsyncSession, user_id: str) -> None:
     await db.execute(
         update(User).where(User.id == user_id).values(last_login_at=datetime.now(tz=timezone.utc))
     )
+
+
+async def update_user(
+    db: AsyncSession,
+    *,
+    organization_id: str,
+    user_id: str,
+    full_name: str | None = None,
+    phone: str | None = None,
+    professional_id: str | None = None,
+    status: str | None = None,
+    role_codes: list[str] | None = None,
+) -> User:
+    """Actualiza un usuario (perfil + status + roles)."""
+    user = await get_user(db, user_id)
+    if user.organization_id != organization_id:
+        raise NotFoundError("Usuario no encontrado")
+    if full_name is not None:
+        user.full_name = full_name
+    if phone is not None:
+        user.phone = phone or None
+    if professional_id is not None:
+        user.professional_id = professional_id or None
+    if status is not None:
+        try:
+            UserStatus(status)
+        except ValueError as exc:
+            raise ConflictError(f"Estado inválido: {status}") from exc
+        user.status = status
+    if role_codes is not None:
+        from sqlalchemy import delete
+
+        from app.models import UserRole
+
+        await db.execute(delete(UserRole).where(UserRole.user_id == user_id))
+        await _assign_roles_by_code(db, user_id, organization_id, role_codes)
+    await db.flush()
+    return user
+
+
+async def soft_delete_user(
+    db: AsyncSession,
+    *,
+    organization_id: str,
+    user_id: str,
+) -> User:
+    """Soft delete: set status=disabled + deleted_at."""
+    from datetime import datetime, timezone
+
+    user = await get_user(db, user_id)
+    if user.organization_id != organization_id:
+        raise NotFoundError("Usuario no encontrado")
+    user.status = UserStatus.DISABLED.value
+    user.deleted_at = datetime.now(tz=timezone.utc)
+    await db.flush()
+    return user
+
+
+async def reset_user_password(
+    db: AsyncSession,
+    *,
+    user_id: str,
+    new_password: str,
+) -> User:
+    """Setea una nueva contraseña tras validar token de reset."""
+    user = await get_user(db, user_id)
+    user.password_hash = hash_password(new_password)
+    await db.flush()
+    return user

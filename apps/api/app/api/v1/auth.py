@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from fastapi import APIRouter, Request, status
 
 from app.api.deps import (
@@ -11,6 +13,10 @@ from app.api.deps import (
     get_client_ip,
     get_user_agent,
 )
+from app.config import settings
+from app.core.security import create_password_reset_token, decode_token
+
+log = logging.getLogger(__name__)
 from app.schemas.auth import (
     LoginRequest,
     MeResponse,
@@ -20,7 +26,12 @@ from app.schemas.auth import (
     TokenPair,
 )
 from app.schemas.organization import BranchRead, OrganizationRead
-from app.schemas.user import UserRead
+from app.schemas.user import (
+    ForgotPasswordRequest,
+    ForgotPasswordResponse,
+    ResetPasswordRequest,
+    UserRead,
+)
 from app.services import auth_service, organization_service, user_service
 
 router = APIRouter()
@@ -151,3 +162,62 @@ async def me(
         organization=OrganizationRead.model_validate(organization),
         permissions=principal.permission_codes,
     )
+
+
+def _reset_link_for(token: str) -> str:
+    base = settings.cors_origins[0].rstrip("/") if settings.cors_origins else "http://localhost:3100"
+    return f"{base}/reset-password?token={token}"
+
+
+@router.post(
+    "/forgot-password",
+    response_model=ForgotPasswordResponse,
+    summary="Solicitar email de reset de contraseña",
+)
+async def forgot_password(
+    payload: ForgotPasswordRequest,
+    db: DBSession,
+) -> ForgotPasswordResponse:
+    user = await user_service.get_user_by_email(db, payload.email)
+    generic = ForgotPasswordResponse(
+        message="Si el correo está registrado, recibirás instrucciones para restablecer la contraseña.",
+    )
+    if user is None or not user.is_active:
+        return generic
+    token, _ = create_password_reset_token(user_id=user.id)
+    link = _reset_link_for(token)
+    log.info("password_reset_link user_id=%s link=%s", user.id, link)
+    if settings.is_development:
+        return ForgotPasswordResponse(message=generic.message, reset_link=link)
+    return generic
+
+
+@router.post(
+    "/reset-password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
+    summary="Aplicar nueva contraseña con token de reset",
+)
+async def reset_password(
+    payload: ResetPasswordRequest,
+    db: DBSession,
+) -> None:
+    import jwt
+
+    try:
+        claims = decode_token(payload.token, expected_type="reset")
+    except jwt.ExpiredSignatureError as exc:
+        from app.core.errors import UnauthorizedError
+
+        raise UnauthorizedError("Token expirado") from exc
+    except jwt.PyJWTError as exc:
+        from app.core.errors import UnauthorizedError
+
+        raise UnauthorizedError("Token inválido") from exc
+    user_id = claims["sub"]
+    await user_service.reset_user_password(
+        db,
+        user_id=user_id,
+        new_password=payload.new_password.get_secret_value(),
+    )
+    await db.commit()
