@@ -21,6 +21,14 @@ class TemplateCreate(ORMModel):
     variables: list[str] = Field(default_factory=list)
 
 
+class TemplateUpdate(ORMModel):
+    name: str | None = Field(default=None, min_length=2, max_length=255)
+    body: str | None = Field(default=None, min_length=10)
+    locale: str | None = Field(default=None, max_length=10)
+    variables: list[str] | None = None
+    status: str | None = None
+
+
 class TemplateRead(ORMModel):
     id: str
     organization_id: str

@@ -231,6 +231,51 @@ async def create_template(
     return tpl
 
 
+async def get_template_by_id(
+    db: AsyncSession, *, organization_id: str, template_id: str
+) -> MessageTemplate:
+    from app.core.errors import NotFoundError
+
+    tpl = await db.get(MessageTemplate, template_id)
+    if tpl is None or tpl.organization_id != organization_id:
+        raise NotFoundError("Plantilla no encontrada")
+    return tpl
+
+
+async def update_template(
+    db: AsyncSession,
+    *,
+    organization_id: str,
+    template_id: str,
+    name: str | None,
+    body: str | None,
+    locale: str | None,
+    variables: list[str] | None,
+    status: str | None,
+) -> MessageTemplate:
+    tpl = await get_template_by_id(db, organization_id=organization_id, template_id=template_id)
+    if name is not None:
+        tpl.name = name
+    if body is not None:
+        tpl.body = body
+    if locale is not None:
+        tpl.locale = locale
+    if variables is not None:
+        tpl.variables = variables
+    if status is not None:
+        tpl.status = status
+    await db.flush()
+    return tpl
+
+
+async def delete_template(
+    db: AsyncSession, *, organization_id: str, template_id: str
+) -> None:
+    tpl = await get_template_by_id(db, organization_id=organization_id, template_id=template_id)
+    await db.delete(tpl)
+    await db.flush()
+
+
 # Helpers de dominio --------------------------------------------------------
 
 

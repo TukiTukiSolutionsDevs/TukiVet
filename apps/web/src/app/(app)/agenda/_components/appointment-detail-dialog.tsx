@@ -6,6 +6,7 @@ import {
   CalendarClock,
   CheckCircle2,
   Loader2,
+  MessageCircle,
   PlayCircle,
   Stethoscope,
   XCircle,
@@ -30,6 +31,7 @@ import {
   appointmentStatusLabel,
   appointmentTypeLabel,
 } from "@/lib/appointments-api";
+import { notificationsApi } from "@/lib/notifications-api";
 import { ApiError } from "@/lib/api";
 import { formatDateTime } from "@/lib/format";
 
@@ -87,6 +89,18 @@ export function AppointmentDetailDialog({
       onSuccess();
     },
     onError: (e) => toast.error(humanError(e, "No pude confirmar.")),
+  });
+
+  const remindM = useMutation({
+    mutationFn: () => notificationsApi.sendAppointmentReminder(appointmentId),
+    onSuccess: (res) => {
+      if (res.status === "failed") {
+        toast.error(`Falló: ${res.error_message ?? "error"}`);
+      } else {
+        toast.success("Recordatorio enviado");
+      }
+    },
+    onError: (e) => toast.error(humanError(e, "No pude enviar el recordatorio.")),
   });
 
   const startM = useMutation({
@@ -294,6 +308,22 @@ export function AppointmentDetailDialog({
                 >
                   <PlayCircle className="size-4" />
                   Iniciar
+                </Button>
+              )}
+              {(q.data.status === "scheduled" ||
+                q.data.status === "confirmed") && (
+                <Button
+                  variant="outline"
+                  onClick={() => remindM.mutate()}
+                  disabled={remindM.isPending}
+                  className="col-span-2"
+                >
+                  {remindM.isPending ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <MessageCircle className="size-4" />
+                  )}
+                  Enviar recordatorio ahora
                 </Button>
               )}
               {q.data.status === "in_progress" && (

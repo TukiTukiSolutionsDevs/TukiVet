@@ -33,6 +33,14 @@ export type TemplateCreate = {
   variables?: string[];
 };
 
+export type TemplateUpdate = {
+  name?: string | null;
+  body?: string | null;
+  locale?: string | null;
+  variables?: string[] | null;
+  status?: string | null;
+};
+
 export type SendMessageRequest = {
   channel?: NotificationChannel;
   recipient: string;
@@ -89,9 +97,21 @@ export const notificationsApi = {
     api.get<TemplateRead[]>("/api/v1/notifications/templates"),
   createTemplate: (payload: TemplateCreate) =>
     api.post<TemplateRead>("/api/v1/notifications/templates", payload),
+  updateTemplate: (id: string, payload: TemplateUpdate) =>
+    api.patch<TemplateRead>(`/api/v1/notifications/templates/${id}`, payload),
+  deleteTemplate: (id: string) =>
+    api.delete<void>(`/api/v1/notifications/templates/${id}`),
   seedDefaults: () =>
     api.post<{ created: number }>(
       "/api/v1/notifications/templates/seed-defaults",
+    ),
+  sendAppointmentReminder: (appointmentId: string) =>
+    api.post<NotificationRead>(
+      `/api/v1/notifications/appointments/${appointmentId}/remind`,
+    ),
+  sendVaccineReminder: (administrationId: string) =>
+    api.post<NotificationRead>(
+      `/api/v1/notifications/vaccines/${administrationId}/remind`,
     ),
 };
 

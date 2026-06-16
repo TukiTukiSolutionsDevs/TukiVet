@@ -10,6 +10,7 @@ from app.schemas.notification import (
     SendMessageRequest,
     TemplateCreate,
     TemplateRead,
+    TemplateUpdate,
 )
 from app.services import notification_service
 
@@ -60,6 +61,51 @@ async def create_template(
     return TemplateRead.model_validate(tpl)
 
 
+@router.patch(
+    "/templates/{template_id}",
+    response_model=TemplateRead,
+    dependencies=[Depends(require_permission("organization:update"))],
+)
+async def update_template_endpoint(
+    template_id: str,
+    payload: TemplateUpdate,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> TemplateRead:
+    tpl = await notification_service.update_template(
+        db,
+        organization_id=current_user.organization_id,
+        template_id=template_id,
+        name=payload.name,
+        body=payload.body,
+        locale=payload.locale,
+        variables=payload.variables,
+        status=payload.status,
+    )
+    await db.commit()
+    await db.refresh(tpl)
+    return TemplateRead.model_validate(tpl)
+
+
+@router.delete(
+    "/templates/{template_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
+    dependencies=[Depends(require_permission("organization:update"))],
+)
+async def delete_template_endpoint(
+    template_id: str,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> None:
+    await notification_service.delete_template(
+        db,
+        organization_id=current_user.organization_id,
+        template_id=template_id,
+    )
+    await db.commit()
+
+
 @router.post(
     "/templates/seed-defaults",
     response_model=dict,
@@ -96,6 +142,103 @@ async def send_message(
         variables=payload.variables,
         customer_id=payload.customer_id,
     )
+    await db.commit()
+    return NotificationRead.model_validate(notif)
+
+
+@router.post(
+    "/appointments/{appointment_id}/remind",
+    response_model=NotificationRead,
+    summary="Enviar recordatorio de cita ahora (manual)",
+    dependencies=[Depends(require_permission("organization:update"))],
+)
+async def send_appointment_reminder(
+    appointment_id: str,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> NotificationRead:
+    from sqlalchemy import select
+
+    from app.core.errors import ConflictError, NotFoundError
+    from app.models import Appointment, Customer, Pet
+
+    appt = await db.get(Appointment, appointment_id)
+    if appt is None or appt.organization_id != current_user.organization_id:
+        raise NotFoundError("Cita no encontrada")
+    customer = await db.get(Customer, appt.customer_id)
+    if customer is None:
+        raise NotFoundError("Tutor no encontrado")
+    pet_name = "tu mascota"
+    if appt.pet_id:
+        pet = await db.get(Pet, appt.pet_id)
+        if pet:
+            pet_name = pet.name
+    notif = await notification_service.notify_appointment_reminder(
+        db,
+        organization_id=current_user.organization_id,
+        customer=customer,
+        pet_name=pet_name,
+        when=appt.starts_at.strftime("%d/%m/%Y %H:%M"),
+    )
+    if notif is None:
+        raise ConflictError(
+            "No pude enviar: el tutor no aceptó WhatsApp o no tiene teléfono."
+        )
+    await db.commit()
+    return NotificationRead.model_validate(notif)
+
+
+@router.post(
+    "/vaccines/{administration_id}/remind",
+    response_model=NotificationRead,
+    summary="Enviar recordatorio de vacuna ahora (manual)",
+    dependencies=[Depends(require_permission("organization:update"))],
+)
+async def send_vaccine_reminder(
+    administration_id: str,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> NotificationRead:
+    from app.core.errors import ConflictError, NotFoundError
+    from app.models import Customer, Pet, Vaccine
+    from app.models.vaccine import VaccineAdministration
+
+    adm = await db.get(VaccineAdministration, administration_id)
+    if adm is None or adm.organization_id != current_user.organization_id:
+        raise NotFoundError("Vacunación no encontrada")
+    pet = await db.get(Pet, adm.pet_id)
+    if pet is None:
+        raise NotFoundError("Mascota no encontrada")
+    from sqlalchemy import select
+
+    from app.models import PetOwner
+
+    res = await db.execute(
+        select(PetOwner.customer_id).where(
+            PetOwner.pet_id == pet.id, PetOwner.role == "primary"
+        )
+    )
+    customer_id = res.scalar_one_or_none()
+    if customer_id is None:
+        raise NotFoundError("Tutor primario no encontrado")
+    customer = await db.get(Customer, customer_id)
+    if customer is None:
+        raise NotFoundError("Tutor no encontrado")
+    vaccine = await db.get(Vaccine, adm.vaccine_id)
+    vaccine_name = vaccine.name if vaccine else "vacuna"
+    due = adm.next_dose_due_date.strftime("%d/%m/%Y") if adm.next_dose_due_date else "pronto"
+    notif = await notification_service.notify_vaccine_due(
+        db,
+        organization_id=current_user.organization_id,
+        customer=customer,
+        pet_name=pet.name,
+        vaccine_name=vaccine_name,
+        due_date=due,
+    )
+    if notif is None:
+        raise ConflictError(
+            "No pude enviar: el tutor no aceptó WhatsApp o no tiene teléfono."
+        )
     await db.commit()
     return NotificationRead.model_validate(notif)
 
