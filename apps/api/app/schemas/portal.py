@@ -43,6 +43,13 @@ class CustomerSelfRead(ORMModel):
     business_name: str | None
     email: str | None
     phone_primary: str
+    whatsapp_opted_in: bool
+    email_opted_in: bool
+
+
+class PreferencesUpdate(ORMModel):
+    whatsapp_opted_in: bool | None = None
+    email_opted_in: bool | None = None
 
 
 class PetSelfRead(ORMModel):

@@ -108,6 +108,19 @@ export type RoomRead = {
   active: boolean;
 };
 
+export type RoomCreate = {
+  name: string;
+  type?: string;
+  branch_id?: string | null;
+};
+
+export type RoomUpdate = {
+  name?: string | null;
+  type?: string | null;
+  branch_id?: string | null;
+  active?: boolean | null;
+};
+
 export const appointmentsApi = {
   list: (params: AppointmentListParams = {}) =>
     api.get<Page<AppointmentRead>>(
@@ -132,6 +145,20 @@ export const appointmentsApi = {
   noShow: (id: string) =>
     api.post<AppointmentRead>(`/api/v1/appointments/${id}/no-show`),
   listRooms: () => api.get<RoomRead[]>("/api/v1/appointments/rooms"),
+  createRoom: (payload: RoomCreate) =>
+    api.post<RoomRead>("/api/v1/appointments/rooms", payload),
+  updateRoom: (id: string, payload: RoomUpdate) =>
+    api.patch<RoomRead>(`/api/v1/appointments/rooms/${id}`, payload),
+  deleteRoom: (id: string) =>
+    api.delete<void>(`/api/v1/appointments/rooms/${id}`),
+};
+
+export const ROOM_TYPE_LABELS: Record<string, string> = {
+  consultation: "Consulta",
+  surgery: "Cirugía",
+  imaging: "Imagen",
+  grooming: "Peluquería",
+  hospital: "Hospitalización",
 };
 
 export function appointmentTypeLabel(t: string): string {

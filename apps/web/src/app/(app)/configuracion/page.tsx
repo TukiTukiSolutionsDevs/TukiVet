@@ -27,6 +27,7 @@ import { api } from "@/lib/api";
 import { organizationsApi } from "@/lib/organizations-api";
 import { usersApi } from "@/lib/users-api";
 import { BranchesCard } from "./_components/branches-card";
+import { RoomsCard } from "./_components/rooms-card";
 
 type SafeRecipientRead = { id: string; phone_number: string; label: string | null };
 
@@ -57,6 +58,7 @@ export default function ConfiguracionPage() {
 
       <OrgCard org={org} onSaved={auth.refreshUser} />
       <BranchesCard />
+      <RoomsCard />
       <ProfileCard user={user} onSaved={auth.refreshUser} />
       <WhatsAppCard queryClient={queryClient} />
       <IntegrationsCard />

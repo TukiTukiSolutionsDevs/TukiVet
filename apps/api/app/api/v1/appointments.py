@@ -14,6 +14,7 @@ from app.schemas.appointment import (
     AppointmentUpdate,
     RoomCreate,
     RoomRead,
+    RoomUpdate,
 )
 from app.schemas.common import Page
 from app.services import appointment_service
@@ -52,6 +53,45 @@ async def create_room(
     )
     await db.commit()
     return RoomRead.model_validate(room)
+
+
+@router.patch(
+    "/rooms/{room_id}",
+    response_model=RoomRead,
+    dependencies=[Depends(require_permission("appointment:write"))],
+)
+async def update_room(
+    room_id: str,
+    payload: RoomUpdate,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> RoomRead:
+    room = await appointment_service.update_room(
+        db,
+        organization_id=current_user.organization_id,
+        room_id=room_id,
+        payload=payload,
+    )
+    await db.commit()
+    await db.refresh(room)
+    return RoomRead.model_validate(room)
+
+
+@router.delete(
+    "/rooms/{room_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
+    dependencies=[Depends(require_permission("appointment:write"))],
+)
+async def delete_room(
+    room_id: str,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> None:
+    await appointment_service.soft_delete_room(
+        db, organization_id=current_user.organization_id, room_id=room_id
+    )
+    await db.commit()
 
 
 # ----- Appointments -----

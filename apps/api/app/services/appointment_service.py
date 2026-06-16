@@ -331,3 +331,48 @@ async def create_room(
     db.add(room)
     await db.flush()
     return room
+
+
+async def get_room(
+    db: AsyncSession, *, organization_id: str, room_id: str
+) -> Room:
+    from datetime import datetime
+
+    from app.core.errors import NotFoundError
+
+    room = await db.get(Room, room_id)
+    if (
+        room is None
+        or room.organization_id != organization_id
+        or room.deleted_at is not None
+    ):
+        raise NotFoundError("Consultorio no encontrado")
+    return room
+
+
+async def update_room(
+    db: AsyncSession, *, organization_id: str, room_id: str, payload
+) -> Room:
+    room = await get_room(db, organization_id=organization_id, room_id=room_id)
+    if payload.name is not None:
+        room.name = payload.name
+    if payload.type is not None:
+        room.type = payload.type
+    if payload.branch_id is not None:
+        room.branch_id = payload.branch_id or None
+    if payload.active is not None:
+        room.active = payload.active
+    await db.flush()
+    return room
+
+
+async def soft_delete_room(
+    db: AsyncSession, *, organization_id: str, room_id: str
+) -> Room:
+    from datetime import datetime, timezone
+
+    room = await get_room(db, organization_id=organization_id, room_id=room_id)
+    room.deleted_at = datetime.now(tz=timezone.utc)
+    room.active = False
+    await db.flush()
+    return room

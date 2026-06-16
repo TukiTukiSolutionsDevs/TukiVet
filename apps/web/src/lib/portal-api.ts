@@ -143,6 +143,13 @@ export type CustomerSelfRead = {
   business_name: string | null;
   email: string | null;
   phone_primary: string;
+  whatsapp_opted_in: boolean;
+  email_opted_in: boolean;
+};
+
+export type PreferencesUpdate = {
+  whatsapp_opted_in?: boolean;
+  email_opted_in?: boolean;
 };
 
 export type PetSelfRead = {
@@ -222,5 +229,10 @@ export const portalApi = {
     portalFetch<ARCORead>("/api/v1/portal/data-requests", {
       method: "POST",
       body: { type, description: description ?? null },
+    }),
+  updatePreferences: (payload: PreferencesUpdate) =>
+    portalFetch<CustomerSelfRead>("/api/v1/portal/me/preferences", {
+      method: "PATCH",
+      body: payload,
     }),
 };

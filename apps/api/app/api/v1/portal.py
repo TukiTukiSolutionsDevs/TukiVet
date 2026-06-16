@@ -25,6 +25,7 @@ from app.schemas.portal import (
     PetSelfRead,
     PortalRefreshRequest,
     PortalTokens,
+    PreferencesUpdate,
 )
 from app.services import portal_service
 
@@ -151,6 +152,30 @@ async def refresh_portal(
 @router.get("/me", response_model=CustomerSelfRead)
 async def me(customer: PortalCustomer) -> CustomerSelfRead:
     return CustomerSelfRead.model_validate(customer)
+
+
+@router.patch(
+    "/me/preferences",
+    response_model=CustomerSelfRead,
+    summary="Actualizar opt-in/opt-out de canales (WhatsApp, Email)",
+)
+async def update_my_preferences(
+    payload: PreferencesUpdate,
+    request: Request,
+    customer: PortalCustomer,
+    db: DBSession,
+) -> CustomerSelfRead:
+    updated = await portal_service.update_preferences(
+        db,
+        customer=customer,
+        whatsapp_opted_in=payload.whatsapp_opted_in,
+        email_opted_in=payload.email_opted_in,
+        ip=get_client_ip(request),
+        user_agent=get_user_agent(request),
+    )
+    await db.commit()
+    await db.refresh(updated)
+    return CustomerSelfRead.model_validate(updated)
 
 
 @router.get("/pets", response_model=list[PetSelfRead])

@@ -379,3 +379,41 @@ async def record_consent(
     db.add(consent)
     await db.flush()
     return consent
+
+
+async def update_preferences(
+    db: AsyncSession,
+    *,
+    customer: Customer,
+    whatsapp_opted_in: bool | None,
+    email_opted_in: bool | None,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> Customer:
+    """Actualiza opt-in/opt-out de canales y registra Consent por cada cambio."""
+    if whatsapp_opted_in is not None and whatsapp_opted_in != customer.whatsapp_opted_in:
+        customer.whatsapp_opted_in = whatsapp_opted_in
+        action = "whatsapp_opt_in" if whatsapp_opted_in else "whatsapp_opt_out"
+        await record_consent(
+            db,
+            customer=customer,
+            type_=action,
+            version="v1",
+            body=f"Cliente {customer.id} actualizó preferencia WhatsApp a {whatsapp_opted_in}",
+            ip=ip,
+            user_agent=user_agent,
+        )
+    if email_opted_in is not None and email_opted_in != customer.email_opted_in:
+        customer.email_opted_in = email_opted_in
+        action = "email_opt_in" if email_opted_in else "email_opt_out"
+        await record_consent(
+            db,
+            customer=customer,
+            type_=action,
+            version="v1",
+            body=f"Cliente {customer.id} actualizó preferencia Email a {email_opted_in}",
+            ip=ip,
+            user_agent=user_agent,
+        )
+    await db.flush()
+    return customer

@@ -95,6 +95,13 @@ class RoomCreate(ORMModel):
     branch_id: str | None = None
 
 
+class RoomUpdate(ORMModel):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    type: str | None = Field(default=None, max_length=50)
+    branch_id: str | None = None
+    active: bool | None = None
+
+
 class RoomRead(ORMModel):
     id: str
     organization_id: str

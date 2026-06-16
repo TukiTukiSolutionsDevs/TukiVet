@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Download, Loader2, ShieldCheck } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Bell, Download, Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import {
   ARCO_LABELS,
   portalApi,
   type ARCOType,
+  type CustomerSelfRead,
 } from "@/lib/portal-api";
 import { ApiError } from "@/lib/api";
 
@@ -90,6 +91,8 @@ export default function PortalAccountPage() {
           "rectificación" más abajo.
         </p>
       </Card>
+
+      <PreferencesCard me={meQ.data} loading={meQ.isLoading} />
 
       <Card className="space-y-3 p-5">
         <div className="flex items-center gap-2">
@@ -189,4 +192,98 @@ function humanError(e: unknown, fallback: string): string {
     }
   }
   return fallback;
+}
+
+function PreferencesCard({
+  me,
+  loading,
+}: {
+  me: CustomerSelfRead | undefined;
+  loading: boolean;
+}) {
+  const qc = useQueryClient();
+  const m = useMutation({
+    mutationFn: (payload: { whatsapp_opted_in?: boolean; email_opted_in?: boolean }) =>
+      portalApi.updatePreferences(payload),
+    onSuccess: (updated) => {
+      qc.setQueryData(["portal", "me"], updated);
+      toast.success("Preferencia guardada");
+    },
+    onError: (e) => toast.error(humanError(e, "No pude actualizar.")),
+  });
+
+  return (
+    <Card className="space-y-3 p-5">
+      <div className="flex items-center gap-2">
+        <Bell className="size-5 text-primary" />
+        <h2 className="text-base font-semibold">Notificaciones</h2>
+      </div>
+      <p className="text-sm text-muted-foreground">
+        Elegí por qué canales podemos contactarte para recordatorios de citas
+        y vacunas. Podés cambiarlos cuando quieras.
+      </p>
+      {loading || !me ? (
+        <Skeleton className="h-24 w-full" />
+      ) : (
+        <div className="space-y-2">
+          <ToggleRow
+            label="WhatsApp"
+            description="Recordatorios de cita y vacuna por WhatsApp."
+            value={me.whatsapp_opted_in}
+            disabled={m.isPending}
+            onChange={(v) => m.mutate({ whatsapp_opted_in: v })}
+          />
+          <ToggleRow
+            label="Email"
+            description="Avisos por correo electrónico (requiere tener email registrado)."
+            value={me.email_opted_in}
+            disabled={m.isPending || !me.email}
+            onChange={(v) => m.mutate({ email_opted_in: v })}
+          />
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function ToggleRow({
+  label,
+  description,
+  value,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  description: string;
+  value: boolean;
+  disabled?: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 rounded-md border border-border p-3">
+      <div>
+        <div className="text-sm font-medium text-foreground">{label}</div>
+        <div className="text-xs text-muted-foreground">{description}</div>
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={value}
+        aria-label={label}
+        disabled={disabled}
+        onClick={() => onChange(!value)}
+        className={
+          "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors disabled:cursor-not-allowed disabled:opacity-50 " +
+          (value ? "bg-primary" : "bg-muted")
+        }
+      >
+        <span
+          className={
+            "inline-block size-4 transform rounded-full bg-white shadow transition-transform " +
+            (value ? "translate-x-6" : "translate-x-1")
+          }
+        />
+      </button>
+    </div>
+  );
 }
