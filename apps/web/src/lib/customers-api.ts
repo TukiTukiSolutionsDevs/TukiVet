@@ -105,6 +105,7 @@ export const customersApi = {
     }),
   listPets: (customerId: string) =>
     api.get<PetRead[]>(`/api/v1/customers/${customerId}/pets`),
+  remove: (id: string) => api.delete<void>(`/api/v1/customers/${id}`),
 };
 
 export function customerFullName(

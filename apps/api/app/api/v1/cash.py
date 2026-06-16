@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, status
+from datetime import datetime
+
+from fastapi import APIRouter, Depends, Query, status
 
 from app.api.deps import CurrentUser, DBSession, require_permission
 from app.core.errors import NotFoundError
@@ -48,6 +50,33 @@ async def get_active(
         db, organization_id=current_user.organization_id, user_id=current_user.id
     )
     return CashSessionRead.model_validate(session) if session else None
+
+
+@router.get(
+    "",
+    response_model=list[CashSessionRead],
+    summary="Listar sesiones de caja (por defecto sólo cerradas)",
+    dependencies=[Depends(require_permission("cash_session:read"))],
+)
+async def list_cash_sessions(
+    current_user: CurrentUser,
+    db: DBSession,
+    user_id: str | None = Query(default=None),
+    closed_only: bool = Query(default=True),
+    date_from: datetime | None = Query(default=None),
+    date_to: datetime | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=200),
+) -> list[CashSessionRead]:
+    sessions = await order_service.list_cash_sessions(
+        db,
+        organization_id=current_user.organization_id,
+        user_id=user_id,
+        closed_only=closed_only,
+        date_from=date_from,
+        date_to=date_to,
+        limit=limit,
+    )
+    return [CashSessionRead.model_validate(s) for s in sessions]
 
 
 @router.post(

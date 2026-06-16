@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { ExternalLink, FileText } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ExternalLink, FileText, Loader2, RotateCw } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { ApiError } from "@/lib/api";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -141,20 +144,25 @@ export default function ComprobantesPage() {
                   <TableCell className="text-sm text-muted-foreground">
                     {formatDateTime(doc.issued_at)}
                   </TableCell>
-                  <TableCell className="w-10 text-right">
-                    {doc.pdf_url && (
-                      <a
-                        href={doc.pdf_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-                      >
-                        <FileText className="size-3.5" />
-                        PDF
-                        <ExternalLink className="size-3" />
-                      </a>
-                    )}
+                  <TableCell className="w-32 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      {(doc.status === "rejected" || doc.status === "pending") && (
+                        <ResubmitButton doc={doc} />
+                      )}
+                      {doc.pdf_url && (
+                        <a
+                          href={doc.pdf_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                        >
+                          <FileText className="size-3.5" />
+                          PDF
+                          <ExternalLink className="size-3" />
+                        </a>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
@@ -194,5 +202,44 @@ export default function ComprobantesPage() {
         />
       )}
     </div>
+  );
+}
+
+function ResubmitButton({ doc }: { doc: ElectronicDocumentRead }) {
+  const qc = useQueryClient();
+  const m = useMutation({
+    mutationFn: () => invoicesApi.resubmit(doc.id),
+    onSuccess: (newDoc) => {
+      qc.invalidateQueries({ queryKey: ["invoices"] });
+      toast.success(
+        `Reenviado: ${newDoc.series}-${String(newDoc.number).padStart(8, "0")}`,
+      );
+    },
+    onError: (e) => {
+      const msg =
+        e instanceof ApiError && typeof e.detail === "string"
+          ? e.detail
+          : "No pude reenviar.";
+      toast.error(msg);
+    },
+  });
+  return (
+    <Button
+      size="xs"
+      variant="outline"
+      disabled={m.isPending}
+      onClick={(e) => {
+        e.stopPropagation();
+        m.mutate();
+      }}
+      title="Reintentar envío a SUNAT"
+    >
+      {m.isPending ? (
+        <Loader2 className="size-3 animate-spin" />
+      ) : (
+        <RotateCw className="size-3" />
+      )}
+      Reintentar
+    </Button>
   );
 }

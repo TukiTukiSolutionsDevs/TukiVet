@@ -3,6 +3,7 @@
 import { use, useState } from "react";
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import {
   ChevronRight,
   Edit2,
@@ -12,6 +13,7 @@ import {
   MessageCircle,
   PawPrint,
   Phone,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
@@ -32,6 +34,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -78,6 +81,8 @@ export default function CustomerDetailPage({
 
 function CustomerDetail({ customer }: { customer: CustomerRead }) {
   const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const router = useRouter();
   const name = customerFullName(customer);
 
   const petsQ = useQuery({
@@ -154,10 +159,21 @@ function CustomerDetail({ customer }: { customer: CustomerRead }) {
               </div>
             </div>
           </div>
-          <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
-            <Edit2 className="size-4" />
-            Editar
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
+              <Edit2 className="size-4" />
+              Editar
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setDeleteOpen(true)}
+              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+            >
+              <Trash2 className="size-4" />
+              Eliminar
+            </Button>
+          </div>
         </div>
         {customer.notes && (
           <div className="mt-3 rounded-md bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
@@ -316,7 +332,80 @@ function CustomerDetail({ customer }: { customer: CustomerRead }) {
           onClose={() => setEditOpen(false)}
         />
       )}
+      {deleteOpen && (
+        <DeleteCustomerDialog
+          customer={customer}
+          onClose={() => setDeleteOpen(false)}
+          onDeleted={() => {
+            setDeleteOpen(false);
+            router.push("/clientes");
+          }}
+        />
+      )}
     </div>
+  );
+}
+
+function DeleteCustomerDialog({
+  customer,
+  onClose,
+  onDeleted,
+}: {
+  customer: { id: string; first_name: string; last_name: string; business_name: string | null };
+  onClose: () => void;
+  onDeleted: () => void;
+}) {
+  const qc = useQueryClient();
+  const [confirm, setConfirm] = useState("");
+  const fullName =
+    customer.business_name ?? `${customer.first_name} ${customer.last_name}`.trim();
+
+  const m = useMutation({
+    mutationFn: () => customersApi.remove(customer.id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["customers"] });
+      qc.removeQueries({ queryKey: ["customers", customer.id] });
+      toast.success(`${fullName} eliminado`);
+      onDeleted();
+    },
+    onError: (e) => toast.error(humanError(e, "No pude eliminar.")),
+  });
+
+  return (
+    <Dialog open onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Eliminar cliente</DialogTitle>
+          <DialogDescription>
+            Se hace soft-delete: el cliente y sus relaciones desaparecen del UI
+            pero permanecen en la base de datos.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Escribí <strong>{fullName}</strong> para confirmar.
+          </p>
+          <Input
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            placeholder={fullName}
+          />
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose} disabled={m.isPending}>
+            Cancelar
+          </Button>
+          <Button
+            onClick={() => m.mutate()}
+            disabled={m.isPending || confirm.trim() !== fullName}
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          >
+            {m.isPending && <Loader2 className="size-4 animate-spin" />}
+            Eliminar
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -506,3 +595,16 @@ function EditCustomerDialog({
     </Dialog>
   );
 }
+
+
+function humanError(e: unknown, fallback: string): string {
+  if (e instanceof ApiError) {
+    if (typeof e.detail === "string") return e.detail;
+    if (Array.isArray(e.detail)) {
+      const first = e.detail[0] as { msg?: string } | undefined;
+      if (first?.msg) return first.msg;
+    }
+  }
+  return fallback;
+}
+

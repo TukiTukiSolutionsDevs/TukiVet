@@ -83,6 +83,8 @@ export const invoicesApi = {
     api.post<ElectronicDocumentRead>("/api/v1/invoices", payload),
   void: (id: string, payload: VoidInvoiceRequest) =>
     api.post<ElectronicDocumentRead>(`/api/v1/invoices/${id}/void`, payload),
+  resubmit: (id: string) =>
+    api.post<ElectronicDocumentRead>(`/api/v1/invoices/${id}/resubmit`),
 };
 
 export function invoiceTypeLabel(t: string): string {

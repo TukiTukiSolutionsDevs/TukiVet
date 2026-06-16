@@ -234,6 +234,14 @@ export const ordersApi = {
     api.post<PaymentRead>(`/api/v1/orders/${orderId}/payments`, payload),
 };
 
+export type CashSessionListParams = {
+  user_id?: string;
+  closed_only?: boolean;
+  date_from?: string;
+  date_to?: string;
+  limit?: number;
+};
+
 export const cashApi = {
   open: (payload: CashSessionOpen) =>
     api.post<CashSessionRead>("/api/v1/cash-sessions/open", payload),
@@ -241,6 +249,14 @@ export const cashApi = {
     api.get<CashSessionRead | null>("/api/v1/cash-sessions/active"),
   close: (id: string, payload: CashSessionClose) =>
     api.post<CashSessionRead>(`/api/v1/cash-sessions/${id}/close`, payload),
+  list: (params: CashSessionListParams = {}) => {
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== "") q.set(k, String(v));
+    });
+    const qs = q.toString() ? `?${q.toString()}` : "";
+    return api.get<CashSessionRead[]>(`/api/v1/cash-sessions${qs}`);
+  },
 };
 
 export function orderStatusLabel(s: string): string {

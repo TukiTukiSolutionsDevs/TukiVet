@@ -424,6 +424,29 @@ async def get_active_cash_session(
     return result.scalar_one_or_none()
 
 
+async def list_cash_sessions(
+    db: AsyncSession,
+    *,
+    organization_id: str,
+    user_id: str | None = None,
+    closed_only: bool = True,
+    date_from: datetime | None = None,
+    date_to: datetime | None = None,
+    limit: int = 50,
+) -> list[CashSession]:
+    stmt = select(CashSession).where(CashSession.organization_id == organization_id)
+    if closed_only:
+        stmt = stmt.where(CashSession.closed_at.is_not(None))
+    if user_id:
+        stmt = stmt.where(CashSession.user_id == user_id)
+    if date_from:
+        stmt = stmt.where(CashSession.opened_at >= date_from)
+    if date_to:
+        stmt = stmt.where(CashSession.opened_at <= date_to)
+    stmt = stmt.order_by(CashSession.opened_at.desc()).limit(limit)
+    return list((await db.execute(stmt)).scalars().all())
+
+
 async def open_cash_session(
     db: AsyncSession,
     *,

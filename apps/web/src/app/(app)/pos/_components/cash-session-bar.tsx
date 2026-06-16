@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { DoorClosed, DoorOpen, Loader2, Wallet } from "lucide-react";
+import { DoorClosed, DoorOpen, History, Loader2, Wallet } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -24,7 +32,7 @@ import { formatCurrencyPEN, formatDateTime } from "@/lib/format";
 
 export function CashSessionBar() {
   const qc = useQueryClient();
-  const [openModal, setOpenModal] = useState<null | "open" | "close">(null);
+  const [openModal, setOpenModal] = useState<null | "open" | "close" | "history">(null);
 
   const sessionQ = useQuery({
     queryKey: ["cash", "active"],
@@ -65,6 +73,14 @@ export function CashSessionBar() {
         </div>
 
         <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setOpenModal("history")}
+          >
+            <History className="size-4" />
+            Historial
+          </Button>
           {session ? (
             <Button
               size="sm"
@@ -82,6 +98,10 @@ export function CashSessionBar() {
           )}
         </div>
       </Card>
+
+      {openModal === "history" && (
+        <CashHistoryDialog onClose={() => setOpenModal(null)} />
+      )}
 
       {openModal === "open" && (
         <OpenCashDialog
@@ -258,6 +278,115 @@ function CloseCashDialog({
             </Button>
           </DialogFooter>
         </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function CashHistoryDialog({ onClose }: { onClose: () => void }) {
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+  const q = useQuery({
+    queryKey: ["cash", "history", fromDate, toDate],
+    queryFn: () =>
+      cashApi.list({
+        closed_only: true,
+        date_from: fromDate ? `${fromDate}T00:00:00Z` : undefined,
+        date_to: toDate ? `${toDate}T23:59:59Z` : undefined,
+        limit: 100,
+      }),
+  });
+
+  return (
+    <Dialog open onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>Historial de cierres de caja</DialogTitle>
+          <DialogDescription>
+            Sólo sesiones cerradas. Filtrá por fecha de apertura.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <Label htmlFor="from">Desde</Label>
+            <Input
+              id="from"
+              type="date"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="to">Hasta</Label>
+            <Input
+              id="to"
+              type="date"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="max-h-[60vh] overflow-auto">
+          {q.isLoading ? (
+            <Skeleton className="h-32 w-full" />
+          ) : (q.data ?? []).length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">
+              No hay sesiones cerradas en el rango.
+            </p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Apertura</TableHead>
+                  <TableHead>Cierre</TableHead>
+                  <TableHead className="text-right">Saldo inicial</TableHead>
+                  <TableHead className="text-right">Calculado</TableHead>
+                  <TableHead className="text-right">Declarado</TableHead>
+                  <TableHead className="text-right">Diferencia</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {q.data!.map((s) => (
+                  <TableRow key={s.id}>
+                    <TableCell className="text-sm">{formatDateTime(s.opened_at)}</TableCell>
+                    <TableCell className="text-sm">
+                      {s.closed_at ? formatDateTime(s.closed_at) : "—"}
+                    </TableCell>
+                    <TableCell className="tnum text-right text-sm">
+                      {formatCurrencyPEN(s.opening_balance)}
+                    </TableCell>
+                    <TableCell className="tnum text-right text-sm">
+                      {s.closing_balance_calculated
+                        ? formatCurrencyPEN(s.closing_balance_calculated)
+                        : "—"}
+                    </TableCell>
+                    <TableCell className="tnum text-right text-sm">
+                      {s.closing_balance_declared
+                        ? formatCurrencyPEN(s.closing_balance_declared)
+                        : "—"}
+                    </TableCell>
+                    <TableCell
+                      className={
+                        "tnum text-right text-sm " +
+                        (s.difference && Number(s.difference) !== 0
+                          ? "text-destructive"
+                          : "")
+                      }
+                    >
+                      {s.difference ? formatCurrencyPEN(s.difference) : "—"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose}>
+            Cerrar
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

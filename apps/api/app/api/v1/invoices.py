@@ -109,6 +109,53 @@ async def get_document(
 
 
 @router.post(
+    "/{document_id}/resubmit",
+    response_model=ElectronicDocumentRead,
+    summary="Reenviar a SUNAT un comprobante rejected/pending (re-emite con nueva numeración)",
+    dependencies=[Depends(require_permission("invoice:emit"))],
+)
+async def resubmit_document(
+    document_id: str,
+    request: Request,
+    current_user: CurrentUser,
+    db: DBSession,
+) -> ElectronicDocumentRead:
+    from app.core.errors import ConflictError
+
+    original = await invoice_service.get_document(
+        db,
+        organization_id=current_user.organization_id,
+        document_id=document_id,
+    )
+    if original.status not in ("rejected", "pending"):
+        raise ConflictError(
+            f"Sólo se reenvían comprobantes rejected/pending (estado actual: {original.status})"
+        )
+    if original.order_id is None:
+        raise ConflictError("El comprobante no tiene orden asociada")
+    provider = invoice_service.get_provider_for_request()
+    new_doc = await invoice_service.emit_invoice(
+        db,
+        organization_id=current_user.organization_id,
+        order_id=original.order_id,
+        doc_type=original.type,
+        provider=provider,
+    )
+    await audit(
+        db,
+        action="invoice.resubmitted",
+        organization_id=current_user.organization_id,
+        actor_user_id=current_user.id,
+        target_type="electronic_document",
+        target_id=new_doc.id,
+        before={"original_document_id": original.id, "original_status": original.status},
+        after={"new_status": new_doc.status, "series": new_doc.series, "number": new_doc.number},
+    )
+    await db.commit()
+    return _enrich(new_doc)
+
+
+@router.post(
     "/{document_id}/void",
     response_model=ElectronicDocumentRead,
     summary="Anular comprobante",
