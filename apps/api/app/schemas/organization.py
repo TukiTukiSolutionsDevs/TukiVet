@@ -52,6 +52,13 @@ class BranchCreate(ORMModel):
     timezone: str = Field(default="America/Lima", max_length=50)
 
 
+class BranchUpdate(ORMModel):
+    name: str | None = Field(default=None, min_length=2, max_length=255)
+    address: str | None = Field(default=None, max_length=500)
+    phone: str | None = Field(default=None, max_length=20)
+    timezone: str | None = Field(default=None, max_length=50)
+
+
 class BranchRead(ORMModel):
     id: str
     organization_id: str

@@ -1,10 +1,17 @@
 "use client";
 
-import { Bell, Building2, ChevronDown, Moon, Search, Sun } from "lucide-react";
+import { Bell, Building2, Check, ChevronDown, Moon, Search, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useBranches } from "@/contexts/branch-context";
 import { cn } from "@/lib/utils";
 
 export function Topbar() {
@@ -68,15 +75,8 @@ export function Topbar() {
         Caja abierta
       </button>
 
-      {/* Sede */}
-      <button
-        type="button"
-        className="flex h-9 items-center gap-2 rounded-md border border-border bg-card px-3 text-[13px] font-semibold text-foreground transition-colors hover:bg-muted"
-      >
-        <Building2 className="size-4" />
-        Sede principal
-        <ChevronDown className="size-3.5" />
-      </button>
+      {/* Sede switcher */}
+      <BranchSwitcher />
 
       {/* Theme toggle */}
       <Button
@@ -114,5 +114,59 @@ export function Topbar() {
         />
       </Button>
     </header>
+  );
+}
+
+function BranchSwitcher() {
+  const { branches, activeBranch, setActiveBranch } = useBranches();
+  const label = activeBranch?.name ?? "Sede";
+  const hasOptions = branches.length > 1;
+
+  if (!hasOptions) {
+    return (
+      <div className="flex h-9 items-center gap-2 rounded-md border border-border bg-card px-3 text-[13px] font-semibold text-foreground">
+        <Building2 className="size-4" />
+        {label}
+      </div>
+    );
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <button
+            type="button"
+            className="flex h-9 items-center gap-2 rounded-md border border-border bg-card px-3 text-[13px] font-semibold text-foreground transition-colors hover:bg-muted"
+          >
+            <Building2 className="size-4" />
+            {label}
+            <ChevronDown className="size-3.5" />
+          </button>
+        }
+      />
+      <DropdownMenuContent align="end" className="min-w-48">
+        {branches.map((b) => (
+          <DropdownMenuItem
+            key={b.id}
+            onClick={() => setActiveBranch(b.id)}
+            className="gap-2"
+          >
+            <Check
+              className={cn(
+                "size-4",
+                b.id === activeBranch?.id ? "opacity-100" : "opacity-0",
+              )}
+            />
+            <span className="flex-1">{b.name}</span>
+            {b.is_main && (
+              <span className="text-[10px] uppercase text-muted-foreground">
+                principal
+              </span>
+            )}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

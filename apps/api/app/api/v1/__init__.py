@@ -9,6 +9,7 @@ from app.api.v1.audit import router as audit_router
 from app.api.v1.organizations import router as organizations_router
 from app.api.v1.appointments import router as appointments_router
 from app.api.v1.auth import router as auth_router
+from app.api.v1.branches import router as branches_router
 from app.api.v1.cash import router as cash_router
 from app.api.v1.customers import router as customers_router
 from app.api.v1.encounters import router as encounters_router
@@ -47,3 +48,4 @@ api_router.include_router(reports_router, prefix="/reports", tags=["reports"])
 api_router.include_router(ai_router, prefix="/ai", tags=["ai"])
 api_router.include_router(audit_router, prefix="/audit-logs", tags=["audit"])
 api_router.include_router(organizations_router, prefix="/organizations", tags=["organizations"])
+api_router.include_router(branches_router, prefix="/branches", tags=["branches"])
